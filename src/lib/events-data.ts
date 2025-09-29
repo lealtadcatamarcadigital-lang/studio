@@ -241,7 +241,7 @@ export const WWF_2000_DATA: MonthData[] = [
           'WrestleMania Title Shot: The Rock vs. The Big Show',
           'WWF Championship vs. Career Hell in a Cell Match: Triple H vs. Cactus Jack',
         ],
-        coverUrl: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/A8jsquz8t5g8gVd49a3gBBlS8yX.jpg',
+        coverUrl: 'https://upload.wikimedia.org/wikipedia/en/e/ed/No_Way_Out_2000_logo.jpg',
       },
     ],
   },
