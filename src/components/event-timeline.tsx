@@ -231,10 +231,9 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
       <header className="text-center mb-12">
         <div className="flex justify-center items-center gap-4">
           <WrestlingMaskIcon className="h-12 w-12 text-primary" />
-          <h1 className="font-headline text-4xl md:text-6xl font-bold text-primary">
+          <h1 className="font-headline text-4xl md:text-5xl font-bold text-primary">
             Attitude Rewind years 2000
           </h1>
-          <WrestlingMaskIcon className="h-12 w-12 text-primary" />
         </div>
       </header>
 
@@ -261,8 +260,8 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         </form>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
-        <div className="md:col-span-1 lg:col-span-3 flex justify-center lg:justify-end">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-12">
+        <div className="lg:col-span-3 flex justify-center lg:justify-end">
           <Card>
             <CardContent className="p-0 flex justify-center">
               <Calendar
@@ -291,7 +290,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
             </CardContent>
           </Card>
         </div>
-        <div className="md:col-span-1 lg:col-span-2">
+        <div className="lg:col-span-2">
           {selectedDate && selectedDayEvents ? (
             <Card className="h-full">
               <CardHeader>
