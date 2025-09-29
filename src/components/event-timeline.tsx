@@ -438,9 +438,6 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                         </p>
                         <Separator className="my-2" />
                         <p className="text-sm text-muted-foreground">
-                          <span className="font-semibold text-accent-foreground/80">
-                            Perspectiva de la IA:
-                          </span>{" "}
                           {result.insights}
                         </p>
                       </div>
