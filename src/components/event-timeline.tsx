@@ -10,6 +10,7 @@ import {
   Sparkles,
   List,
 } from "lucide-react";
+import { es } from 'date-fns/locale';
 
 import type { MonthData, Event, PPVEvent } from "@/lib/events-data";
 import {
@@ -240,10 +241,11 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 flex justify-center">
             <Card>
                 <CardContent className="p-0 flex justify-center">
                     <Calendar
+                        locale={es}
                         mode="single"
                         selected={selectedDate}
                         onSelect={setSelectedDate}
