@@ -303,9 +303,9 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                         </div>
                         <ul className="space-y-2 pl-2 border-l-2 border-red-500/50 ml-3">
                             {selectedDayEvents.raw.map((event, index) => (
-                                <li key={`raw-${index}`} className="flex items-center justify-between p-1 rounded-md">
+                                <li key={`raw-${index}`} className="flex flex-col items-start p-1 rounded-md">
                                   <span><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</span>
-                                  <Button variant="ghost" size="sm" onClick={() => handleEventClick(event, 'raw')}>
+                                  <Button variant="ghost" size="sm" onClick={() => handleEventClick(event, 'raw')} className="mt-1 self-start">
                                     <Info className="h-4 w-4 mr-2"/>
                                     Detalles
                                   </Button>
@@ -322,9 +322,9 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                         </div>
                         <ul className="space-y-2 pl-2 border-l-2 border-blue-500/50 ml-3">
                             {selectedDayEvents.smackdown.map((event, index) => (
-                                <li key={`sd-${index}`} className="flex items-center justify-between p-1 rounded-md">
+                                <li key={`sd-${index}`} className="flex flex-col items-start p-1 rounded-md">
                                   <span><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</span>
-                                  <Button variant="ghost" size="sm" onClick={() => handleEventClick(event, 'smackdown')}>
+                                   <Button variant="ghost" size="sm" onClick={() => handleEventClick(event, 'smackdown')} className="mt-1 self-start">
                                     <Info className="h-4 w-4 mr-2"/>
                                     Detalles
                                   </Button>
@@ -343,13 +343,11 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                             {selectedDayEvents.ppvs.map((event, index) => (
                                 <li key={`ppv-${index}`} className="flex flex-col items-start p-1 rounded-md">
                                     <p className="font-bold">{event.name}</p>
-                                    <div className="flex items-center justify-between w-full">
-                                      <span><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</span>
-                                      <Button variant="ghost" size="sm" onClick={() => handleEventClick(event, 'ppv')}>
-                                        <Info className="h-4 w-4 mr-2"/>
-                                        Detalles
-                                      </Button>
-                                    </div>
+                                    <span><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</span>
+                                    <Button variant="ghost" size="sm" onClick={() => handleEventClick(event, 'ppv')} className="mt-1 self-start">
+                                    <Info className="h-4 w-4 mr-2"/>
+                                    Detalles
+                                    </Button>
                                 </li>
                             ))}
                         </ul>
@@ -514,5 +512,3 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
     </div>
   );
 }
-
-    
