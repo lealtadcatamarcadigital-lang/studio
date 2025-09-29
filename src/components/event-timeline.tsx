@@ -239,10 +239,10 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="md:col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <div className="lg:col-span-3">
             <Card>
-                <CardContent className="p-0">
+                <CardContent className="p-0 flex justify-center">
                     <Calendar
                         mode="single"
                         selected={selectedDate}
@@ -260,7 +260,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                 </CardContent>
             </Card>
         </div>
-        <div className="md:col-span-1">
+        <div className="lg:col-span-2">
           {selectedDate && selectedDayEvents ? (
             <Card>
               <CardHeader>
@@ -421,7 +421,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
 
                       {aiSummary && (
                         <div className="mt-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
-                           <p className="text-sm text-foreground-primary">{aiSummary.summary}</p>
+                           <p className="text-sm text-black">{aiSummary.summary}</p>
                         </div>
                       )}
                     </div>
@@ -451,5 +451,3 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
     </div>
   );
 }
-
-    
