@@ -421,7 +421,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
 
                       {aiSummary && (
                         <div className="mt-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
-                           <p className="text-sm text-primary-foreground">{aiSummary.summary}</p>
+                           <p className="text-sm text-foreground">{aiSummary.summary}</p>
                         </div>
                       )}
                     </div>
@@ -451,3 +451,5 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
     </div>
   );
 }
+
+    
