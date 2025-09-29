@@ -423,14 +423,14 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                 </DialogTitle>
                 <DialogDescription>
                   
-                    <p className="flex items-center gap-2 text-sm">
+                    <div className="flex items-center gap-2 text-sm">
                       <CalendarDays className="h-4 w-4" />
                       <span>{selectedDate?.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                    </p>
-                    <p className="flex items-center gap-2 text-sm">
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
                       <MapPin className="h-4 w-4" />
                       <span>{selectedEvent.location}</span>
-                    </p>
+                    </div>
                   
                 </DialogDescription>
               </DialogHeader>
