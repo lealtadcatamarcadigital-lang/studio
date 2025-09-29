@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
-  title: 'WWF Throwback 2000',
+  title: 'Attitude Rewind years 2000',
   description: 'A chronological tour of WWF events in the year 2000.',
 };
 

@@ -205,7 +205,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
     <div className="container mx-auto px-4 py-8">
       <header className="text-center mb-12">
         <h1 className="font-headline text-5xl md:text-7xl font-bold text-primary mb-4">
-          WWF Throwback 2000
+          Attitude Rewind years 2000
         </h1>
       </header>
 
@@ -421,7 +421,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
 
                       {aiSummary && (
                         <div className="mt-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
-                           <p className="text-sm text-foreground">{aiSummary.summary}</p>
+                           <p className="text-sm text-foreground-primary">{aiSummary.summary}</p>
                         </div>
                       )}
                     </div>
