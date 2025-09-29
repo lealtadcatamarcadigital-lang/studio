@@ -255,14 +255,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         </form>
       </div>
 
-      <div className="text-center mb-12">
-        <Button onClick={handleDownload} variant="outline">
-          <Download />
-          Descargar Datos
-        </Button>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
         <div className="md:col-span-2 flex justify-center">
             <Card>
                 <CardContent className="p-0 flex justify-center">
@@ -358,6 +351,13 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
             </Card>
           )}
         </div>
+      </div>
+      
+      <div className="text-center">
+        <Button onClick={handleDownload} variant="outline">
+          <Download />
+          Descargar Datos
+        </Button>
       </div>
 
       <Dialog open={isSearchDialogOpen} onOpenChange={setIsSearchDialogOpen}>
