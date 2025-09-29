@@ -67,10 +67,13 @@ const monthNameToNumber: { [key: string]: number } = {
   Julio: 6, Agosto: 7, Septiembre: 8, Octubre: 9, Noviembre: 10, Diciembre: 11,
 };
 
+type DayEvents = { raw: Event[]; smackdown: Event[]; ppvs: PPVEvent[] };
+
 const getEventsByDate = (data: MonthData[]) => {
-  const eventsByDate = new Map<string, { raw: Event[]; smackdown: Event[]; ppvs: PPVEvent[] }>();
+  const eventsByDate = new Map<string, DayEvents>();
   data.forEach((month) => {
     const monthIndex = monthNameToNumber[month.month];
+    if (monthIndex === undefined) return;
     const processEvents = (events: (Event | PPVEvent)[], type: 'raw' | 'smackdown' | 'ppvs') => {
       events.forEach(event => {
         const date = new Date(2000, monthIndex, parseInt(event.date));
@@ -89,6 +92,24 @@ const getEventsByDate = (data: MonthData[]) => {
   return eventsByDate;
 };
 
+const getEventDates = (eventsByDate: Map<string, DayEvents>) => {
+  const eventDates: {
+    all: Date[],
+    raw: Date[],
+    smackdown: Date[],
+    ppv: Date[]
+  } = { all: [], raw: [], smackdown: [], ppv: [] };
+
+  eventsByDate.forEach((dayEvents, dateString) => {
+    const date = new Date(dateString);
+    eventDates.all.push(date);
+    if (dayEvents.raw.length > 0) eventDates.raw.push(date);
+    if (dayEvents.smackdown.length > 0) eventDates.smackdown.push(date);
+    if (dayEvents.ppvs.length > 0) eventDates.ppv.push(date);
+  });
+  return eventDates;
+}
+
 type DetailedEvent = (Event | PPVEvent) & { type: 'raw' | 'smackdown' | 'ppv' };
 
 export function EventTimeline({ initialEvents }: EventTimelineProps) {
@@ -105,7 +126,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
   const [isAiSummaryLoading, setIsAiSummaryLoading] = useState(false);
 
   const eventsByDate = useMemo(() => getEventsByDate(initialEvents), [initialEvents]);
-  const eventDates = useMemo(() => Array.from(eventsByDate.keys()).map(d => new Date(d)), [eventsByDate]);
+  const eventDatesModifiers = useMemo(() => getEventDates(eventsByDate), [eventsByDate]);
   
   const selectedDayEvents = selectedDate ? eventsByDate.get(selectedDate.toDateString()) : undefined;
 
@@ -163,7 +184,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
   };
   
   const handleDayClick = (day: Date, { selected }: { selected: boolean }) => {
-    if (eventDates.some(eventDate => eventDate.toDateString() === day.toDateString())) {
+    if (eventDatesModifiers.all.some(eventDate => eventDate.toDateString() === day.toDateString())) {
       setSelectedDate(selected ? undefined : day);
     } else {
       setSelectedDate(undefined);
@@ -240,8 +261,8 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 flex justify-center">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="md:col-span-2 flex justify-center">
             <Card>
                 <CardContent className="p-0 flex justify-center">
                     <Calendar
@@ -250,9 +271,17 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                         selected={selectedDate}
                         onSelect={setSelectedDate}
                         onDayClick={handleDayClick}
-                        modifiers={{ event: eventDates }}
+                        modifiers={{ 
+                            event: eventDatesModifiers.all,
+                            raw: eventDatesModifiers.raw,
+                            smackdown: eventDatesModifiers.smackdown,
+                            ppv: eventDatesModifiers.ppv,
+                        }}
                         modifiersClassNames={{
                             event: 'bg-primary/20 text-primary-foreground rounded-full',
+                            raw: 'day-raw',
+                            smackdown: 'day-smackdown',
+                            ppv: 'day-ppv',
                         }}
                         defaultMonth={new Date(2000, 0)}
                         fromYear={2000}
@@ -262,7 +291,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                 </CardContent>
             </Card>
         </div>
-        <div className="lg:col-span-1">
+        <div className="md:col-span-1">
           {selectedDate && selectedDayEvents ? (
             <Card>
               <CardHeader>

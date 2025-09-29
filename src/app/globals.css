@@ -86,3 +86,15 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .day-raw {
+    @apply bg-red-500/50 text-white rounded-full;
+  }
+  .day-smackdown {
+    @apply bg-blue-500/50 text-white rounded-full;
+  }
+  .day-ppv {
+    @apply bg-amber-500/50 text-white rounded-full;
+  }
+}
