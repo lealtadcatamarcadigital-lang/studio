@@ -256,42 +256,42 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         </form>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-        <div className="lg:col-span-2 flex justify-center">
-            <Card>
-                <CardContent className="p-0 flex justify-center">
-                    <Calendar
-                        locale={es}
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={setSelectedDate}
-                        onDayClick={handleDayClick}
-                        modifiers={{ 
-                            event: eventDatesModifiers.all,
-                            raw: eventDatesModifiers.raw,
-                            smackdown: eventDatesModifiers.smackdown,
-                            ppv: eventDatesModifiers.ppv,
-                        }}
-                        modifiersClassNames={{
-                            event: 'bg-primary/20 text-primary-foreground rounded-full',
-                            raw: 'day-raw',
-                            smackdown: 'day-smackdown',
-                            ppv: 'day-ppv',
-                        }}
-                        defaultMonth={new Date(2000, 0)}
-                        fromYear={2000}
-                        toYear={2000}
-                        className="p-4"
-                    />
-                </CardContent>
-            </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+        <div className="md:col-span-1 lg:col-span-3 flex justify-center lg:justify-end">
+          <Card>
+            <CardContent className="p-0 flex justify-center">
+              <Calendar
+                locale={es}
+                mode="single"
+                selected={selectedDate}
+                onSelect={setSelectedDate}
+                onDayClick={handleDayClick}
+                modifiers={{ 
+                    event: eventDatesModifiers.all,
+                    raw: eventDatesModifiers.raw,
+                    smackdown: eventDatesModifiers.smackdown,
+                    ppv: eventDatesModifiers.ppv,
+                }}
+                modifiersClassNames={{
+                    event: 'bg-primary/20 text-primary-foreground rounded-full',
+                    raw: 'day-raw',
+                    smackdown: 'day-smackdown',
+                    ppv: 'day-ppv',
+                }}
+                defaultMonth={new Date(2000, 0)}
+                fromYear={2000}
+                toYear={2000}
+                className="p-4"
+              />
+            </CardContent>
+          </Card>
         </div>
-        <div className="lg:col-span-1">
+        <div className="md:col-span-1 lg:col-span-2">
           {selectedDate && selectedDayEvents ? (
             <Card className="h-full">
               <CardHeader>
                 <CardTitle className="font-headline text-2xl">
-                    Eventos para {selectedDate.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                  Eventos para {selectedDate.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                 </CardTitle>
               </CardHeader>
               <CardContent>
