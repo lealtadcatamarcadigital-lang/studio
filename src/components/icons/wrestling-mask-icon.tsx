@@ -2,7 +2,7 @@ import * as React from "react";
 
 export const WrestlingMaskIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
-    xmlns="http://www.w3.org/2000/svg"
+    xmlns="By https://www.deviantart.com/darkvoidpictures/art/WWF-Attitude-Logo-SVG-782842784, Fair use, https://en.wikipedia.org/w/index.php?curid=75032009"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"

@@ -229,12 +229,10 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <header className="text-center mb-12">
-        <div className="flex justify-center items-center gap-4">
-          <WrestlingMaskIcon className="h-12 w-12 text-primary" />
-          <h1 className="font-headline text-4xl md:text-5xl font-bold text-primary">
-            Attitude Rewind years 2000
-          </h1>
-        </div>
+        <h1 className="font-headline text-4xl md:text-5xl font-bold">
+          <span className="text-black dark:text-white">Attitude Rewind years </span>
+          <span className="text-red-600">2000</span>
+        </h1>
       </header>
 
       <div className="max-w-4xl mx-auto mb-12">
@@ -260,7 +258,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         </form>
       </div>
 
-      <div className="flex flex-col lg:flex-row lg:justify-center gap-8 mb-12">
+      <div className="flex flex-col lg:flex-row justify-center gap-8 mb-12">
         <div className="flex justify-center">
           <Card>
             <CardContent className="p-0 flex justify-center">
