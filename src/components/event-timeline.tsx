@@ -10,6 +10,7 @@ import {
   MapPin,
   Sparkles,
   List,
+  Info,
 } from "lucide-react";
 import { es } from 'date-fns/locale';
 
@@ -255,8 +256,8 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         </form>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-        <div className="md:col-span-2 flex justify-center">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+        <div className="lg:col-span-2 flex justify-center">
             <Card>
                 <CardContent className="p-0 flex justify-center">
                     <Calendar
@@ -285,7 +286,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                 </CardContent>
             </Card>
         </div>
-        <div className="md:col-span-1">
+        <div className="lg:col-span-1">
           {selectedDate && selectedDayEvents ? (
             <Card className="h-full">
               <CardHeader>
@@ -302,8 +303,12 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                         </div>
                         <ul className="space-y-2 pl-2 border-l-2 border-red-500/50 ml-3">
                             {selectedDayEvents.raw.map((event, index) => (
-                                <li key={`raw-${index}`} className="cursor-pointer hover:bg-muted p-1 rounded-md" onClick={() => handleEventClick(event, 'raw')}>
-                                  <MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}
+                                <li key={`raw-${index}`} className="flex items-center justify-between p-1 rounded-md">
+                                  <span><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</span>
+                                  <Button variant="ghost" size="sm" onClick={() => handleEventClick(event, 'raw')}>
+                                    <Info className="h-4 w-4 mr-2"/>
+                                    Detalles
+                                  </Button>
                                 </li>
                             ))}
                         </ul>
@@ -317,8 +322,12 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                         </div>
                         <ul className="space-y-2 pl-2 border-l-2 border-blue-500/50 ml-3">
                             {selectedDayEvents.smackdown.map((event, index) => (
-                                <li key={`sd-${index}`} className="cursor-pointer hover:bg-muted p-1 rounded-md" onClick={() => handleEventClick(event, 'smackdown')}>
-                                  <MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}
+                                <li key={`sd-${index}`} className="flex items-center justify-between p-1 rounded-md">
+                                  <span><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</span>
+                                  <Button variant="ghost" size="sm" onClick={() => handleEventClick(event, 'smackdown')}>
+                                    <Info className="h-4 w-4 mr-2"/>
+                                    Detalles
+                                  </Button>
                                 </li>
                             ))}
                         </ul>
@@ -332,9 +341,15 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                         </div>
                         <ul className="space-y-2 pl-2 border-l-2 border-amber-500/50 ml-3">
                             {selectedDayEvents.ppvs.map((event, index) => (
-                                <li key={`ppv-${index}`} className="cursor-pointer hover:bg-muted p-1 rounded-md" onClick={() => handleEventClick(event, 'ppv')}>
+                                <li key={`ppv-${index}`} className="flex flex-col items-start p-1 rounded-md">
                                     <p className="font-bold">{event.name}</p>
-                                    <p><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</p>
+                                    <div className="flex items-center justify-between w-full">
+                                      <span><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</span>
+                                      <Button variant="ghost" size="sm" onClick={() => handleEventClick(event, 'ppv')}>
+                                        <Info className="h-4 w-4 mr-2"/>
+                                        Detalles
+                                      </Button>
+                                    </div>
                                 </li>
                             ))}
                         </ul>
@@ -421,8 +436,8 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                 <DialogTitle className="font-headline text-2xl">
                     {selectedEvent.type === 'ppv' ? (selectedEvent as PPVEvent).name : `WWF ${selectedEvent.type.toUpperCase()}`}
                 </DialogTitle>
-                <DialogDescription>
-                  
+                <DialogDescription asChild>
+                  <div>
                     <div className="flex items-center gap-2 text-sm">
                       <CalendarDays className="h-4 w-4" />
                       <span>{selectedDate?.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
@@ -431,7 +446,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                       <MapPin className="h-4 w-4" />
                       <span>{selectedEvent.location}</span>
                     </div>
-                  
+                  </div>
                 </DialogDescription>
               </DialogHeader>
               <div className="flex-grow min-h-0">
