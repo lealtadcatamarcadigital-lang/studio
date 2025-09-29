@@ -137,7 +137,7 @@ export const WWF_2000_DATA: MonthData[] = [
           'WWF Championship Street Fight: Triple H vs. Cactus Jack',
           'The 30-Man Royal Rumble Match',
         ],
-        coverUrl: 'https://picsum.photos/seed/royalrumble2000/400/600',
+        coverUrl: 'https://www.imdb.com/es/title/tt0261260/mediaviewer/rm3046971392/?ref_=tt_ov_i',
       },
     ],
   },

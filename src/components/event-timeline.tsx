@@ -422,14 +422,16 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                     {selectedEvent.type === 'ppv' ? (selectedEvent as PPVEvent).name : `WWF ${selectedEvent.type.toUpperCase()}`}
                 </DialogTitle>
                 <DialogDescription>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CalendarDays className="h-4 w-4" />
-                    <span>{selectedDate?.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <MapPin className="h-4 w-4" />
-                    <span>{selectedEvent.location}</span>
-                  </div>
+                  
+                    <p className="flex items-center gap-2 text-sm">
+                      <CalendarDays className="h-4 w-4" />
+                      <span>{selectedDate?.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                    </p>
+                    <p className="flex items-center gap-2 text-sm">
+                      <MapPin className="h-4 w-4" />
+                      <span>{selectedEvent.location}</span>
+                    </p>
+                  
                 </DialogDescription>
               </DialogHeader>
               <div className="flex-grow min-h-0">
@@ -497,3 +499,5 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
     </div>
   );
 }
+
+    
