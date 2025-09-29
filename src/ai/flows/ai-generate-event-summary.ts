@@ -21,7 +21,7 @@ const AIGenerateEventSummaryInputSchema = z.object({
 export type AIGenerateEventSummaryInput = z.infer<typeof AIGenerateEventSummaryInputSchema>;
 
 const AIGenerateEventSummaryOutputSchema = z.object({
-  summary: z.string().describe('A brief, non-spoiler summary of the event.'),
+  summary: z.string().describe('Un breve resumen del evento, sin spoilers.'),
 });
 export type AIGenerateEventSummaryOutput = z.infer<typeof AIGenerateEventSummaryOutputSchema>;
 
@@ -37,12 +37,12 @@ const eventSummaryPrompt = ai.definePrompt({
   output: {
     schema: AIGenerateEventSummaryOutputSchema,
   },
-  prompt: `You are a wrestling historian. Generate a short, non-spoiler summary for the following event.
-Focus on the main storylines and rivalries leading into the event. Do not reveal any match outcomes.
-The summary should be about 2-3 sentences.
+  prompt: `Eres un historiador de la lucha libre. Genera un resumen breve y sin spoilers para el siguiente evento en español.
+Céntrate en las principales historias y rivalidades que conducen al evento. No reveles ningún resultado de los combates.
+El resumen debe tener unas 2-3 frases.
 
-Event: {{{eventName}}}
-Matches:
+Evento: {{{eventName}}}
+Combates:
 {{#each matches}}
 - {{{this}}}
 {{/each}}
