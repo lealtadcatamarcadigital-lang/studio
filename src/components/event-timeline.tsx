@@ -294,7 +294,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         </div>
         <div className="md:col-span-1">
           {selectedDate && selectedDayEvents ? (
-            <Card>
+            <Card className="h-full">
               <CardHeader>
                 <CardTitle className="font-headline text-2xl">
                     Eventos para {selectedDate.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
