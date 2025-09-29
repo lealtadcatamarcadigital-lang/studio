@@ -7,6 +7,7 @@ export interface Event {
 
 export interface PPVEvent extends Event {
   name: string;
+  coverUrl?: string;
 }
 
 export interface MonthData {
@@ -136,6 +137,7 @@ export const WWF_2000_DATA: MonthData[] = [
           'WWF Championship Street Fight: Triple H vs. Cactus Jack',
           'The 30-Man Royal Rumble Match',
         ],
+        coverUrl: 'https://picsum.photos/seed/royalrumble2000/400/600',
       },
     ],
   },

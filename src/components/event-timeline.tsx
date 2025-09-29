@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import Image from 'next/image';
 import {
   Search,
   Download,
@@ -434,6 +435,18 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
               <div className="flex-grow min-h-0">
                 <ScrollArea className="h-full pr-4 -mr-4">
                   <div className="space-y-4">
+                    {selectedEvent.type === 'ppv' && (selectedEvent as PPVEvent).coverUrl && (
+                        <div className="my-4">
+                            <Image
+                                src={(selectedEvent as PPVEvent).coverUrl!}
+                                alt={`Cover for ${(selectedEvent as PPVEvent).name}`}
+                                width={400}
+                                height={600}
+                                className="rounded-lg mx-auto"
+                                data-ai-hint="wrestling poster"
+                            />
+                        </div>
+                    )}
                     <div>
                       <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
                         <Sparkles className="h-5 w-5 text-accent" />
