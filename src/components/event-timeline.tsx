@@ -260,8 +260,8 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         </form>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-12 justify-center">
-        <div className="lg:col-span-3 flex justify-center lg:justify-end">
+      <div className="flex flex-col lg:flex-row lg:justify-center gap-8 mb-12">
+        <div className="flex justify-center">
           <Card>
             <CardContent className="p-0 flex justify-center">
               <Calendar
@@ -290,7 +290,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
             </CardContent>
           </Card>
         </div>
-        <div className="lg:col-span-2">
+        <div className="w-full lg:max-w-md">
           {selectedDate && selectedDayEvents ? (
             <Card className="h-full">
               <CardHeader>
