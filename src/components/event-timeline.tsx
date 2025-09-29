@@ -207,10 +207,6 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         <h1 className="font-headline text-5xl md:text-7xl font-bold text-primary mb-4">
           WWF Throwback 2000
         </h1>
-        <p className="text-lg md:text-xl max-w-3xl mx-auto text-muted-foreground">
-          Revive la acción del año 2000 con esta cronología completa de eventos
-          de la WWF. Busca tus shows favoritos y descarga todos los datos.
-        </p>
       </header>
 
       <div className="max-w-4xl mx-auto mb-12">
