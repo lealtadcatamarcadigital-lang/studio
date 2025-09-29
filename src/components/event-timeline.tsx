@@ -406,7 +406,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         <DialogContent className="max-w-2xl h-[80vh] flex flex-col">
           <DialogHeader>
             <DialogTitle className="font-headline text-2xl">
-              Resultados de la Búsqueda IA
+              Resultados:
             </DialogTitle>
             <DialogDescription>
               Resultados para: "{searchQuery}"
