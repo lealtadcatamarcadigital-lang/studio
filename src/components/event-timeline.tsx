@@ -37,6 +37,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RawIcon } from "./icons/raw-icon";
 import { SmackDownIcon } from "./icons/smackdown-icon";
 import { PpvIcon } from "./icons/ppv-icon";
+import { WrestlingMaskIcon } from "./icons/wrestling-mask-icon";
 
 interface EventTimelineProps {
   initialEvents: MonthData[];
@@ -228,9 +229,13 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <header className="text-center mb-12">
-        <h1 className="font-headline text-5xl md:text-7xl font-bold text-primary mb-4">
-          Attitude Rewind years 2000
-        </h1>
+        <div className="flex justify-center items-center gap-4">
+          <WrestlingMaskIcon className="h-12 w-12 text-primary" />
+          <h1 className="font-headline text-4xl md:text-6xl font-bold text-primary">
+            Attitude Rewind years 2000
+          </h1>
+          <WrestlingMaskIcon className="h-12 w-12 text-primary" />
+        </div>
       </header>
 
       <div className="max-w-4xl mx-auto mb-12">
@@ -304,7 +309,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                         <ul className="space-y-2 pl-2 border-l-2 border-red-500/50 ml-3">
                             {selectedDayEvents.raw.map((event, index) => (
                                 <li key={`raw-${index}`} className="flex flex-col items-start p-1 rounded-md">
-                                  <span><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</span>
+                                  <div><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</div>
                                   <Button variant="ghost" size="sm" onClick={() => handleEventClick(event, 'raw')} className="mt-1 self-start">
                                     <Info className="h-4 w-4 mr-2"/>
                                     Detalles
@@ -323,7 +328,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                         <ul className="space-y-2 pl-2 border-l-2 border-blue-500/50 ml-3">
                             {selectedDayEvents.smackdown.map((event, index) => (
                                 <li key={`sd-${index}`} className="flex flex-col items-start p-1 rounded-md">
-                                  <span><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</span>
+                                  <div><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</div>
                                    <Button variant="ghost" size="sm" onClick={() => handleEventClick(event, 'smackdown')} className="mt-1 self-start">
                                     <Info className="h-4 w-4 mr-2"/>
                                     Detalles
@@ -342,8 +347,8 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                         <ul className="space-y-2 pl-2 border-l-2 border-amber-500/50 ml-3">
                             {selectedDayEvents.ppvs.map((event, index) => (
                                 <li key={`ppv-${index}`} className="flex flex-col items-start p-1 rounded-md">
-                                    <p className="font-bold">{event.name}</p>
-                                    <span><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</span>
+                                    <div className="font-bold">{event.name}</div>
+                                    <div><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</div>
                                     <Button variant="ghost" size="sm" onClick={() => handleEventClick(event, 'ppv')} className="mt-1 self-start">
                                     <Info className="h-4 w-4 mr-2"/>
                                     Detalles
