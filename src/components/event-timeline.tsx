@@ -18,6 +18,7 @@ import type { MonthData, Event, PPVEvent } from "@/lib/events-data";
 import {
   searchEventInsights,
   type AISearchEventInsightsOutput,
+  type AISearchEventInsightsInput,
 } from "@/ai/flows/ai-search-event-insights";
 import { generateEventSummary, type AIGenerateEventSummaryOutput } from "@/ai/flows/ai-generate-event-summary";
 import { Button } from "@/components/ui/button";
@@ -37,32 +38,34 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RawIcon } from "./icons/raw-icon";
 import { SmackDownIcon } from "./icons/smackdown-icon";
 import { PpvIcon } from "./icons/ppv-icon";
-import { WrestlingMaskIcon } from "./icons/wrestling-mask-icon";
 
 interface EventTimelineProps {
   initialEvents: MonthData[];
 }
 
-const flattenEventsToStrings = (data: MonthData[]): string[] => {
-  const eventStrings: string[] = [];
-  data.forEach((month) => {
-    month.raw.forEach((event) => {
-      eventStrings.push(
-        `RAW en ${month.month} ${event.date}: ${event.location}`
-      );
+const flattenEventsToSearchableObjects = (data: MonthData[]): AISearchEventInsightsInput['eventData'] => {
+  const eventObjects: AISearchEventInsightsInput['eventData'] = [];
+  data.forEach((month, monthIndex) => {
+    month.raw.forEach((event, eventIndex) => {
+      eventObjects.push({
+        id: `${month.monthId}-raw-${eventIndex}`,
+        text: `RAW en ${month.month} ${event.date}: ${event.location}`
+      });
     });
-    month.smackdown.forEach((event) => {
-      eventStrings.push(
-        `SmackDown en ${month.month} ${event.date}: ${event.location}`
-      );
+    month.smackdown.forEach((event, eventIndex) => {
+      eventObjects.push({
+        id: `${month.monthId}-smackdown-${eventIndex}`,
+        text: `SmackDown en ${month.month} ${event.date}: ${event.location}`
+      });
     });
-    month.ppvs.forEach((event) => {
-      eventStrings.push(
-        `PPV ${event.name} en ${month.month} ${event.date}: ${event.location}`
-      );
+    month.ppvs.forEach((event, eventIndex) => {
+      eventObjects.push({
+        id: `${month.monthId}-ppv-${eventIndex}`,
+        text: `PPV ${event.name} en ${month.month} ${event.date}: ${event.location}`
+      });
     });
   });
-  return eventStrings;
+  return eventObjects;
 };
 
 const monthNameToNumber: { [key: string]: number } = {
@@ -71,6 +74,7 @@ const monthNameToNumber: { [key: string]: number } = {
 };
 
 type DayEvents = { raw: Event[]; smackdown: Event[]; ppvs: PPVEvent[] };
+type DetailedEvent = (Event | PPVEvent) & { type: 'raw' | 'smackdown' | 'ppv' };
 
 const getEventsByDate = (data: MonthData[]) => {
   const eventsByDate = new Map<string, DayEvents>();
@@ -113,7 +117,15 @@ const getEventDates = (eventsByDate: Map<string, DayEvents>) => {
   return eventDates;
 }
 
-type DetailedEvent = (Event | PPVEvent) & { type: 'raw' | 'smackdown' | 'ppv' };
+const createEventMap = (data: MonthData[]): Map<string, DetailedEvent> => {
+    const map = new Map<string, DetailedEvent>();
+    data.forEach((month) => {
+        month.raw.forEach((event, index) => map.set(`${month.monthId}-raw-${index}`, { ...event, type: 'raw' }));
+        month.smackdown.forEach((event, index) => map.set(`${month.monthId}-smackdown-${index}`, { ...event, type: 'smackdown' }));
+        month.ppvs.forEach((event, index) => map.set(`${month.monthId}-ppv-${index}`, { ...event, type: 'ppv' }));
+    });
+    return map;
+};
 
 export function EventTimeline({ initialEvents }: EventTimelineProps) {
   const { toast } = useToast();
@@ -130,6 +142,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
 
   const eventsByDate = useMemo(() => getEventsByDate(initialEvents), [initialEvents]);
   const eventDatesModifiers = useMemo(() => getEventDates(eventsByDate), [eventsByDate]);
+  const eventMap = useMemo(() => createEventMap(initialEvents), [initialEvents]);
   
   const selectedDayEvents = selectedDate ? eventsByDate.get(selectedDate.toDateString()) : undefined;
 
@@ -141,11 +154,11 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
     setIsSearchDialogOpen(true);
     setSearchResults(null);
 
-    const eventStrings = flattenEventsToStrings(initialEvents);
+    const eventObjects = flattenEventsToSearchableObjects(initialEvents);
     try {
       const results = await searchEventInsights({
         query: searchQuery,
-        eventData: eventStrings,
+        eventData: eventObjects,
       });
       setSearchResults(results);
     } catch (error) {
@@ -194,10 +207,24 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
     }
   };
 
-  const handleEventClick = (event: Event | PPVEvent, type: 'raw' | 'smackdown' | 'ppv') => {
-    setSelectedEvent({ ...event, type });
+  const handleEventClick = (event: DetailedEvent, date?: Date) => {
+    if (date) setSelectedDate(date);
+    setSelectedEvent(event);
     setIsEventDetailsOpen(true);
     setAiSummary(null);
+  };
+
+  const handleSearchResultClick = (eventId: string) => {
+      const event = eventMap.get(eventId);
+      if (event) {
+          const monthIndex = Object.values(initialEvents).findIndex(m => m.monthId === eventId.split('-')[0]);
+          const monthName = initialEvents[monthIndex].month;
+          const monthNumber = monthNameToNumber[monthName];
+          const eventDate = new Date(2000, monthNumber, parseInt(event.date));
+          
+          handleEventClick(event, eventDate);
+          setIsSearchDialogOpen(false);
+      }
   };
   
   const handleGenerateSummary = async () => {
@@ -307,7 +334,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                             {selectedDayEvents.raw.map((event, index) => (
                                 <li key={`raw-${index}`} className="flex flex-col items-start p-1 rounded-md">
                                   <div><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</div>
-                                  <Button variant="ghost" size="sm" onClick={() => handleEventClick(event, 'raw')} className="mt-1 self-start">
+                                  <Button variant="ghost" size="sm" onClick={() => handleEventClick({ ...event, type: 'raw' }, selectedDate)} className="mt-1 self-start">
                                     <Info className="h-4 w-4 mr-2"/>
                                     Detalles
                                   </Button>
@@ -326,7 +353,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                             {selectedDayEvents.smackdown.map((event, index) => (
                                 <li key={`sd-${index}`} className="flex flex-col items-start p-1 rounded-md">
                                   <div><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</div>
-                                   <Button variant="ghost" size="sm" onClick={() => handleEventClick(event, 'smackdown')} className="mt-1 self-start">
+                                   <Button variant="ghost" size="sm" onClick={() => handleEventClick({ ...event, type: 'smackdown' }, selectedDate)} className="mt-1 self-start">
                                     <Info className="h-4 w-4 mr-2"/>
                                     Detalles
                                   </Button>
@@ -346,7 +373,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                                 <li key={`ppv-${index}`} className="flex flex-col items-start p-1 rounded-md">
                                     <div className="font-bold">{event.name}</div>
                                     <div><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</div>
-                                    <Button variant="ghost" size="sm" onClick={() => handleEventClick(event, 'ppv')} className="mt-1 self-start">
+                                    <Button variant="ghost" size="sm" onClick={() => handleEventClick({ ...event, type: 'ppv' }, selectedDate)} className="mt-1 self-start">
                                     <Info className="h-4 w-4 mr-2"/>
                                     Detalles
                                     </Button>
@@ -399,15 +426,15 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
               )}
               {searchResults && (
                 <div className="space-y-4">
-                  {searchResults.results
-                    .filter(result => !result.insights.toLowerCase().includes("not relevant"))
-                    .map((result, index) => (
+                  {searchResults.results.length > 0 ? (
+                    searchResults.results.map((result, index) => (
                       <div
                         key={index}
-                        className="p-4 border rounded-lg bg-card/50"
+                        className="p-4 border rounded-lg bg-card/50 cursor-pointer hover:bg-accent/50"
+                        onClick={() => handleSearchResultClick(result.eventId)}
                       >
-                        <p className="font-semibold text-primary-foreground mb-2">
-                          {result.event}
+                        <p className="font-semibold mb-2">
+                          {result.eventText}
                         </p>
                         <Separator className="my-2" />
                         <p className="text-sm text-muted-foreground">
@@ -417,10 +444,12 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                           {result.insights}
                         </p>
                       </div>
-                    ))}
-                    {searchResults.results.filter(result => !result.insights.toLowerCase().includes("not relevant")).length === 0 && (
-                        <p className="text-muted-foreground text-center py-8">No se encontraron eventos relevantes para tu búsqueda.</p>
-                    )}
+                    ))
+                  ) : (
+                    <p className="text-muted-foreground text-center py-8">
+                      No se encontraron eventos relevantes para tu búsqueda.
+                    </p>
+                  )}
                 </div>
               )}
             </ScrollArea>

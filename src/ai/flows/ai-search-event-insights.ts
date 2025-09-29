@@ -16,9 +16,14 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
+const EventObjectSchema = z.object({
+  id: z.string().describe('Un identificador único para el evento.'),
+  text: z.string().describe('La descripción textual del evento a buscar.'),
+});
+
 const AISearchEventInsightsInputSchema = z.object({
-  query: z.string().describe('The search query from the user.'),
-  eventData: z.array(z.string()).describe('Array of event strings to search through.'),
+  query: z.string().describe('La consulta de búsqueda del usuario.'),
+  eventData: z.array(EventObjectSchema).describe('Array de objetos de evento para buscar.'),
 });
 export type AISearchEventInsightsInput = z.infer<typeof AISearchEventInsightsInputSchema>;
 
@@ -26,15 +31,16 @@ const AISearchEventInsightsOutputSchema = z.object({
   results: z
     .array(
       z.object({
-        event: z.string().describe('The matching event data.'),
+        eventId: z.string().describe('El ID del evento coincidente.'),
+        eventText: z.string().describe('El texto del evento coincidente.'),
         insights: z
           .string()
           .describe(
-            'AI-generated insights about the event relevance to the query.'
+            'Perspectivas generadas por la IA sobre la relevancia del evento para la consulta (en español).'
           ),
       })
     )
-    .describe('Search results with event data and AI-generated insights.'),
+    .describe('Resultados de búsqueda con datos de eventos y perspectivas generadas por la IA.'),
 });
 export type AISearchEventInsightsOutput = z.infer<
   typeof AISearchEventInsightsOutputSchema
@@ -50,17 +56,19 @@ const eventInsightPrompt = ai.definePrompt({
   name: 'eventInsightPrompt',
   input: {schema: AISearchEventInsightsInputSchema},
   output: {schema: AISearchEventInsightsOutputSchema},
-  prompt: `You are an AI search engine for a timeline of 2000 WWF wrestling events.
-The user is searching for: {{{query}}}
+  prompt: `Eres un motor de búsqueda de IA para una cronología de eventos de lucha libre de la WWF del año 2000.
+El usuario está buscando: {{{query}}}
 
-Search through the following event data and return only the events that are relevant to the user's query. For each relevant event, provide a short, one-sentence insight explaining why it matches the query.
+Busca en los siguientes datos de eventos y devuelve solo los eventos que sean relevantes para la consulta del usuario.
+Para cada evento relevante, proporciona una breve perspectiva de una oración en español que explique por qué coincide con la consulta.
+Devuelve el 'eventId' y 'eventText' originales para cada resultado.
 
-Event Data:
+Datos del evento:
 {{#each eventData}}
-- {{{this}}}
+- ID: {{{this.id}}}, Texto: {{{this.text}}}
 {{/each}}
 
-If no events are relevant, return an empty array for the results.
+Si ningún evento es relevante, devuelve un array vacío para los resultados.
 `,
 });
 
