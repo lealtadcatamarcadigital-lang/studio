@@ -239,8 +239,8 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-        <div className="lg:col-span-3">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2">
             <Card>
                 <CardContent className="p-0 flex justify-center">
                     <Calendar
@@ -260,7 +260,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                 </CardContent>
             </Card>
         </div>
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-1">
           {selectedDate && selectedDayEvents ? (
             <Card>
               <CardHeader>
