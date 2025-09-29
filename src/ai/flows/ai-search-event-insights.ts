@@ -23,32 +23,45 @@ const AISearchEventInsightsInputSchema = z.object({
 export type AISearchEventInsightsInput = z.infer<typeof AISearchEventInsightsInputSchema>;
 
 const AISearchEventInsightsOutputSchema = z.object({
-  results: z.array(
-    z.object({
-      event: z.string().describe('The matching event data.'),
-      insights: z.string().describe('AI-generated insights about the event relevance to the query.'),
-    })
-  ).describe('Search results with event data and AI-generated insights.'),
+  results: z
+    .array(
+      z.object({
+        event: z.string().describe('The matching event data.'),
+        insights: z
+          .string()
+          .describe(
+            'AI-generated insights about the event relevance to the query.'
+          ),
+      })
+    )
+    .describe('Search results with event data and AI-generated insights.'),
 });
-export type AISearchEventInsightsOutput = z.infer<typeof AISearchEventInsightsOutputSchema>;
+export type AISearchEventInsightsOutput = z.infer<
+  typeof AISearchEventInsightsOutputSchema
+>;
 
-export async function searchEventInsights(input: AISearchEventInsightsInput): Promise<AISearchEventInsightsOutput> {
+export async function searchEventInsights(
+  input: AISearchEventInsightsInput
+): Promise<AISearchEventInsightsOutput> {
   return searchEventInsightsFlow(input);
 }
 
 const eventInsightPrompt = ai.definePrompt({
   name: 'eventInsightPrompt',
-  input: {
-    schema: z.object({
-      query: z.string(),
-      event: z.string(),
-    }),
-  },
-  output: {
-    schema: z.string(),
-  },
-  prompt: `You are an AI assistant that provides insights on the relevance of a WWF event to a user's search query.\n  The user is searching for: {{{query}}}\n  The event data is: {{{event}}}\n  Provide a short explanation of why this event is relevant to the search query. If the event is not relevant, explain why.  Be concise.
-  `,
+  input: {schema: AISearchEventInsightsInputSchema},
+  output: {schema: AISearchEventInsightsOutputSchema},
+  prompt: `You are an AI search engine for a timeline of 2000 WWF wrestling events.
+The user is searching for: {{{query}}}
+
+Search through the following event data and return only the events that are relevant to the user's query. For each relevant event, provide a short, one-sentence insight explaining why it matches the query.
+
+Event Data:
+{{#each eventData}}
+- {{{this}}}
+{{/each}}
+
+If no events are relevant, return an empty array for the results.
+`,
 });
 
 const searchEventInsightsFlow = ai.defineFlow(
@@ -58,19 +71,7 @@ const searchEventInsightsFlow = ai.defineFlow(
     outputSchema: AISearchEventInsightsOutputSchema,
   },
   async input => {
-    const results = [];
-    for (const event of input.eventData) {
-      const {output} = await eventInsightPrompt({
-        query: input.query,
-        event: event,
-      });
-
-      results.push({
-        event: event,
-        insights: output!,
-      });
-    }
-
-    return {results: results};
+    const {output} = await eventInsightPrompt(input);
+    return output!;
   }
 );
