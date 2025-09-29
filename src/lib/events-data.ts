@@ -1,6 +1,8 @@
 export interface Event {
   date: string;
   location: string;
+  description?: string;
+  matches?: string[];
 }
 
 export interface PPVEvent extends Event {
@@ -20,14 +22,34 @@ export const WWF_2000_DATA: MonthData[] = [
     month: "Enero",
     monthId: "january",
     raw: [
-      { date: "3", location: "Miami" },
+      {
+        date: "3",
+        location: "Miami",
+        description: "La era McMahon-Helmsley continúa su dominio. Triple H defiende su Campeonato de la WWF contra The Big Show, mientras The Rock se enfrenta a una dura prueba.",
+        matches: [
+          "Test vs. The Big Boss Man",
+          "Kurt Angle vs. Kane",
+          "Dudley Boyz vs. The Acolytes",
+          "WWF Championship: Triple H vs. The Big Show"
+        ]
+      },
       { date: "10", location: "St. Louis" },
       { date: "17", location: "New Haven" },
       { date: "24", location: "Philadelphia" },
       { date: "31", location: "Pittsburgh" },
     ],
     smackdown: [
-      { date: "6", location: "Orlando" },
+      {
+        date: "6",
+        location: "Orlando",
+        description: "The Rock y la facción McMahon-Helmsley siguen en pie de guerra. Se anuncian más participantes para el Royal Rumble.",
+        matches: [
+          "Edge & Christian vs. The Hardy Boyz",
+          "Chris Jericho vs. Hardcore Holly",
+          "Mankind vs. Al Snow",
+          "The Rock vs. Kurt Angle & Triple H"
+        ]
+      },
       { date: "13", location: "Chicago" },
       { date: "20", location: "Providence" },
       { date: "27", location: "Baltimore" },
@@ -37,6 +59,14 @@ export const WWF_2000_DATA: MonthData[] = [
         date: "23",
         name: "Royal Rumble",
         location: "New York, NY (Madison Square Garden)",
+        description: "¡El camino a WrestleMania comienza aquí! 30 superestrellas compiten en el Royal Rumble Match por una oportunidad por el título en el evento principal. Además, Triple H defiende el Campeonato de la WWF contra Cactus Jack en una brutal Street Fight.",
+        matches: [
+          "Tazz vs. Kurt Angle",
+          "Tag Team Tables Match: The Hardy Boyz vs. The Dudley Boyz",
+          "WWF Intercontinental Championship: Chris Jericho vs. Chyna vs. Hardcore Holly",
+          "WWF Championship Street Fight: Triple H vs. Cactus Jack",
+          "The 30-Man Royal Rumble Match"
+        ]
       },
     ],
   },

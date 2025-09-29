@@ -7,6 +7,8 @@ import {
   LoaderCircle,
   CalendarDays,
   MapPin,
+  Sparkles,
+  List,
 } from "lucide-react";
 
 import type { MonthData, Event, PPVEvent } from "@/lib/events-data";
@@ -14,6 +16,7 @@ import {
   searchEventInsights,
   type AISearchEventInsightsOutput,
 } from "@/ai/flows/ai-search-event-insights";
+import { generateEventSummary, type AIGenerateEventSummaryOutput } from "@/ai/flows/ai-generate-event-summary";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -85,6 +88,7 @@ const getEventsByDate = (data: MonthData[]) => {
   return eventsByDate;
 };
 
+type DetailedEvent = (Event | PPVEvent) & { type: 'raw' | 'smackdown' | 'ppv' };
 
 export function EventTimeline({ initialEvents }: EventTimelineProps) {
   const { toast } = useToast();
@@ -92,8 +96,12 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
   const [searchResults, setSearchResults] =
     useState<AISearchEventInsightsOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isSearchDialogOpen, setIsSearchDialogOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [selectedEvent, setSelectedEvent] = useState<DetailedEvent | null>(null);
+  const [isEventDetailsOpen, setIsEventDetailsOpen] = useState(false);
+  const [aiSummary, setAiSummary] = useState<AIGenerateEventSummaryOutput | null>(null);
+  const [isAiSummaryLoading, setIsAiSummaryLoading] = useState(false);
 
   const eventsByDate = useMemo(() => getEventsByDate(initialEvents), [initialEvents]);
   const eventDates = useMemo(() => Array.from(eventsByDate.keys()).map(d => new Date(d)), [eventsByDate]);
@@ -105,7 +113,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
     if (!searchQuery.trim()) return;
 
     setIsLoading(true);
-    setIsDialogOpen(true);
+    setIsSearchDialogOpen(true);
     setSearchResults(null);
 
     const eventStrings = flattenEventsToStrings(initialEvents);
@@ -122,7 +130,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         title: "Error de búsqueda",
         description: "No se pudo completar la búsqueda de IA. Inténtalo de nuevo.",
       });
-      setIsDialogOpen(false);
+      setIsSearchDialogOpen(false);
     } finally {
       setIsLoading(false);
     }
@@ -160,6 +168,38 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
       setSelectedDate(undefined);
     }
   };
+
+  const handleEventClick = (event: Event | PPVEvent, type: 'raw' | 'smackdown' | 'ppv') => {
+    setSelectedEvent({ ...event, type });
+    setIsEventDetailsOpen(true);
+    setAiSummary(null);
+  };
+  
+  const handleGenerateSummary = async () => {
+    if (!selectedEvent) return;
+    
+    setIsAiSummaryLoading(true);
+    setAiSummary(null);
+
+    try {
+        const eventName = selectedEvent.type === 'ppv' ? (selectedEvent as PPVEvent).name : selectedEvent.type.toUpperCase();
+        const result = await generateEventSummary({
+            eventName: eventName,
+            matches: selectedEvent.matches || [],
+        });
+        setAiSummary(result);
+    } catch(error) {
+        console.error("AI summary generation failed:", error);
+        toast({
+            variant: "destructive",
+            title: "Error de IA",
+            description: "No se pudo generar el resumen. Inténtalo de nuevo.",
+        });
+    } finally {
+        setIsAiSummaryLoading(false);
+    }
+  };
+
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -241,7 +281,9 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                         </div>
                         <ul className="space-y-2 pl-2 border-l-2 border-red-500/50 ml-3">
                             {selectedDayEvents.raw.map((event, index) => (
-                                <li key={`raw-${index}`}><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</li>
+                                <li key={`raw-${index}`} className="cursor-pointer hover:bg-muted p-1 rounded-md" onClick={() => handleEventClick(event, 'raw')}>
+                                  <MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}
+                                </li>
                             ))}
                         </ul>
                     </div>
@@ -254,7 +296,9 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                         </div>
                         <ul className="space-y-2 pl-2 border-l-2 border-blue-500/50 ml-3">
                             {selectedDayEvents.smackdown.map((event, index) => (
-                                <li key={`sd-${index}`}><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</li>
+                                <li key={`sd-${index}`} className="cursor-pointer hover:bg-muted p-1 rounded-md" onClick={() => handleEventClick(event, 'smackdown')}>
+                                  <MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}
+                                </li>
                             ))}
                         </ul>
                     </div>
@@ -267,7 +311,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                         </div>
                         <ul className="space-y-2 pl-2 border-l-2 border-amber-500/50 ml-3">
                             {selectedDayEvents.ppvs.map((event, index) => (
-                                <li key={`ppv-${index}`}>
+                                <li key={`ppv-${index}`} className="cursor-pointer hover:bg-muted p-1 rounded-md" onClick={() => handleEventClick(event, 'ppv')}>
                                     <p className="font-bold">{event.name}</p>
                                     <p><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</p>
                                 </li>
@@ -288,7 +332,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         </div>
       </div>
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <Dialog open={isSearchDialogOpen} onOpenChange={setIsSearchDialogOpen}>
         <DialogContent className="max-w-2xl h-[80vh] flex flex-col">
           <DialogHeader>
             <DialogTitle className="font-headline text-2xl">
@@ -338,6 +382,74 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
               )}
             </ScrollArea>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isEventDetailsOpen} onOpenChange={setIsEventDetailsOpen}>
+        <DialogContent className="max-w-2xl h-[80vh] flex flex-col">
+          {selectedEvent && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="font-headline text-2xl">
+                    {selectedEvent.type === 'ppv' ? (selectedEvent as PPVEvent).name : `WWF ${selectedEvent.type.toUpperCase()}`}
+                </DialogTitle>
+                <DialogDescription>
+                  <div className="flex items-center gap-2 text-sm">
+                    <CalendarDays className="h-4 w-4" />
+                    <span>{selectedDate?.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <MapPin className="h-4 w-4" />
+                    <span>{selectedEvent.location}</span>
+                  </div>
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex-grow min-h-0">
+                <ScrollArea className="h-full pr-4 -mr-4">
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
+                        <Sparkles className="h-5 w-5 text-accent" />
+                        Resumen del Show
+                      </h3>
+                      {selectedEvent.description ? (
+                        <p className="text-muted-foreground">{selectedEvent.description}</p>
+                      ) : (
+                        <p className="text-muted-foreground text-sm">No hay descripción disponible. ¡Genera una con IA!</p>
+                      )}
+                      
+                      <Button onClick={handleGenerateSummary} disabled={isAiSummaryLoading} variant="outline" size="sm" className="mt-2">
+                        {isAiSummaryLoading ? <LoaderCircle className="animate-spin" /> : <Sparkles />}
+                        {isAiSummaryLoading ? "Generando..." : "Generar resumen con IA"}
+                      </Button>
+
+                      {aiSummary && (
+                        <div className="mt-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
+                           <p className="text-sm text-primary-foreground">{aiSummary.summary}</p>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <Separator />
+                    
+                    <div>
+                      <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
+                        <List className="h-5 w-5 text-accent" />
+                        Cartelera de Combates
+                      </h3>
+                      {selectedEvent.matches && selectedEvent.matches.length > 0 ? (
+                        <ul className="space-y-2 list-disc pl-5 text-muted-foreground">
+                          {selectedEvent.matches.map((match, i) => <li key={i}>{match}</li>)}
+                        </ul>
+                      ) : (
+                        <p className="text-muted-foreground">No se ha anunciado la cartelera de combates.</p>
+                      )}
+                    </div>
+                  </div>
+                </ScrollArea>
+              </div>
+            </>
+          )}
         </DialogContent>
       </Dialog>
     </div>
