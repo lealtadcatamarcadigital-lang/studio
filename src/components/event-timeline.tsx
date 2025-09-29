@@ -285,8 +285,8 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         </form>
       </div>
 
-      <div className="flex flex-col lg:flex-row justify-center gap-8 mb-12">
-        <div className="flex justify-center">
+      <div className="flex flex-col lg:flex-row justify-center items-start gap-8 mb-12">
+        <div className="flex justify-center w-full lg:w-auto">
           <Card>
             <CardContent className="p-0 flex justify-center">
               <Calendar
@@ -408,9 +408,6 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
             <DialogTitle className="font-headline text-2xl">
               Resultados:
             </DialogTitle>
-            <DialogDescription>
-              Resultados para: "{searchQuery}"
-            </DialogDescription>
           </DialogHeader>
           <div className="flex-grow min-h-0">
             <ScrollArea className="h-full pr-4 -mr-4">
