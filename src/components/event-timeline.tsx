@@ -435,39 +435,41 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
               <div className="flex-grow min-h-0">
                 <ScrollArea className="h-full pr-4 -mr-4">
                   <div className="space-y-4">
-                    {selectedEvent.type === 'ppv' && (selectedEvent as PPVEvent).coverUrl && (
-                        <div className="my-4">
-                            <Image
-                                src={(selectedEvent as PPVEvent).coverUrl!}
-                                alt={`Cover for ${(selectedEvent as PPVEvent).name}`}
-                                width={400}
-                                height={600}
-                                className="rounded-lg mx-auto"
-                                data-ai-hint="wrestling poster"
-                            />
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {selectedEvent.type === 'ppv' && (selectedEvent as PPVEvent).coverUrl && (
+                        <div className="md:col-span-1">
+                          <Image
+                            src={(selectedEvent as PPVEvent).coverUrl!}
+                            alt={`Cover for ${(selectedEvent as PPVEvent).name}`}
+                            width={200}
+                            height={300}
+                            className="rounded-lg w-full h-auto object-cover"
+                            data-ai-hint="wrestling poster"
+                          />
                         </div>
-                    )}
-                    <div>
-                      <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
-                        <Sparkles className="h-5 w-5 text-accent" />
-                        Resumen del Show
-                      </h3>
-                      {selectedEvent.description ? (
-                        <p className="text-muted-foreground">{selectedEvent.description}</p>
-                      ) : (
-                        <p className="text-muted-foreground text-sm">No hay descripción disponible. ¡Genera una con IA!</p>
                       )}
-                      
-                      <Button onClick={handleGenerateSummary} disabled={isAiSummaryLoading} variant="outline" size="sm" className="mt-2">
-                        {isAiSummaryLoading ? <LoaderCircle className="animate-spin" /> : <Sparkles />}
-                        {isAiSummaryLoading ? "Generando..." : "Generar resumen con IA"}
-                      </Button>
+                      <div className={selectedEvent.type === 'ppv' && (selectedEvent as PPVEvent).coverUrl ? "md:col-span-2" : "md:col-span-3"}>
+                        <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
+                          <Sparkles className="h-5 w-5 text-accent" />
+                          Resumen del Show
+                        </h3>
+                        {selectedEvent.description ? (
+                          <p className="text-muted-foreground">{selectedEvent.description}</p>
+                        ) : (
+                          <p className="text-muted-foreground text-sm">No hay descripción disponible. ¡Genera una con IA!</p>
+                        )}
+                        
+                        <Button onClick={handleGenerateSummary} disabled={isAiSummaryLoading} variant="outline" size="sm" className="mt-2">
+                          {isAiSummaryLoading ? <LoaderCircle className="animate-spin" /> : <Sparkles />}
+                          {isAiSummaryLoading ? "Generando..." : "Generar resumen con IA"}
+                        </Button>
 
-                      {aiSummary && (
-                        <div className="mt-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
-                           <p className="text-sm text-black">{aiSummary.summary}</p>
-                        </div>
-                      )}
+                        {aiSummary && (
+                          <div className="mt-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
+                            <p className="text-sm text-black">{aiSummary.summary}</p>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     
                     <Separator />
