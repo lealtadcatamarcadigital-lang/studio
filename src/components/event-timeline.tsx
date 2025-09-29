@@ -260,7 +260,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         </form>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-12">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-12 justify-center">
         <div className="lg:col-span-3 flex justify-center lg:justify-end">
           <Card>
             <CardContent className="p-0 flex justify-center">
@@ -516,5 +516,3 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
     </div>
   );
 }
-
-    
