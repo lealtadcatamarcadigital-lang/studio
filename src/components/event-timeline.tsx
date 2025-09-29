@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Search,
   Download,
@@ -9,12 +9,11 @@ import {
   MapPin,
 } from "lucide-react";
 
-import type { MonthData } from "@/lib/events-data";
+import type { MonthData, Event, PPVEvent } from "@/lib/events-data";
 import {
   searchEventInsights,
   type AISearchEventInsightsOutput,
 } from "@/ai/flows/ai-search-event-insights";
-import { EventCard } from "@/components/event-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -27,7 +26,11 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { RawIcon } from "./icons/raw-icon";
+import { SmackDownIcon } from "./icons/smackdown-icon";
+import { PpvIcon } from "./icons/ppv-icon";
 
 interface EventTimelineProps {
   initialEvents: MonthData[];
@@ -55,6 +58,34 @@ const flattenEventsToStrings = (data: MonthData[]): string[] => {
   return eventStrings;
 };
 
+const monthNameToNumber: { [key: string]: number } = {
+  Enero: 0, Febrero: 1, Marzo: 2, Abril: 3, Mayo: 4, Junio: 5,
+  Julio: 6, Agosto: 7, Septiembre: 8, Octubre: 9, Noviembre: 10, Diciembre: 11,
+};
+
+const getEventsByDate = (data: MonthData[]) => {
+  const eventsByDate = new Map<string, { raw: Event[]; smackdown: Event[]; ppvs: PPVEvent[] }>();
+  data.forEach((month) => {
+    const monthIndex = monthNameToNumber[month.month];
+    const processEvents = (events: (Event | PPVEvent)[], type: 'raw' | 'smackdown' | 'ppvs') => {
+      events.forEach(event => {
+        const date = new Date(2000, monthIndex, parseInt(event.date));
+        const dateString = date.toDateString();
+        if (!eventsByDate.has(dateString)) {
+          eventsByDate.set(dateString, { raw: [], smackdown: [], ppvs: [] });
+        }
+        const dayEvents = eventsByDate.get(dateString)!;
+        (dayEvents[type] as (Event | PPVEvent)[]).push(event);
+      });
+    };
+    processEvents(month.raw, 'raw');
+    processEvents(month.smackdown, 'smackdown');
+    processEvents(month.ppvs, 'ppvs');
+  });
+  return eventsByDate;
+};
+
+
 export function EventTimeline({ initialEvents }: EventTimelineProps) {
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
@@ -62,6 +93,12 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
     useState<AISearchEventInsightsOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+
+  const eventsByDate = useMemo(() => getEventsByDate(initialEvents), [initialEvents]);
+  const eventDates = useMemo(() => Array.from(eventsByDate.keys()).map(d => new Date(d)), [eventsByDate]);
+  
+  const selectedDayEvents = selectedDate ? eventsByDate.get(selectedDate.toDateString()) : undefined;
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -115,6 +152,14 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
       });
     }
   };
+  
+  const handleDayClick = (day: Date, { selected }: { selected: boolean }) => {
+    if (eventDates.some(eventDate => eventDate.toDateString() === day.toDateString())) {
+      setSelectedDate(selected ? undefined : day);
+    } else {
+      setSelectedDate(undefined);
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -158,15 +203,89 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {initialEvents.map((month, index) => (
-          <EventCard
-            key={month.monthId}
-            monthData={month}
-            style={{ animationDelay: `${index * 100}ms` }}
-            className="opacity-0 animate-fade-in"
-          />
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="md:col-span-2">
+            <Card>
+                <CardContent className="p-0">
+                    <Calendar
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={setSelectedDate}
+                        onDayClick={handleDayClick}
+                        modifiers={{ event: eventDates }}
+                        modifiersClassNames={{
+                            event: 'bg-primary/20 text-primary-foreground rounded-full',
+                        }}
+                        defaultMonth={new Date(2000, 0)}
+                        fromYear={2000}
+                        toYear={2000}
+                        className="p-4"
+                    />
+                </CardContent>
+            </Card>
+        </div>
+        <div className="md:col-span-1">
+          {selectedDate && selectedDayEvents ? (
+            <Card>
+              <CardHeader>
+                <CardTitle className="font-headline text-2xl">
+                    Eventos para {selectedDate.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                 {selectedDayEvents.raw.length > 0 && (
+                    <div className="mb-4">
+                        <div className="flex items-center gap-2 mb-2">
+                            <RawIcon className="h-6 w-6" />
+                            <h3 className="font-semibold text-lg">RAW</h3>
+                        </div>
+                        <ul className="space-y-2 pl-2 border-l-2 border-red-500/50 ml-3">
+                            {selectedDayEvents.raw.map((event, index) => (
+                                <li key={`raw-${index}`}><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</li>
+                            ))}
+                        </ul>
+                    </div>
+                 )}
+                 {selectedDayEvents.smackdown.length > 0 && (
+                    <div className="mb-4">
+                        <div className="flex items-center gap-2 mb-2">
+                            <SmackDownIcon className="h-6 w-6" />
+                            <h3 className="font-semibold text-lg">SmackDown</h3>
+                        </div>
+                        <ul className="space-y-2 pl-2 border-l-2 border-blue-500/50 ml-3">
+                            {selectedDayEvents.smackdown.map((event, index) => (
+                                <li key={`sd-${index}`}><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</li>
+                            ))}
+                        </ul>
+                    </div>
+                 )}
+                 {selectedDayEvents.ppvs.length > 0 && (
+                    <div>
+                        <div className="flex items-center gap-2 mb-2">
+                            <PpvIcon className="h-6 w-6 text-accent" />
+                            <h3 className="font-semibold text-lg">PPVs</h3>
+                        </div>
+                        <ul className="space-y-2 pl-2 border-l-2 border-amber-500/50 ml-3">
+                            {selectedDayEvents.ppvs.map((event, index) => (
+                                <li key={`ppv-${index}`}>
+                                    <p className="font-bold">{event.name}</p>
+                                    <p><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                 )}
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="flex items-center justify-center h-full">
+              <CardContent className="text-center text-muted-foreground p-6">
+                <CalendarDays className="mx-auto h-12 w-12 mb-4" />
+                <p>Selecciona un día en el calendario para ver los detalles del evento.</p>
+              </CardContent>
+            </Card>
+          )}
+        </div>
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
