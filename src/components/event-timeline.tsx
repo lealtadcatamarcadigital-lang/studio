@@ -320,29 +320,6 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         </h1>
       </header>
 
-      <div className="max-w-4xl mx-auto mb-12">
-        <form onSubmit={handleSearch} className="flex gap-2 items-center">
-          <div className="relative flex-grow">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Busca eventos por ciudad, nombre de PPV, etc. (p.ej. 'Royal Rumble' o 'eventos en Chicago')"
-              className="pl-10 h-12 text-base"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-          <Button type="submit" size="lg" disabled={isLoading} className="h-12">
-            {isLoading ? (
-              <LoaderCircle className="animate-spin" />
-            ) : (
-              <Search />
-            )}
-            <span className="hidden md:inline ml-2">Buscar con IA</span>
-          </Button>
-        </form>
-      </div>
-
       <div className="flex flex-col lg:flex-row justify-center items-start gap-8 mb-12">
         <div className="w-full lg:w-auto">
           <Card>
@@ -456,6 +433,29 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         </div>
       </div>
       
+      <div className="max-w-4xl mx-auto mb-12">
+        <form onSubmit={handleSearch} className="flex gap-2 items-center">
+          <div className="relative flex-grow">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Busca eventos por ciudad, nombre de PPV, etc. (p.ej. 'Royal Rumble' o 'eventos en Chicago')"
+              className="pl-10 h-12 text-base"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <Button type="submit" size="lg" disabled={isLoading} className="h-12">
+            {isLoading ? (
+              <LoaderCircle className="animate-spin" />
+            ) : (
+              <Search />
+            )}
+            <span className="hidden md:inline ml-2">Buscar con IA</span>
+          </Button>
+        </form>
+      </div>
+
       <div className="text-center">
         <Button onClick={handleDownload} variant="outline">
           <Download />
