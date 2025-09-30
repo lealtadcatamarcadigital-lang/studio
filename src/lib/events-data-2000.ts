@@ -76,7 +76,7 @@ export const WWF_2000_DATA: MonthData[] = [
     ],
     ppvs: [
       { date: '2', name: 'WrestleMania 2000', location: 'Anaheim, CA', description: 'Una lucha fatal de 4 esquinas por el título. Vince McMahon traiciona a The Rock, permitiendo que Triple H retenga.', matches: ['WWF Championship: Triple H vs. The Rock vs. The Big Show vs. Mick Foley', 'Triangle Ladder Match: Edge & Christian vs. The Hardy Boyz vs. The Dudley Boyz'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/a/ab/WM2000Poster.jpeg' },
-      { date: '30', name: 'Backlash', location: 'Washington, D.C.', description: '¡The Rock finalmente derrota a Triple H para ganar el Campeonato de la WWF, gracias a la ayuda de Stone Cold Steve Austin!', matches: ['WWF Championship: The Rock vs. Triple H (con Shane McMahon como árbitro)'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/5/50/Backlash_2000.jpg' },
+      { date: '30', name: 'Backlash', location: 'Washington, D.C.', description: '¡The Rock finalmente derrota a Triple H para ganar el Campeonato de la WWF, gracias a la ayuda de Stone Cold Steve Austin!', matches: ['WWF Championship: The Rock vs. Triple H (con Shane McMahon como árbitro)'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/c/c6/Backlash_2000_poster.jpg' },
     ],
   },
   {
