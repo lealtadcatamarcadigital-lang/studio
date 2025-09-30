@@ -4,8 +4,12 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
-  title: 'Attitude Rewind 2000',
+  title: 'Attitude Rewind',
   description: 'A chronological tour of WWF events in the years 2000 and 2001.',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-icon.png',
+  },
 };
 
 export default function RootLayout({
