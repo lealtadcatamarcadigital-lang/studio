@@ -37,7 +37,6 @@ const eventSummaryPrompt = ai.definePrompt({
   output: {
     schema: AIGenerateEventSummaryOutputSchema,
   },
-  model: 'googleai/gemini-2.5-flash',
   prompt: `Eres un historiador de la lucha libre. Genera un resumen breve y sin spoilers para el siguiente evento en español.
 Céntrate en las principales historias y rivalidades que conducen al evento. No reveles ningún resultado de los combates.
 El resumen debe tener unas 2-3 frases.
