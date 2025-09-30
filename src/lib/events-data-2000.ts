@@ -19,7 +19,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '27', location: 'Baltimore, MD', description: 'Cactus Jack ataca a Triple H, construyendo su lucha para No Way Out.', matches: ['The Rock vs. Kurt Angle'] },
     ],
     ppvs: [
-      { date: '23', name: 'Royal Rumble', location: 'New York, NY', description: 'The Rock gana el Royal Rumble Match. Triple H retiene el título contra Cactus Jack en una brutal Street Fight.', matches: ['Street Fight for WWF Championship: Triple H vs. Cactus Jack', '30-Man Royal Rumble Match'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/2/23/Wwfroyalrumble2000.jpg' },
+      { date: '23', name: 'Royal Rumble', location: 'New York, NY', description: 'The Rock gana el Royal Rumble Match. Triple H retiene el título contra Cactus Jack en una brutal Street Fight.', matches: ['Street Fight for WWF Championship: Triple H vs. Cactus Jack', '30-Man Royal Rumble Match'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/b/bb/Royal_Rumble_2000.jpg' },
     ],
   },
   {
