@@ -75,7 +75,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '27', location: 'Raleigh, NC', description: 'Stone Cold Steve Austin destruye el autobús de DX, anunciando su regreso.', matches: ['The Rock & The Dudley Boyz vs. Triple H, X-Pac, & Road Dogg'] },
     ],
     ppvs: [
-      { date: '2', name: 'WrestleMania 2000', location: 'Anaheim, CA', description: 'Una lucha fatal de 4 esquinas por el título. Vince McMahon traiciona a The Rock, permitiendo que Triple H retenga.', matches: ['WWF Championship: Triple H vs. The Rock vs. The Big Show vs. Mick Foley', 'Triangle Ladder Match: Edge & Christian vs. The Hardy Boyz vs. The Dudley Boyz'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/e/e6/Wrestlemania2000.jpg' },
+      { date: '2', name: 'WrestleMania 2000', location: 'Anaheim, CA', description: 'Una lucha fatal de 4 esquinas por el título. Vince McMahon traiciona a The Rock, permitiendo que Triple H retenga.', matches: ['WWF Championship: Triple H vs. The Rock vs. The Big Show vs. Mick Foley', 'Triangle Ladder Match: Edge & Christian vs. The Hardy Boyz vs. The Dudley Boyz'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/a/ab/WM2000Poster.jpeg' },
       { date: '30', name: 'Backlash', location: 'Washington, D.C.', description: '¡The Rock finalmente derrota a Triple H para ganar el Campeonato de la WWF, gracias a la ayuda de Stone Cold Steve Austin!', matches: ['WWF Championship: The Rock vs. Triple H (con Shane McMahon como árbitro)'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/50/Backlash_2000.jpg/800px-Backlash_2000.jpg' },
     ],
   },
