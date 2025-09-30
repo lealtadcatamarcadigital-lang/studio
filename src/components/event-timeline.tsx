@@ -61,20 +61,20 @@ const flattenEventsToSearchableObjects = (data: MonthData[]) => {
   data.forEach((month, monthIndex) => {
     month.raw.forEach((event, eventIndex) => {
       eventObjects.push({
-        id: `${month.monthId}-raw-${eventIndex}`,
-        text: `RAW en ${month.month} ${event.date}: ${event.location}`
+        id: `${month.monthId}-${month.year}-raw-${eventIndex}`,
+        text: `RAW en ${month.month} ${event.date}, ${month.year}: ${event.location}`
       });
     });
     month.smackdown.forEach((event, eventIndex) => {
       eventObjects.push({
-        id: `${month.monthId}-smackdown-${eventIndex}`,
-        text: `SmackDown en ${month.month} ${event.date}: ${event.location}`
+        id: `${month.monthId}-${month.year}-smackdown-${eventIndex}`,
+        text: `SmackDown en ${month.month} ${event.date}, ${month.year}: ${event.location}`
       });
     });
     month.ppvs.forEach((event, eventIndex) => {
       eventObjects.push({
-        id: `${month.monthId}-ppv-${eventIndex}`,
-        text: `PPV ${event.name} en ${month.month} ${event.date}: ${event.location}`
+        id: `${month.monthId}-${month.year}-ppv-${eventIndex}`,
+        text: `PPV ${event.name} en ${month.month} ${event.date}, ${month.year}: ${event.location}`
       });
     });
   });
@@ -87,7 +87,7 @@ const monthNameToNumber: { [key: string]: number } = {
 };
 
 type DayEvents = { raw: (Event & {id: string})[]; smackdown: (Event & {id: string})[]; ppvs: (PPVEvent & {id: string})[] };
-type DetailedEvent = (Event | PPVEvent) & { type: 'raw' | 'smackdown' | 'ppv', id: string };
+type DetailedEvent = (Event | PPVEvent) & { type: 'raw' | 'smackdown' | 'ppv', id: string, year: number };
 
 const getEventsByDate = (data: MonthData[]) => {
   const eventsByDate = new Map<string, DayEvents>();
@@ -96,13 +96,13 @@ const getEventsByDate = (data: MonthData[]) => {
     if (monthIndex === undefined) return;
     const processEvents = (events: (Event | PPVEvent)[], type: 'raw' | 'smackdown' | 'ppvs', typeName: 'raw' | 'smackdown' | 'ppv') => {
       events.forEach((event, eventIndex) => {
-        const date = new Date(2000, monthIndex, parseInt(event.date));
+        const date = new Date(month.year, monthIndex, parseInt(event.date));
         const dateString = date.toDateString();
         if (!eventsByDate.has(dateString)) {
           eventsByDate.set(dateString, { raw: [], smackdown: [], ppvs: [] });
         }
         const dayEvents = eventsByDate.get(dateString)!;
-        const eventWithId = { ...event, id: `${month.monthId}-${typeName}-${eventIndex}`};
+        const eventWithId = { ...event, id: `${month.monthId}-${month.year}-${typeName}-${eventIndex}`};
         (dayEvents[type] as (Event & {id: string})[]).push(eventWithId);
       });
     };
@@ -148,9 +148,10 @@ const getEventDates = (eventsByDate: Map<string, DayEvents>, eventStatuses: Even
 const createEventMap = (data: MonthData[]): Map<string, DetailedEvent> => {
     const map = new Map<string, DetailedEvent>();
     data.forEach((month) => {
-        month.raw.forEach((event, index) => map.set(`${month.monthId}-raw-${index}`, { ...event, type: 'raw', id: `${month.monthId}-raw-${index}` }));
-        month.smackdown.forEach((event, index) => map.set(`${month.monthId}-smackdown-${index}`, { ...event, type: 'smackdown', id: `${month.monthId}-smackdown-${index}` }));
-        month.ppvs.forEach((event, index) => map.set(`${month.monthId}-ppv-${index}`, { ...event, type: 'ppv', id: `${month.monthId}-ppv-${index}` }));
+        const year = month.year;
+        month.raw.forEach((event, index) => map.set(`${month.monthId}-${year}-raw-${index}`, { ...event, type: 'raw', id: `${month.monthId}-${year}-raw-${index}`, year }));
+        month.smackdown.forEach((event, index) => map.set(`${month.monthId}-${year}-smackdown-${index}`, { ...event, type: 'smackdown', id: `${month.monthId}-${year}-smackdown-${index}`, year }));
+        month.ppvs.forEach((event, index) => map.set(`${month.monthId}-${year}-ppv-${index}`, { ...event, type: 'ppv', id: `${month.monthId}-${year}-ppv-${index}`, year }));
     });
     return map;
 };
@@ -185,8 +186,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
     const storedMonth = localStorage.getItem('attitude-rewind-month');
     if (storedMonth) {
       const parsedMonth = new Date(storedMonth);
-      // Validate that the stored month is for the correct year, to avoid issues if data changes.
-      if (!isNaN(parsedMonth.getTime()) && parsedMonth.getFullYear() === 2000) {
+      if (!isNaN(parsedMonth.getTime())) {
         setMonth(parsedMonth);
       }
     }
@@ -284,13 +284,17 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
   const handleSearchResultClick = (eventId: string) => {
       const event = eventMap.get(eventId);
       if (event) {
-          const monthIndex = Object.values(initialEvents).findIndex(m => m.monthId === eventId.split('-')[0]);
-          const monthName = initialEvents[monthIndex].month;
+          const [_monthId, yearStr, _type, _index] = eventId.split('-');
+          const year = parseInt(yearStr);
+          const monthData = initialEvents.find(m => m.monthId === _monthId && m.year === year);
+          if (!monthData) return;
+
+          const monthName = monthData.month;
           const monthNumber = monthNameToNumber[monthName];
-          const eventDate = new Date(2000, monthNumber, parseInt(event.date));
+          const eventDate = new Date(year, monthNumber, parseInt(event.date));
           
           handleEventClick(event, eventDate);
-          setIsSearchDialogOpen(false);
+setIsSearchDialogOpen(false);
       }
   };
   
@@ -325,7 +329,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
       <header className="text-center mb-12">
         <h1 className="font-headline text-4xl md:text-5xl font-bold">
           <span className="text-black dark:text-white">Attitude Rewind </span>
-          <span className="text-red-600">2000</span>
+          <span className="text-red-600">2000-2001</span>
         </h1>
       </header>
 
@@ -358,7 +362,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                     available: 'day-available',
                 }}
                 fromYear={2000}
-                toYear={2000}
+                toYear={2001}
                 className="p-4"
               />
             </CardContent>
@@ -383,7 +387,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                             {selectedDayEvents.raw.map((event, index) => (
                                 <li key={`raw-${index}`} className="flex flex-col items-start p-1 rounded-md">
                                   <div><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</div>
-                                  <Button variant="ghost" size="sm" onClick={() => handleEventClick({ ...event, type: 'raw', id: event.id }, selectedDate)} className="mt-1 self-start">
+                                  <Button variant="ghost" size="sm" onClick={() => handleEventClick({ ...event, type: 'raw', id: event.id, year: selectedDate.getFullYear() }, selectedDate)} className="mt-1 self-start">
                                     <Info className="h-4 w-4 mr-2"/>
                                     Detalles
                                   </Button>
@@ -402,7 +406,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                             {selectedDayEvents.smackdown.map((event, index) => (
                                 <li key={`sd-${index}`} className="flex flex-col items-start p-1 rounded-md">
                                   <div><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</div>
-                                   <Button variant="ghost" size="sm" onClick={() => handleEventClick({ ...event, type: 'smackdown', id: event.id }, selectedDate)} className="mt-1 self-start">
+                                   <Button variant="ghost" size="sm" onClick={() => handleEventClick({ ...event, type: 'smackdown', id: event.id, year: selectedDate.getFullYear() }, selectedDate)} className="mt-1 self-start">
                                     <Info className="h-4 w-4 mr-2"/>
                                     Detalles
                                   </Button>
@@ -422,7 +426,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                                 <li key={`ppv-${index}`} className="flex flex-col items-start p-1 rounded-md">
                                     <div className="font-bold">{event.name}</div>
                                     <div><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</div>
-                                    <Button variant="ghost" size="sm" onClick={() => handleEventClick({ ...event, type: 'ppv', id: event.id }, selectedDate)} className="mt-1 self-start">
+                                    <Button variant="ghost" size="sm" onClick={() => handleEventClick({ ...event, type: 'ppv', id: event.id, year: selectedDate.getFullYear() }, selectedDate)} className="mt-1 self-start">
                                     <Info className="h-4 w-4 mr-2"/>
                                     Detalles
                                     </Button>
