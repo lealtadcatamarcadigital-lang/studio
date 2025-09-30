@@ -15,6 +15,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {googleAI} from '@genkit-ai/googleai';
 
 const EventObjectSchema = z.object({
   id: z.string().describe('Un identificador único para el evento.'),
@@ -56,7 +57,7 @@ const eventInsightPrompt = ai.definePrompt({
   name: 'eventInsightPrompt',
   input: {schema: AISearchEventInsightsInputSchema},
   output: {schema: AISearchEventInsightsOutputSchema},
-  prompt: `Eres un motor de búsqueda de IA para una cronología de eventos de lucha libre de la WWF del año 2000.
+  prompt: `Eres un motor de búsqueda de IA para una cronología de eventos de lucha libre de la WWF del año 2001.
 El usuario está buscando: {{{query}}}
 
 Busca en los siguientes datos de eventos y devuelve solo los eventos que sean relevantes para la consulta del usuario.

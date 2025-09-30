@@ -95,7 +95,7 @@ const getEventsByDate = (data: MonthData[]) => {
     if (monthIndex === undefined) return;
     const processEvents = (events: (Event | PPVEvent)[], type: 'raw' | 'smackdown' | 'ppvs', typeName: 'raw' | 'smackdown' | 'ppv') => {
       events.forEach((event, eventIndex) => {
-        const date = new Date(2000, monthIndex, parseInt(event.date));
+        const date = new Date(2001, monthIndex, parseInt(event.date));
         const dateString = date.toDateString();
         if (!eventsByDate.has(dateString)) {
           eventsByDate.set(dateString, { raw: [], smackdown: [], ppvs: [] });
@@ -177,7 +177,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
   const [isEventDetailsOpen, setIsEventDetailsOpen] = useState(false);
   const [aiSummary, setAiSummary] = useState<AIGenerateEventSummaryOutput | null>(null);
   const [isAiSummaryLoading, setIsAiSummaryLoading] = useState(false);
-  const [month, setMonth] = useState(new Date(2000, 0));
+  const [month, setMonth] = useState(new Date(2001, 0));
   const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
 
   useEffect(() => {
@@ -246,13 +246,13 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
       )}`;
       const link = document.createElement("a");
       link.href = jsonString;
-      link.download = "wwf_2000_events.json";
+      link.download = "wwf_2001_events.json";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       toast({
         title: "Descarga iniciada",
-        description: "El archivo wwf_2000_events.json ha comenzado a descargarse.",
+        description: "El archivo wwf_2001_events.json ha comenzado a descargarse.",
       });
     } catch (error) {
       console.error("Download failed:", error);
@@ -285,7 +285,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
           const monthIndex = Object.values(initialEvents).findIndex(m => m.monthId === eventId.split('-')[0]);
           const monthName = initialEvents[monthIndex].month;
           const monthNumber = monthNameToNumber[monthName];
-          const eventDate = new Date(2000, monthNumber, parseInt(event.date));
+          const eventDate = new Date(2001, monthNumber, parseInt(event.date));
           
           handleEventClick(event, eventDate);
           setIsSearchDialogOpen(false);
@@ -323,7 +323,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
       <header className="text-center mb-12">
         <h1 className="font-headline text-4xl md:text-5xl font-bold">
           <span className="text-black dark:text-white">Attitude Rewind years </span>
-          <span className="text-red-600">2000</span>
+          <span className="text-red-600">2001</span>
         </h1>
       </header>
 
@@ -355,8 +355,8 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                     notWatched: 'day-not-watched',
                     available: 'day-available',
                 }}
-                fromYear={2000}
-                toYear={2000}
+                fromYear={2001}
+                toYear={2001}
                 className="p-4"
               />
             </CardContent>
@@ -381,7 +381,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                             {selectedDayEvents.raw.map((event, index) => (
                                 <li key={`raw-${index}`} className="flex flex-col items-start p-1 rounded-md">
                                   <div><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</div>
-                                  <Button variant="ghost" size="sm" onClick={() => handleEventClick({ ...event, type: 'raw' }, selectedDate)} className="mt-1 self-start">
+                                  <Button variant="ghost" size="sm" onClick={() => handleEventClick({ ...event, type: 'raw', id: event.id }, selectedDate)} className="mt-1 self-start">
                                     <Info className="h-4 w-4 mr-2"/>
                                     Detalles
                                   </Button>
@@ -400,7 +400,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                             {selectedDayEvents.smackdown.map((event, index) => (
                                 <li key={`sd-${index}`} className="flex flex-col items-start p-1 rounded-md">
                                   <div><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</div>
-                                   <Button variant="ghost" size="sm" onClick={() => handleEventClick({ ...event, type: 'smackdown' }, selectedDate)} className="mt-1 self-start">
+                                   <Button variant="ghost" size="sm" onClick={() => handleEventClick({ ...event, type: 'smackdown', id: event.id }, selectedDate)} className="mt-1 self-start">
                                     <Info className="h-4 w-4 mr-2"/>
                                     Detalles
                                   </Button>
@@ -420,7 +420,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                                 <li key={`ppv-${index}`} className="flex flex-col items-start p-1 rounded-md">
                                     <div className="font-bold">{event.name}</div>
                                     <div><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</div>
-                                    <Button variant="ghost" size="sm" onClick={() => handleEventClick({ ...event, type: 'ppv' }, selectedDate)} className="mt-1 self-start">
+                                    <Button variant="ghost" size="sm" onClick={() => handleEventClick({ ...event, type: 'ppv', id: event.id }, selectedDate)} className="mt-1 self-start">
                                     <Info className="h-4 w-4 mr-2"/>
                                     Detalles
                                     </Button>
@@ -448,7 +448,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Busca eventos por ciudad, nombre de PPV, etc. (p.ej. 'Royal Rumble' o 'eventos en Chicago')"
+              placeholder="Busca eventos por ciudad, nombre de PPV, etc. (p.ej. 'WrestleMania' o 'eventos en Houston')"
               className="pl-10 h-12 text-base"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
