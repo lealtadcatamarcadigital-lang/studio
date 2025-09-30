@@ -594,10 +594,27 @@ setIsSearchDialogOpen(false);
                               </SelectContent>
                             </Select>
                         </div>
-
                         <Separator className="my-4"/>
-
-                        <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
+                        <div>
+                          <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
+                            <List className="h-5 w-5 text-accent" />
+                            Cartelera de Combates
+                          </h3>
+                          {selectedEvent.matches && selectedEvent.matches.length > 0 ? (
+                            <ul className="space-y-2 list-disc pl-5 text-muted-foreground">
+                              {selectedEvent.matches.map((match, i) => <li key={i}>{match}</li>)}
+                            </ul>
+                          ) : (
+                            <p className="text-muted-foreground">No se ha anunciado la cartelera de combates.</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <Separator />
+                    
+                    <div>
+                      <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
                           <Sparkles className="h-5 w-5 text-accent" />
                           Resumen del Show
                         </h3>
@@ -617,24 +634,8 @@ setIsSearchDialogOpen(false);
                             <p className="text-sm text-black dark:text-white">{aiSummary.summary}</p>
                           </div>
                         )}
-                      </div>
                     </div>
-                    
-                    <Separator />
-                    
-                    <div>
-                      <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
-                        <List className="h-5 w-5 text-accent" />
-                        Cartelera de Combates
-                      </h3>
-                      {selectedEvent.matches && selectedEvent.matches.length > 0 ? (
-                        <ul className="space-y-2 list-disc pl-5 text-muted-foreground">
-                          {selectedEvent.matches.map((match, i) => <li key={i}>{match}</li>)}
-                        </ul>
-                      ) : (
-                        <p className="text-muted-foreground">No se ha anunciado la cartelera de combates.</p>
-                      )}
-                    </div>
+
                   </div>
                 </ScrollArea>
               </div>
@@ -645,3 +646,4 @@ setIsSearchDialogOpen(false);
     </div>
   );
 }
+
