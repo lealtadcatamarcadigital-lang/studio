@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Image from 'next/image';
 import {
   Search,
@@ -139,6 +139,22 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
   const [isEventDetailsOpen, setIsEventDetailsOpen] = useState(false);
   const [aiSummary, setAiSummary] = useState<AIGenerateEventSummaryOutput | null>(null);
   const [isAiSummaryLoading, setIsAiSummaryLoading] = useState(false);
+  const [month, setMonth] = useState(new Date(2000, 0));
+
+  useEffect(() => {
+    const storedMonth = localStorage.getItem('attitude-rewind-month');
+    if (storedMonth) {
+      const parsedMonth = new Date(storedMonth);
+      if (!isNaN(parsedMonth.getTime())) {
+        setMonth(parsedMonth);
+      }
+    }
+  }, []);
+  
+  const handleMonthChange = (newMonth: Date) => {
+    setMonth(newMonth);
+    localStorage.setItem('attitude-rewind-month', newMonth.toISOString());
+  };
 
   const eventsByDate = useMemo(() => getEventsByDate(initialEvents), [initialEvents]);
   const eventDatesModifiers = useMemo(() => getEventDates(eventsByDate), [eventsByDate]);
@@ -286,12 +302,14 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
       </div>
 
       <div className="flex flex-col lg:flex-row justify-center items-start gap-8 mb-12">
-        <div className="flex justify-center w-full lg:w-auto">
+        <div className="w-full lg:w-auto">
           <Card>
             <CardContent className="p-0 flex justify-center">
               <Calendar
                 locale={es}
                 mode="single"
+                month={month}
+                onMonthChange={handleMonthChange}
                 selected={selectedDate}
                 onSelect={setSelectedDate}
                 onDayClick={handleDayClick}
@@ -307,7 +325,6 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                     smackdown: 'day-smackdown',
                     ppv: 'day-ppv',
                 }}
-                defaultMonth={new Date(2000, 0)}
                 fromYear={2000}
                 toYear={2000}
                 className="p-4"
