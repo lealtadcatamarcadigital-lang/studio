@@ -97,4 +97,8 @@ body {
   .day-ppv {
     @apply bg-amber-500/50 text-white rounded-full;
   }
+  .day-watched::after {
+    content: '';
+    @apply absolute bottom-1 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-green-500;
+  }
 }

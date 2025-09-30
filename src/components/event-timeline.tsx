@@ -11,6 +11,9 @@ import {
   Sparkles,
   List,
   Info,
+  Eye,
+  EyeOff,
+  Circle,
 } from "lucide-react";
 import { es } from 'date-fns/locale';
 
@@ -30,6 +33,13 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
@@ -42,6 +52,9 @@ import { PpvIcon } from "./icons/ppv-icon";
 interface EventTimelineProps {
   initialEvents: MonthData[];
 }
+
+type EventStatus = "disponible" | "visto" | "no-visto";
+type EventStatusMap = { [eventId: string]: EventStatus };
 
 const flattenEventsToSearchableObjects = (data: MonthData[]): AISearchEventInsightsInput['eventData'] => {
   const eventObjects: AISearchEventInsightsInput['eventData'] = [];
@@ -73,39 +86,41 @@ const monthNameToNumber: { [key: string]: number } = {
   Julio: 6, Agosto: 7, Septiembre: 8, Octubre: 9, Noviembre: 10, Diciembre: 11,
 };
 
-type DayEvents = { raw: Event[]; smackdown: Event[]; ppvs: PPVEvent[] };
-type DetailedEvent = (Event | PPVEvent) & { type: 'raw' | 'smackdown' | 'ppv' };
+type DayEvents = { raw: (Event & {id: string})[]; smackdown: (Event & {id: string})[]; ppvs: (PPVEvent & {id: string})[] };
+type DetailedEvent = (Event | PPVEvent) & { type: 'raw' | 'smackdown' | 'ppv', id: string };
 
 const getEventsByDate = (data: MonthData[]) => {
   const eventsByDate = new Map<string, DayEvents>();
   data.forEach((month) => {
     const monthIndex = monthNameToNumber[month.month];
     if (monthIndex === undefined) return;
-    const processEvents = (events: (Event | PPVEvent)[], type: 'raw' | 'smackdown' | 'ppvs') => {
-      events.forEach(event => {
+    const processEvents = (events: (Event | PPVEvent)[], type: 'raw' | 'smackdown' | 'ppvs', typeName: 'raw' | 'smackdown' | 'ppv') => {
+      events.forEach((event, eventIndex) => {
         const date = new Date(2000, monthIndex, parseInt(event.date));
         const dateString = date.toDateString();
         if (!eventsByDate.has(dateString)) {
           eventsByDate.set(dateString, { raw: [], smackdown: [], ppvs: [] });
         }
         const dayEvents = eventsByDate.get(dateString)!;
-        (dayEvents[type] as (Event | PPVEvent)[]).push(event);
+        const eventWithId = { ...event, id: `${month.monthId}-${typeName}-${eventIndex}`};
+        (dayEvents[type] as (Event & {id: string})[]).push(eventWithId);
       });
     };
-    processEvents(month.raw, 'raw');
-    processEvents(month.smackdown, 'smackdown');
-    processEvents(month.ppvs, 'ppvs');
+    processEvents(month.raw, 'raw', 'raw');
+    processEvents(month.smackdown, 'smackdown', 'smackdown');
+    processEvents(month.ppvs, 'ppvs', 'ppv');
   });
   return eventsByDate;
 };
 
-const getEventDates = (eventsByDate: Map<string, DayEvents>) => {
+const getEventDates = (eventsByDate: Map<string, DayEvents>, eventStatuses: EventStatusMap) => {
   const eventDates: {
     all: Date[],
     raw: Date[],
     smackdown: Date[],
-    ppv: Date[]
-  } = { all: [], raw: [], smackdown: [], ppv: [] };
+    ppv: Date[],
+    watched: Date[],
+  } = { all: [], raw: [], smackdown: [], ppv: [], watched: [] };
 
   eventsByDate.forEach((dayEvents, dateString) => {
     const date = new Date(dateString);
@@ -113,6 +128,11 @@ const getEventDates = (eventsByDate: Map<string, DayEvents>) => {
     if (dayEvents.raw.length > 0) eventDates.raw.push(date);
     if (dayEvents.smackdown.length > 0) eventDates.smackdown.push(date);
     if (dayEvents.ppvs.length > 0) eventDates.ppv.push(date);
+
+    const allDayEvents = [...dayEvents.raw, ...dayEvents.smackdown, ...dayEvents.ppvs];
+    if (allDayEvents.some(event => eventStatuses[event.id] === 'visto')) {
+      eventDates.watched.push(date);
+    }
   });
   return eventDates;
 }
@@ -120,11 +140,22 @@ const getEventDates = (eventsByDate: Map<string, DayEvents>) => {
 const createEventMap = (data: MonthData[]): Map<string, DetailedEvent> => {
     const map = new Map<string, DetailedEvent>();
     data.forEach((month) => {
-        month.raw.forEach((event, index) => map.set(`${month.monthId}-raw-${index}`, { ...event, type: 'raw' }));
-        month.smackdown.forEach((event, index) => map.set(`${month.monthId}-smackdown-${index}`, { ...event, type: 'smackdown' }));
-        month.ppvs.forEach((event, index) => map.set(`${month.monthId}-ppv-${index}`, { ...event, type: 'ppv' }));
+        month.raw.forEach((event, index) => map.set(`${month.monthId}-raw-${index}`, { ...event, type: 'raw', id: `${month.monthId}-raw-${index}` }));
+        month.smackdown.forEach((event, index) => map.set(`${month.monthId}-smackdown-${index}`, { ...event, type: 'smackdown', id: `${month.monthId}-smackdown-${index}` }));
+        month.ppvs.forEach((event, index) => map.set(`${month.monthId}-ppv-${index}`, { ...event, type: 'ppv', id: `${month.monthId}-ppv-${index}` }));
     });
     return map;
+};
+
+const StatusIcon = ({ status }: { status: EventStatus }) => {
+  switch (status) {
+    case "visto":
+      return <Eye className="h-4 w-4 text-green-500" />;
+    case "no-visto":
+      return <EyeOff className="h-4 w-4 text-red-500" />;
+    default:
+      return <Circle className="h-4 w-4 text-muted-foreground" />;
+  }
 };
 
 export function EventTimeline({ initialEvents }: EventTimelineProps) {
@@ -140,6 +171,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
   const [aiSummary, setAiSummary] = useState<AIGenerateEventSummaryOutput | null>(null);
   const [isAiSummaryLoading, setIsAiSummaryLoading] = useState(false);
   const [month, setMonth] = useState(new Date(2000, 0));
+  const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
 
   useEffect(() => {
     const storedMonth = localStorage.getItem('attitude-rewind-month');
@@ -149,6 +181,10 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
         setMonth(parsedMonth);
       }
     }
+    const storedStatuses = localStorage.getItem('attitude-rewind-statuses');
+    if(storedStatuses) {
+      setEventStatuses(JSON.parse(storedStatuses));
+    }
   }, []);
   
   const handleMonthChange = (newMonth: Date) => {
@@ -156,8 +192,14 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
     localStorage.setItem('attitude-rewind-month', newMonth.toISOString());
   };
 
+  const handleStatusChange = (eventId: string, status: EventStatus) => {
+    const newStatuses = { ...eventStatuses, [eventId]: status };
+    setEventStatuses(newStatuses);
+    localStorage.setItem('attitude-rewind-statuses', JSON.stringify(newStatuses));
+  };
+
   const eventsByDate = useMemo(() => getEventsByDate(initialEvents), [initialEvents]);
-  const eventDatesModifiers = useMemo(() => getEventDates(eventsByDate), [eventsByDate]);
+  const eventDatesModifiers = useMemo(() => getEventDates(eventsByDate, eventStatuses), [eventsByDate, eventStatuses]);
   const eventMap = useMemo(() => createEventMap(initialEvents), [initialEvents]);
   
   const selectedDayEvents = selectedDate ? eventsByDate.get(selectedDate.toDateString()) : undefined;
@@ -318,12 +360,14 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                     raw: eventDatesModifiers.raw,
                     smackdown: eventDatesModifiers.smackdown,
                     ppv: eventDatesModifiers.ppv,
+                    watched: eventDatesModifiers.watched,
                 }}
                 modifiersClassNames={{
                     event: 'bg-primary/20 text-primary-foreground rounded-full',
                     raw: 'day-raw',
                     smackdown: 'day-smackdown',
                     ppv: 'day-ppv',
+                    watched: 'day-watched',
                 }}
                 fromYear={2000}
                 toYear={2000}
@@ -473,7 +517,8 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
           {selectedEvent && (
             <>
               <DialogHeader>
-                <DialogTitle className="font-headline text-2xl">
+                 <DialogTitle className="font-headline text-2xl flex items-center gap-2">
+                    <StatusIcon status={eventStatuses[selectedEvent.id] || 'disponible'} />
                     {selectedEvent.type === 'ppv' ? (selectedEvent as PPVEvent).name : `WWF ${selectedEvent.type.toUpperCase()}`}
                 </DialogTitle>
                 <DialogDescription asChild>
@@ -506,6 +551,39 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                         </div>
                       )}
                       <div className={selectedEvent.type === 'ppv' && (selectedEvent as PPVEvent).coverUrl ? "md:col-span-2" : "md:col-span-3"}>
+                        <div>
+                          <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
+                            Estado
+                          </h3>
+                           <Select
+                              value={eventStatuses[selectedEvent.id] || 'disponible'}
+                              onValueChange={(value) => handleStatusChange(selectedEvent.id, value as EventStatus)}
+                            >
+                              <SelectTrigger className="w-[180px]">
+                                <SelectValue placeholder="Seleccionar estado" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="disponible">
+                                  <div className="flex items-center gap-2">
+                                    <Circle className="h-4 w-4 text-muted-foreground" /> Disponible
+                                  </div>
+                                </SelectItem>
+                                <SelectItem value="visto">
+                                   <div className="flex items-center gap-2">
+                                    <Eye className="h-4 w-4 text-green-500" /> Visto
+                                  </div>
+                                </SelectItem>
+                                <SelectItem value="no-visto">
+                                  <div className="flex items-center gap-2">
+                                    <EyeOff className="h-4 w-4 text-red-500" /> No Visto
+                                  </div>
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
+                        </div>
+
+                        <Separator className="my-4"/>
+
                         <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
                           <Sparkles className="h-5 w-5 text-accent" />
                           Resumen del Show
