@@ -1,10 +1,11 @@
+
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
-  title: 'Attitude Rewind years 2001',
-  description: 'A chronological tour of WWF events in the year 2001.',
+  title: 'Attitude Rewind 2000',
+  description: 'A chronological tour of WWF events in the year 2000.',
 };
 
 export default function RootLayout({

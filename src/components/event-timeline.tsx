@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
@@ -95,7 +96,7 @@ const getEventsByDate = (data: MonthData[]) => {
     if (monthIndex === undefined) return;
     const processEvents = (events: (Event | PPVEvent)[], type: 'raw' | 'smackdown' | 'ppvs', typeName: 'raw' | 'smackdown' | 'ppv') => {
       events.forEach((event, eventIndex) => {
-        const date = new Date(2001, monthIndex, parseInt(event.date));
+        const date = new Date(2000, monthIndex, parseInt(event.date));
         const dateString = date.toDateString();
         if (!eventsByDate.has(dateString)) {
           eventsByDate.set(dateString, { raw: [], smackdown: [], ppvs: [] });
@@ -177,14 +178,15 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
   const [isEventDetailsOpen, setIsEventDetailsOpen] = useState(false);
   const [aiSummary, setAiSummary] = useState<AIGenerateEventSummaryOutput | null>(null);
   const [isAiSummaryLoading, setIsAiSummaryLoading] = useState(false);
-  const [month, setMonth] = useState(new Date(2001, 0));
+  const [month, setMonth] = useState(new Date(2000, 0));
   const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
 
   useEffect(() => {
     const storedMonth = localStorage.getItem('attitude-rewind-month');
     if (storedMonth) {
       const parsedMonth = new Date(storedMonth);
-      if (!isNaN(parsedMonth.getTime())) {
+      // Validate that the stored month is for the correct year, to avoid issues if data changes.
+      if (!isNaN(parsedMonth.getTime()) && parsedMonth.getFullYear() === 2000) {
         setMonth(parsedMonth);
       }
     }
@@ -246,13 +248,13 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
       )}`;
       const link = document.createElement("a");
       link.href = jsonString;
-      link.download = "wwf_2001_events.json";
+      link.download = "wwf_2000_events.json";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       toast({
         title: "Descarga iniciada",
-        description: "El archivo wwf_2001_events.json ha comenzado a descargarse.",
+        description: "El archivo wwf_2000_events.json ha comenzado a descargarse.",
       });
     } catch (error) {
       console.error("Download failed:", error);
@@ -285,7 +287,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
           const monthIndex = Object.values(initialEvents).findIndex(m => m.monthId === eventId.split('-')[0]);
           const monthName = initialEvents[monthIndex].month;
           const monthNumber = monthNameToNumber[monthName];
-          const eventDate = new Date(2001, monthNumber, parseInt(event.date));
+          const eventDate = new Date(2000, monthNumber, parseInt(event.date));
           
           handleEventClick(event, eventDate);
           setIsSearchDialogOpen(false);
@@ -322,8 +324,8 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
     <div className="container mx-auto px-4 py-8">
       <header className="text-center mb-12">
         <h1 className="font-headline text-4xl md:text-5xl font-bold">
-          <span className="text-black dark:text-white">Attitude Rewind years </span>
-          <span className="text-red-600">2001</span>
+          <span className="text-black dark:text-white">Attitude Rewind </span>
+          <span className="text-red-600">2000</span>
         </h1>
       </header>
 
@@ -355,8 +357,8 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                     notWatched: 'day-not-watched',
                     available: 'day-available',
                 }}
-                fromYear={2001}
-                toYear={2001}
+                fromYear={2000}
+                toYear={2000}
                 className="p-4"
               />
             </CardContent>

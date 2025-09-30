@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -13,7 +14,6 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import {googleAI} from '@genkit-ai/googleai';
 
 const AIGenerateEventSummaryInputSchema = z.object({
   eventName: z.string().describe('The name of the wrestling event.'),
