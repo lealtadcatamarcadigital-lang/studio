@@ -116,7 +116,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '29', location: 'Hartford, CT', description: 'The Rock confronta a Rikishi por sus acciones.', matches: ['The Rock vs. Triple H'] },
     ],
     ppvs: [
-      { date: '25', name: 'King of the Ring', location: 'Boston, MA', description: 'Kurt Angle gana el torneo. The Rock recupera el Campeonato de la WWF de Triple H en una lucha de equipos de seis hombres.', matches: ['WWF Championship Tag Team Match: The Rock, The Undertaker & Kane vs. Triple H, Vince & Shane McMahon', 'King of the Ring Final: Kurt Angle vs. Rikishi'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/5/5c/King_of_the_Ring_2000.jpg' },
+      { date: '25', name: 'King of the Ring', location: 'Boston, MA', description: 'Kurt Angle gana el torneo. The Rock recupera el Campeonato de la WWF de Triple H en una lucha de equipos de seis hombres.', matches: ['WWF Championship Tag Team Match: The Rock, The Undertaker & Kane vs. Triple H, Vince & Shane McMahon', 'King of the Ring Final: Kurt Angle vs. Rikishi'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/e/e2/Kotr99-00.jpg' },
     ],
   },
   {
