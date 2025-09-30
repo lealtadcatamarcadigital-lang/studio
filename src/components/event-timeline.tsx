@@ -21,7 +21,6 @@ import type { MonthData, Event, PPVEvent } from "@/lib/events-data";
 import {
   searchEventInsights,
   type AISearchEventInsightsOutput,
-  type AISearchEventInsightsInput,
 } from "@/ai/flows/ai-search-event-insights";
 import { generateEventSummary, type AIGenerateEventSummaryOutput } from "@/ai/flows/ai-generate-event-summary";
 import { Button } from "@/components/ui/button";
@@ -56,8 +55,8 @@ interface EventTimelineProps {
 type EventStatus = "disponible" | "visto" | "no-visto";
 type EventStatusMap = { [eventId: string]: EventStatus };
 
-const flattenEventsToSearchableObjects = (data: MonthData[]): AISearchEventInsightsInput['eventData'] => {
-  const eventObjects: AISearchEventInsightsInput['eventData'] = [];
+const flattenEventsToSearchableObjects = (data: MonthData[]) => {
+  const eventObjects: { id: string; text: string }[] = [];
   data.forEach((month, monthIndex) => {
     month.raw.forEach((event, eventIndex) => {
       eventObjects.push({
@@ -120,7 +119,9 @@ const getEventDates = (eventsByDate: Map<string, DayEvents>, eventStatuses: Even
     smackdown: Date[],
     ppv: Date[],
     watched: Date[],
-  } = { all: [], raw: [], smackdown: [], ppv: [], watched: [] };
+    notWatched: Date[],
+    available: Date[],
+  } = { all: [], raw: [], smackdown: [], ppv: [], watched: [], notWatched: [], available: [] };
 
   eventsByDate.forEach((dayEvents, dateString) => {
     const date = new Date(dateString);
@@ -130,8 +131,14 @@ const getEventDates = (eventsByDate: Map<string, DayEvents>, eventStatuses: Even
     if (dayEvents.ppvs.length > 0) eventDates.ppv.push(date);
 
     const allDayEvents = [...dayEvents.raw, ...dayEvents.smackdown, ...dayEvents.ppvs];
-    if (allDayEvents.some(event => eventStatuses[event.id] === 'visto')) {
+    const statuses = allDayEvents.map(event => eventStatuses[event.id] || 'disponible');
+
+    if (statuses.some(s => s === 'visto')) {
       eventDates.watched.push(date);
+    } else if (statuses.some(s => s === 'no-visto')) {
+      eventDates.notWatched.push(date);
+    } else {
+        eventDates.available.push(date);
     }
   });
   return eventDates;
@@ -154,7 +161,7 @@ const StatusIcon = ({ status }: { status: EventStatus }) => {
     case "no-visto":
       return <EyeOff className="h-4 w-4 text-red-500" />;
     default:
-      return <Circle className="h-4 w-4 text-muted-foreground" />;
+      return <Circle className="h-4 w-4 text-black dark:text-white" />;
   }
 };
 
@@ -333,18 +340,20 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                 onSelect={setSelectedDate}
                 onDayClick={handleDayClick}
                 modifiers={{ 
-                    event: eventDatesModifiers.all,
                     raw: eventDatesModifiers.raw,
                     smackdown: eventDatesModifiers.smackdown,
                     ppv: eventDatesModifiers.ppv,
                     watched: eventDatesModifiers.watched,
+                    notWatched: eventDatesModifiers.notWatched,
+                    available: eventDatesModifiers.available,
                 }}
                 modifiersClassNames={{
-                    event: 'bg-primary/20 text-primary-foreground rounded-full',
                     raw: 'day-raw',
                     smackdown: 'day-smackdown',
                     ppv: 'day-ppv',
                     watched: 'day-watched',
+                    notWatched: 'day-not-watched',
+                    available: 'day-available',
                 }}
                 fromYear={2000}
                 toYear={2000}
@@ -466,9 +475,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
       <Dialog open={isSearchDialogOpen} onOpenChange={setIsSearchDialogOpen}>
         <DialogContent className="max-w-2xl h-[80vh] flex flex-col">
           <DialogHeader>
-            <DialogTitle className="font-headline text-2xl">
-              Resultados:
-            </DialogTitle>
+            <DialogTitle className="font-headline text-2xl">Resultados:</DialogTitle>
           </DialogHeader>
           <div className="flex-grow min-h-0">
             <ScrollArea className="h-full pr-4 -mr-4">
@@ -565,7 +572,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
                               <SelectContent>
                                 <SelectItem value="disponible">
                                   <div className="flex items-center gap-2">
-                                    <Circle className="h-4 w-4 text-muted-foreground" /> Disponible
+                                    <Circle className="h-4 w-4 text-black dark:text-white" /> Disponible
                                   </div>
                                 </SelectItem>
                                 <SelectItem value="visto">
@@ -601,7 +608,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
 
                         {aiSummary && (
                           <div className="mt-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
-                            <p className="text-sm text-black">{aiSummary.summary}</p>
+                            <p className="text-sm text-black dark:text-white">{aiSummary.summary}</p>
                           </div>
                         )}
                       </div>

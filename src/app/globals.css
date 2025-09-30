@@ -101,4 +101,12 @@ body {
     content: '';
     @apply absolute bottom-1 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-green-500;
   }
+  .day-not-watched::after {
+    content: '';
+    @apply absolute bottom-1 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-red-500;
+  }
+  .day-available::after {
+    content: '';
+    @apply absolute bottom-1 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-black;
+  }
 }
