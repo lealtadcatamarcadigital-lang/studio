@@ -56,6 +56,7 @@ const eventInsightPrompt = ai.definePrompt({
   name: 'eventInsightPrompt',
   input: {schema: AISearchEventInsightsInputSchema},
   output: {schema: AISearchEventInsightsOutputSchema},
+  model: 'googleai/gemini-2.5-flash',
   prompt: `Eres un motor de búsqueda de IA para una cronología de eventos de lucha libre de la WWF del año 2000.
 El usuario está buscando: {{{query}}}
 
