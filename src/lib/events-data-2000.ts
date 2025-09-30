@@ -38,7 +38,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '24', location: 'St. Louis, MO', description: 'The Big Show derrota a The Rock con ayuda de Shane McMahon.', matches: ['The Rock vs. The Big Show'] },
     ],
     ppvs: [
-      { date: '27', name: 'No Way Out', location: 'Hartford, CT', description: 'Triple H derrota a Cactus Jack en un Hell in a Cell para retener el título y retirar a Mick Foley. The Big Show derrota a The Rock.', matches: ['Hell in a Cell for WWF Championship: Triple H vs. Cactus Jack', 'The Rock vs. The Big Show'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/8/87/Nwo2000.jpg' },
+      { date: '27', name: 'No Way Out', location: 'Hartford, CT', description: 'Triple H derrota a Cactus Jack en un Hell in a Cell para retener el título y retirar a Mick Foley. The Big Show derrota a The Rock.', matches: ['Hell in a Cell for WWF Championship: Triple H vs. Cactus Jack', 'The Rock vs. The Big Show'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/b/bb/Royal_Rumble_2000.jpg' },
     ],
   },
   {
