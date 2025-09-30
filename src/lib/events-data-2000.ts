@@ -96,7 +96,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '25', location: 'Evansville, IN', description: 'El caos reina con el regreso de The Undertaker.', matches: ['The Rock vs. X-Pac & Road Dogg'] },
     ],
     ppvs: [
-      { date: '21', name: 'Judgment Day', location: 'Louisville, KY', description: 'Triple H derrota a The Rock en un Iron Man Match gracias a la intervención de un The Undertaker que regresa, para ganar el título.', matches: ['60-Minute Iron Man Match: The Rock vs. Triple H'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/1/18/Judgment_Day_2000_poster.jpg' },
+      { date: '21', name: 'Judgment Day', location: 'Louisville, KY', description: 'Triple H derrota a The Rock en un Iron Man Match gracias a la intervención de un The Undertaker que regresa, para ganar el título.', matches: ['60-Minute Iron Man Match: The Rock vs. Triple H'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/3/3d/2000JudgmentDay.jpg' },
     ],
   },
   {
@@ -136,7 +136,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '27', location: 'Worcester, MA', description: 'El triángulo amoroso entre Triple H, Stephanie y Kurt Angle se intensifica.', matches: ['The Rock vs. Kurt Angle'] },
     ],
     ppvs: [
-      { date: '23', name: 'Fully Loaded', location: 'Dallas, TX', description: 'The Rock retiene el título contra Chris Benoit. Triple H derrota a Chris Jericho en una brutal Last Man Standing match.', matches: ['WWF Championship: The Rock vs. Chris Benoit', 'Last Man Standing: Triple H vs. Chris Jericho'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/7/7b/Fully_Loaded_2000.jpg' },
+      { date: '23', name: 'Fully Loaded', location: 'Dallas, TX', description: 'The Rock retiene el título contra Chris Benoit. Triple H derrota a Chris Jericho en una brutal Last Man Standing match.', matches: ['WWF Championship: The Rock vs. Chris Benoit', 'Last Man Standing: Triple H vs. Chris Jericho'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/c/c0/WWFFullyLoaded.jpg' },
     ],
   },
   {
