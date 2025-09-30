@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
   title: 'Attitude Rewind 2000',
-  description: 'A chronological tour of WWF events in the year 2000.',
+  description: 'A chronological tour of WWF events in the years 2000 and 2001.',
 };
 
 export default function RootLayout({
@@ -29,3 +29,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+    

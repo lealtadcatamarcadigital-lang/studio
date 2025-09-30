@@ -134,10 +134,12 @@ const getEventDates = (eventsByDate: Map<string, DayEvents>, eventStatuses: Even
     const allDayEvents = [...dayEvents.raw, ...dayEvents.smackdown, ...dayEvents.ppvs];
     const statuses = allDayEvents.map(event => eventStatuses[event.id] || 'disponible');
 
-    if (statuses.some(s => s === 'visto')) {
+    if (statuses.every(s => s === 'visto')) {
       eventDates.watched.push(date);
     } else if (statuses.some(s => s === 'no-visto')) {
       eventDates.notWatched.push(date);
+    } else if (statuses.some(s => s === 'visto')) {
+        eventDates.watched.push(date);
     } else {
         eventDates.available.push(date);
     }
@@ -329,7 +331,7 @@ setIsSearchDialogOpen(false);
       <header className="text-center mb-12">
         <h1 className="font-headline text-4xl md:text-5xl font-bold">
           <span className="text-black dark:text-white">Attitude Rewind </span>
-          <span className="text-red-600">2000-2001</span>
+          <span className="text-red-600">2000</span>
         </h1>
       </header>
 
@@ -647,3 +649,6 @@ setIsSearchDialogOpen(false);
   );
 }
 
+
+
+    
