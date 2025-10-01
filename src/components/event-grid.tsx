@@ -17,6 +17,7 @@ import {
   Circle,
   Tv,
   Ticket,
+  ListChecks,
 } from "lucide-react";
 
 import type { MonthData, Event, PPVEvent } from "@/lib/events-data";
@@ -46,6 +47,7 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 interface EventGridProps {
   initialEvents: MonthData[];
@@ -82,15 +84,20 @@ const getMonthNumber = (monthName: string) => {
     return monthMap[monthName];
 };
 
-const StatusIcon = ({ status }: { status: EventStatus }) => {
-  switch (status) {
-    case "visto":
-      return <Eye className="h-4 w-4 text-green-500" />;
-    case "no-visto":
-      return <EyeOff className="h-4 w-4 text-red-500" />;
-    default:
-      return <Circle className="h-4 w-4 text-black dark:text-white" />;
-  }
+const getEventTypeDisplay = (type: 'raw' | 'smackdown' | 'ppv') => {
+    switch(type) {
+        case 'raw': return 'RAW';
+        case 'smackdown': return 'SmackDown';
+        case 'ppv': return 'PPV';
+    }
+};
+
+const getShowBadgeStyle = (type: 'raw' | 'smackdown' | 'ppv') => {
+    switch (type) {
+        case 'raw': return 'bg-red-500 hover:bg-red-500/80 text-white';
+        case 'smackdown': return 'bg-blue-500 hover:bg-blue-500/80 text-white';
+        case 'ppv': return 'bg-amber-500 hover:bg-amber-500/80 text-white';
+    }
 };
 
 const EventTypeIcon = ({ type }: { type: 'raw' | 'smackdown' | 'ppv' }) => {
@@ -115,6 +122,21 @@ const getDateBoxStyle = (type: 'raw' | 'smackdown' | 'ppv') => {
         case 'smackdown': return 'bg-blue-500/80 text-white';
         case 'ppv': return 'bg-amber-500/80 text-white';
     }
+};
+
+const MatchCard = ({ match }: { match: string }) => {
+    const parts = match.split(':');
+    const mainMatch = parts[0];
+    const stipulation = parts.length > 1 ? parts.slice(1).join(':').trim() : null;
+
+    return (
+        <div className="bg-card border rounded-lg p-3">
+            <p className="font-semibold text-card-foreground">{mainMatch}</p>
+            {stipulation && (
+                <p className="text-red-600 dark:text-red-500 text-xs font-bold tracking-wider uppercase mt-1">{stipulation}</p>
+            )}
+        </div>
+    );
 };
 
 export function EventGrid({ initialEvents }: EventGridProps) {
@@ -294,14 +316,14 @@ export function EventGrid({ initialEvents }: EventGridProps) {
                                     </div>
                                     <div className="flex-grow">
                                         <h3 className="font-bold">
-                                            {event.type === 'ppv' ? (event as PPVEvent).name : event.type.charAt(0).toUpperCase() + event.type.slice(1)}
+                                            {event.type === 'ppv' ? (event as PPVEvent).name : getEventTypeDisplay(event.type)}
                                         </h3>
                                         <p className="text-sm text-muted-foreground">{event.location}</p>
                                     </div>
                                 </div>
                                 <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
                                     <EventTypeIcon type={event.type} />
-                                    <span>{event.type === 'ppv' ? 'PPV' : event.type.charAt(0).toUpperCase() + event.type.slice(1)}</span>
+                                    <span>{getEventTypeDisplay(event.type)}</span>
                                 </div>
                             </CardContent>
                         </Card>
@@ -388,112 +410,77 @@ export function EventGrid({ initialEvents }: EventGridProps) {
       </Dialog>
 
       <Dialog open={isEventDetailsOpen} onOpenChange={setIsEventDetailsOpen}>
-        <DialogContent className="max-w-2xl h-[80vh] flex flex-col">
+        <DialogContent className="max-w-2xl h-[80vh] flex flex-col bg-muted/30 dark:bg-card">
           {selectedEvent && (
             <>
-              <DialogHeader>
-                 <DialogTitle className="font-headline text-2xl flex items-center gap-2">
-                    <StatusIcon status={eventStatuses[selectedEvent.id] || 'disponible'} />
-                    {selectedEvent.type === 'ppv' ? (selectedEvent as PPVEvent).name : `WWF ${selectedEvent.type.toUpperCase()}`}
+              <DialogHeader className="text-left">
+                 <DialogTitle className="font-headline text-3xl">
+                    {selectedEvent.type === 'ppv' ? (selectedEvent as PPVEvent).name : `WWF ${getEventTypeDisplay(selectedEvent.type)}`}
                 </DialogTitle>
-                <DialogDescription asChild>
-                  <div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <CalendarDays className="h-4 w-4" />
-                      <span>{new Date(selectedEvent.year, getMonthNumber(selectedEvent.month), parseInt(selectedEvent.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <MapPin className="h-4 w-4" />
-                      <span>{selectedEvent.location}</span>
-                    </div>
-                  </div>
+                <DialogDescription>
+                  {`${new Date(selectedEvent.year, getMonthNumber(selectedEvent.month), parseInt(selectedEvent.date)).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })} · ${selectedEvent.location}`}
                 </DialogDescription>
               </DialogHeader>
               <div className="flex-grow min-h-0">
-                <ScrollArea className="h-full pr-4 -mr-4">
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      {selectedEvent.type === 'ppv' && (selectedEvent as PPVEvent).coverUrl && (
-                        <div className="md:col-span-1">
-                          <Image
-                            src={(selectedEvent as PPVEvent).coverUrl!}
-                            alt={`Cover for ${(selectedEvent as PPVEvent).name}`}
-                            width={200}
-                            height={300}
-                            className="rounded-lg w-full h-auto object-cover"
-                            data-ai-hint="wrestling poster"
-                          />
-                        </div>
-                      )}
-                      <div className={selectedEvent.type === 'ppv' && (selectedEvent as PPVEvent).coverUrl ? "md:col-span-2" : "md:col-span-3"}>
-                        <div>
-                          <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
-                            Estado
-                          </h3>
-                           <Select
-                              value={eventStatuses[selectedEvent.id] || 'disponible'}
-                              onValueChange={(value) => handleStatusChange(selectedEvent.id, value as EventStatus)}
-                            >
-                              <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Seleccionar estado" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="disponible">
-                                  <div className="flex items-center gap-2">
-                                    <Circle className="h-4 w-4 text-black dark:text-white" /> Disponible
-                                  </div>
-                                </SelectItem>
-                                <SelectItem value="visto">
-                                   <div className="flex items-center gap-2">
-                                    <Eye className="h-4 w-4 text-green-500" /> Visto
-                                  </div>
-                                </SelectItem>
-                                <SelectItem value="no-visto">
-                                  <div className="flex items-center gap-2">
-                                    <EyeOff className="h-4 w-4 text-red-500" /> No Visto
-                                  </div>
-                                </SelectItem>
-                              </SelectContent>
-                            </Select>
-                        </div>
-                         <Separator className="my-4"/>
-                        <div>
-                          <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
-                            <List className="h-5 w-5 text-accent" />
-                            Cartelera de Combates
-                          </h3>
-                          {selectedEvent.matches && selectedEvent.matches.length > 0 ? (
-                            <ul className="space-y-2 list-disc pl-5 text-muted-foreground">
-                              {selectedEvent.matches.map((match, i) => <li key={i}>{match}</li>)}
-                            </ul>
-                          ) : (
-                            <p className="text-muted-foreground">No se ha anunciado la cartelera de combates.</p>
-                          )}
-                        </div>
+                <ScrollArea className="h-full pr-6">
+                  <div className="space-y-6">
+                    
+                    <div className="flex flex-wrap items-center gap-4 text-sm">
+                      <Badge className={cn("text-sm", getShowBadgeStyle(selectedEvent.type))}>{getEventTypeDisplay(selectedEvent.type)}</Badge>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <CalendarDays className="h-4 w-4" />
+                        <span>{new Date(selectedEvent.year, getMonthNumber(selectedEvent.month), parseInt(selectedEvent.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <MapPin className="h-4 w-4" />
+                        <span>{selectedEvent.location}</span>
                       </div>
                     </div>
-                    
-                    <Separator />
-                    
+
                     <div>
-                        <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
-                          <Sparkles className="h-5 w-5 text-accent" />
-                          Resumen del Show
-                        </h3>
-                        {selectedEvent.description ? (
-                          <p className="text-muted-foreground">{selectedEvent.description}</p>
-                        ) : (
-                          <p className="text-muted-foreground text-sm">No hay descripción disponible. ¡Genera una con IA!</p>
-                        )}
+                      <h3 className="font-semibold text-lg flex items-center gap-2 mb-3">
+                        <ListChecks className="h-5 w-5 text-primary" />
+                        Cartelera de Luchas
+                      </h3>
+                      {selectedEvent.matches && selectedEvent.matches.length > 0 ? (
+                        <div className="space-y-2">
+                          {selectedEvent.matches.map((match, i) => <MatchCard key={i} match={match} />)}
+                        </div>
+                      ) : (
+                        <p className="text-muted-foreground text-sm">No se ha anunciado la cartelera de combates.</p>
+                      )}
+                    </div>
+                    
+                    <div className="p-4 bg-card rounded-lg">
+                        <div className="flex items-start justify-between gap-4">
+                            <div>
+                                <h3 className="font-semibold text-lg flex items-center gap-2">
+                                  <Sparkles className="h-5 w-5 text-primary" />
+                                  Avance del Evento con IA
+                                </h3>
+                                <p className="text-muted-foreground text-sm mt-1">Genere un resumen histórico del evento.</p>
+                            </div>
+                            <Button onClick={handleGenerateSummary} disabled={isAiSummaryLoading} className="bg-red-600 hover:bg-red-700 text-white flex-shrink-0">
+                              {isAiSummaryLoading ? <LoaderCircle className="animate-spin" /> : "Generar Avance"}
+                            </Button>
+                        </div>
                         
-                        <Button onClick={handleGenerateSummary} disabled={isAiSummaryLoading} variant="outline" size="sm" className="mt-2">
-                          {isAiSummaryLoading ? <LoaderCircle className="animate-spin mr-2" /> : <Sparkles className="mr-2 h-4 w-4" />}
-                          {isAiSummaryLoading ? "Generando..." : "Generar resumen con IA"}
-                        </Button>
+
+                        {isAiSummaryLoading && (
+                            <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
+                                <LoaderCircle className="animate-spin h-4 w-4" />
+                                <span>Analizando las rivalidades...</span>
+                            </div>
+                        )}
 
                         {aiSummary && (
                           <div className="mt-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
-                            <p className="text-sm text-black dark:text-white">{aiSummary.summary}</p>
+                            <p className="text-sm text-primary-foreground/90">{aiSummary.summary}</p>
+                          </div>
+                        )}
+                         {selectedEvent.description && !aiSummary && !isAiSummaryLoading &&(
+                          <div className="mt-4 p-3 bg-muted/50 rounded-lg">
+                            <p className="text-sm text-muted-foreground italic">{selectedEvent.description}</p>
                           </div>
                         )}
                     </div>
@@ -507,3 +494,5 @@ export function EventGrid({ initialEvents }: EventGridProps) {
     </div>
   );
 }
+
+    
