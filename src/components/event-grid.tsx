@@ -15,8 +15,9 @@ import {
   Eye,
   EyeOff,
   Circle,
+  Tv,
+  Ticket,
 } from "lucide-react";
-import { es } from 'date-fns/locale';
 
 import type { MonthData, Event, PPVEvent } from "@/lib/events-data";
 import {
@@ -43,119 +44,42 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RawIcon } from "./icons/raw-icon";
-import { SmackDownIcon } from "./icons/smackdown-icon";
-import { PpvIcon } from "./icons/ppv-icon";
+import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
-interface EventTimelineProps {
+interface EventGridProps {
   initialEvents: MonthData[];
 }
 
+type DetailedEvent = (Event | PPVEvent) & { type: 'raw' | 'smackdown' | 'ppv', id: string, year: number, month: string };
 type EventStatus = "disponible" | "visto" | "no-visto";
 type EventStatusMap = { [eventId: string]: EventStatus };
 
-const flattenEventsToSearchableObjects = (data: MonthData[]) => {
-  const eventObjects: { id: string; text: string }[] = [];
-  data.forEach((month, monthIndex) => {
-    month.raw.forEach((event, eventIndex) => {
-      eventObjects.push({
-        id: `${month.monthId}-${month.year}-raw-${eventIndex}`,
-        text: `RAW en ${month.month} ${event.date}, ${month.year}: ${event.location}`
-      });
-    });
-    month.smackdown.forEach((event, eventIndex) => {
-      eventObjects.push({
-        id: `${month.monthId}-${month.year}-smackdown-${eventIndex}`,
-        text: `SmackDown en ${month.month} ${event.date}, ${month.year}: ${event.location}`
-      });
-    });
-    month.ppvs.forEach((event, eventIndex) => {
-      eventObjects.push({
-        id: `${month.monthId}-${month.year}-ppv-${eventIndex}`,
-        text: `PPV ${event.name} en ${month.month} ${event.date}, ${month.year}: ${event.location}`
-      });
-    });
+const flattenEvents = (data: MonthData[]): DetailedEvent[] => {
+  const allEvents: DetailedEvent[] = [];
+  data.forEach(month => {
+    month.raw.forEach((event, index) => allEvents.push({ ...event, type: 'raw', id: `${month.monthId}-${month.year}-raw-${index}`, year: month.year, month: month.month }));
+    month.smackdown.forEach((event, index) => allEvents.push({ ...event, type: 'smackdown', id: `${month.monthId}-${month.year}-smackdown-${index}`, year: month.year, month: month.month }));
+    month.ppvs.forEach((event, index) => allEvents.push({ ...event, type: 'ppv', id: `${month.monthId}-${month.year}-ppv-${index}`, year: month.year, month: month.month }));
   });
-  return eventObjects;
+  allEvents.sort((a, b) => new Date(a.year, getMonthNumber(a.month), parseInt(a.date)).getTime() - new Date(b.year, getMonthNumber(b.month), parseInt(b.date)).getTime());
+  return allEvents;
 };
 
-const monthNameToNumber: { [key: string]: number } = {
-  Enero: 0, Febrero: 1, Marzo: 2, Abril: 3, Mayo: 4, Junio: 5,
-  Julio: 6, Agosto: 7, Septiembre: 8, Octubre: 9, Noviembre: 10, Diciembre: 11,
-};
-
-type DayEvents = { raw: (Event & {id: string})[]; smackdown: (Event & {id: string})[]; ppvs: (PPVEvent & {id: string})[] };
-type DetailedEvent = (Event | PPVEvent) & { type: 'raw' | 'smackdown' | 'ppv', id: string, year: number };
-
-const getEventsByDate = (data: MonthData[]) => {
-  const eventsByDate = new Map<string, DayEvents>();
-  data.forEach((month) => {
-    const monthIndex = monthNameToNumber[month.month];
-    if (monthIndex === undefined) return;
-    const processEvents = (events: (Event | PPVEvent)[], type: 'raw' | 'smackdown' | 'ppvs', typeName: 'raw' | 'smackdown' | 'ppv') => {
-      events.forEach((event, eventIndex) => {
-        const date = new Date(month.year, monthIndex, parseInt(event.date));
-        const dateString = date.toDateString();
-        if (!eventsByDate.has(dateString)) {
-          eventsByDate.set(dateString, { raw: [], smackdown: [], ppvs: [] });
-        }
-        const dayEvents = eventsByDate.get(dateString)!;
-        const eventWithId = { ...event, id: `${month.monthId}-${month.year}-${typeName}-${eventIndex}`};
-        (dayEvents[type] as (Event & {id: string})[]).push(eventWithId);
-      });
-    };
-    processEvents(month.raw, 'raw', 'raw');
-    processEvents(month.smackdown, 'smackdown', 'smackdown');
-    processEvents(month.ppvs, 'ppvs', 'ppv');
-  });
-  return eventsByDate;
-};
-
-const getEventDates = (eventsByDate: Map<string, DayEvents>, eventStatuses: EventStatusMap) => {
-  const eventDates: {
-    all: Date[],
-    raw: Date[],
-    smackdown: Date[],
-    ppv: Date[],
-    watched: Date[],
-    notWatched: Date[],
-    available: Date[],
-  } = { all: [], raw: [], smackdown: [], ppv: [], watched: [], notWatched: [], available: [] };
-
-  eventsByDate.forEach((dayEvents, dateString) => {
-    const date = new Date(dateString);
-    eventDates.all.push(date);
-    if (dayEvents.raw.length > 0) eventDates.raw.push(date);
-    if (dayEvents.smackdown.length > 0) eventDates.smackdown.push(date);
-    if (dayEvents.ppvs.length > 0) eventDates.ppv.push(date);
-
-    const allDayEvents = [...dayEvents.raw, ...dayEvents.smackdown, ...dayEvents.ppvs];
-    const statuses = allDayEvents.map(event => eventStatuses[event.id] || 'disponible');
-
-    if (statuses.every(s => s === 'visto')) {
-      eventDates.watched.push(date);
-    } else if (statuses.some(s => s === 'no-visto')) {
-      eventDates.notWatched.push(date);
-    } else if (statuses.some(s => s === 'visto')) {
-        eventDates.watched.push(date);
-    } else {
-        eventDates.available.push(date);
+const groupEventsByMonth = (events: DetailedEvent[]) => {
+  return events.reduce((acc, event) => {
+    const monthYearKey = `${event.month} ${event.year}`;
+    if (!acc[monthYearKey]) {
+      acc[monthYearKey] = [];
     }
-  });
-  return eventDates;
-}
+    acc[monthYearKey].push(event);
+    return acc;
+  }, {} as Record<string, DetailedEvent[]>);
+};
 
-const createEventMap = (data: MonthData[]): Map<string, DetailedEvent> => {
-    const map = new Map<string, DetailedEvent>();
-    data.forEach((month) => {
-        const year = month.year;
-        month.raw.forEach((event, index) => map.set(`${month.monthId}-${year}-raw-${index}`, { ...event, type: 'raw', id: `${month.monthId}-${year}-raw-${index}`, year }));
-        month.smackdown.forEach((event, index) => map.set(`${month.monthId}-${year}-smackdown-${index}`, { ...event, type: 'smackdown', id: `${month.monthId}-${year}-smackdown-${index}`, year }));
-        month.ppvs.forEach((event, index) => map.set(`${month.monthId}-${year}-ppv-${index}`, { ...event, type: 'ppv', id: `${month.monthId}-${year}-ppv-${index}`, year }));
-    });
-    return map;
+const getMonthNumber = (monthName: string) => {
+    const monthMap: { [key: string]: number } = { Enero: 0, Febrero: 1, Marzo: 2, Abril: 3, Mayo: 4, Junio: 5, Julio: 6, Agosto: 7, Septiembre: 8, Octubre: 9, Noviembre: 10, Diciembre: 11 };
+    return monthMap[monthName];
 };
 
 const StatusIcon = ({ status }: { status: EventStatus }) => {
@@ -169,51 +93,85 @@ const StatusIcon = ({ status }: { status: EventStatus }) => {
   }
 };
 
-export function EventTimeline({ initialEvents }: EventTimelineProps) {
+const EventTypeIcon = ({ type }: { type: 'raw' | 'smackdown' | 'ppv' }) => {
+    switch (type) {
+        case 'raw': return <Tv className="h-4 w-4 text-muted-foreground" />;
+        case 'smackdown': return <Tv className="h-4 w-4 text-muted-foreground" />;
+        case 'ppv': return <Ticket className="h-4 w-4 text-muted-foreground" />;
+    }
+};
+
+const getCardStyle = (type: 'raw' | 'smackdown' | 'ppv') => {
+    switch (type) {
+        case 'raw': return 'border-red-500/50';
+        case 'smackdown': return 'border-blue-500/50';
+        case 'ppv': return 'border-amber-500/50';
+    }
+};
+
+const getDateBoxStyle = (type: 'raw' | 'smackdown' | 'ppv') => {
+    switch (type) {
+        case 'raw': return 'bg-red-500/80 text-white';
+        case 'smackdown': return 'bg-blue-500/80 text-white';
+        case 'ppv': return 'bg-amber-500/80 text-white';
+    }
+};
+
+export function EventGrid({ initialEvents }: EventGridProps) {
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] =
-    useState<AISearchEventInsightsOutput | null>(null);
+  const [searchResults, setSearchResults] = useState<AISearchEventInsightsOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSearchDialogOpen, setIsSearchDialogOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  
   const [selectedEvent, setSelectedEvent] = useState<DetailedEvent | null>(null);
   const [isEventDetailsOpen, setIsEventDetailsOpen] = useState(false);
   const [aiSummary, setAiSummary] = useState<AIGenerateEventSummaryOutput | null>(null);
   const [isAiSummaryLoading, setIsAiSummaryLoading] = useState(false);
-  const [month, setMonth] = useState(new Date(2000, 0));
+  
   const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
 
   useEffect(() => {
-    const storedMonth = localStorage.getItem('attitude-rewind-month');
-    if (storedMonth) {
-      const parsedMonth = new Date(storedMonth);
-      if (!isNaN(parsedMonth.getTime())) {
-        setMonth(parsedMonth);
-      }
-    }
     const storedStatuses = localStorage.getItem('attitude-rewind-statuses');
     if(storedStatuses) {
       setEventStatuses(JSON.parse(storedStatuses));
     }
   }, []);
   
-  const handleMonthChange = (newMonth: Date) => {
-    setMonth(newMonth);
-    localStorage.setItem('attitude-rewind-month', newMonth.toISOString());
-  };
-
   const handleStatusChange = (eventId: string, status: EventStatus) => {
     const newStatuses = { ...eventStatuses, [eventId]: status };
     setEventStatuses(newStatuses);
     localStorage.setItem('attitude-rewind-statuses', JSON.stringify(newStatuses));
   };
-
-  const eventsByDate = useMemo(() => getEventsByDate(initialEvents), [initialEvents]);
-  const eventDatesModifiers = useMemo(() => getEventDates(eventsByDate, eventStatuses), [eventsByDate, eventStatuses]);
-  const eventMap = useMemo(() => createEventMap(initialEvents), [initialEvents]);
   
-  const selectedDayEvents = selectedDate ? eventsByDate.get(selectedDate.toDateString()) : undefined;
+  const allEvents = useMemo(() => flattenEvents(initialEvents), [initialEvents]);
+  const eventsByMonth = useMemo(() => groupEventsByMonth(allEvents), [allEvents]);
+  const eventMap = useMemo(() => new Map(allEvents.map(event => [event.id, event])), [allEvents]);
+
+  const flattenEventsToSearchableObjects = (data: MonthData[]) => {
+    const eventObjects: { id: string; text: string }[] = [];
+    data.forEach((month, monthIndex) => {
+      month.raw.forEach((event, eventIndex) => {
+        eventObjects.push({
+          id: `${month.monthId}-${month.year}-raw-${eventIndex}`,
+          text: `RAW en ${month.month} ${event.date}, ${month.year}: ${event.location}`
+        });
+      });
+      month.smackdown.forEach((event, eventIndex) => {
+        eventObjects.push({
+          id: `${month.monthId}-${month.year}-smackdown-${eventIndex}`,
+          text: `SmackDown en ${month.month} ${event.date}, ${month.year}: ${event.location}`
+        });
+      });
+      month.ppvs.forEach((event, eventIndex) => {
+        eventObjects.push({
+          id: `${month.monthId}-${month.year}-ppv-${eventIndex}`,
+          text: `PPV ${event.name} en ${month.month} ${event.date}, ${month.year}: ${event.location}`
+        });
+      });
+    });
+    return eventObjects;
+  };
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -250,13 +208,13 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
       )}`;
       const link = document.createElement("a");
       link.href = jsonString;
-      link.download = "wwf_2000_events.json";
+      link.download = "wwf_events_data.json";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       toast({
         title: "Descarga iniciada",
-        description: "El archivo wwf_2000_events.json ha comenzado a descargarse.",
+        description: "El archivo de datos ha comenzado a descargarse.",
       });
     } catch (error) {
       console.error("Download failed:", error);
@@ -268,16 +226,7 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
     }
   };
   
-  const handleDayClick = (day: Date, { selected }: { selected: boolean }) => {
-    if (eventDatesModifiers.all.some(eventDate => eventDate.toDateString() === day.toDateString())) {
-      setSelectedDate(selected ? undefined : day);
-    } else {
-      setSelectedDate(undefined);
-    }
-  };
-
-  const handleEventClick = (event: DetailedEvent, date?: Date) => {
-    if (date) setSelectedDate(date);
+  const handleEventClick = (event: DetailedEvent) => {
     setSelectedEvent(event);
     setIsEventDetailsOpen(true);
     setAiSummary(null);
@@ -286,17 +235,8 @@ export function EventTimeline({ initialEvents }: EventTimelineProps) {
   const handleSearchResultClick = (eventId: string) => {
       const event = eventMap.get(eventId);
       if (event) {
-          const [_monthId, yearStr, _type, _index] = eventId.split('-');
-          const year = parseInt(yearStr);
-          const monthData = initialEvents.find(m => m.monthId === _monthId && m.year === year);
-          if (!monthData) return;
-
-          const monthName = monthData.month;
-          const monthNumber = monthNameToNumber[monthName];
-          const eventDate = new Date(year, monthNumber, parseInt(event.date));
-          
-          handleEventClick(event, eventDate);
-setIsSearchDialogOpen(false);
+          handleEventClick(event);
+          setIsSearchDialogOpen(false);
       }
   };
   
@@ -330,127 +270,47 @@ setIsSearchDialogOpen(false);
     <div className="container mx-auto px-4 py-8">
       <header className="text-center mb-12">
         <h1 className="font-headline text-4xl md:text-5xl font-bold">
-          <span className="text-black dark:text-white">Attitude Rewind </span>
-          <span className="text-red-600">2000</span>
+          <span className="text-black dark:text-white">Attitude Rewind</span>
         </h1>
       </header>
 
-      <div className="flex flex-col lg:flex-row justify-center items-start gap-8 mb-12">
-        <div className="w-full lg:w-auto">
-          <Card>
-            <CardContent className="p-0 flex justify-center">
-              <Calendar
-                locale={es}
-                mode="single"
-                month={month}
-                onMonthChange={handleMonthChange}
-                selected={selectedDate}
-                onSelect={setSelectedDate}
-                onDayClick={handleDayClick}
-                modifiers={{ 
-                    raw: eventDatesModifiers.raw,
-                    smackdown: eventDatesModifiers.smackdown,
-                    ppv: eventDatesModifiers.ppv,
-                    watched: eventDatesModifiers.watched,
-                    notWatched: eventDatesModifiers.notWatched,
-                    available: eventDatesModifiers.available,
-                }}
-                modifiersClassNames={{
-                    raw: 'day-raw',
-                    smackdown: 'day-smackdown',
-                    ppv: 'day-ppv',
-                    watched: 'day-watched',
-                    notWatched: 'day-not-watched',
-                    available: 'day-available',
-                }}
-                fromYear={2000}
-                toYear={2001}
-                className="p-4"
-              />
-            </CardContent>
-          </Card>
-        </div>
-        <div className="w-full lg:max-w-md">
-          {selectedDate && selectedDayEvents ? (
-            <Card className="h-full">
-              <CardHeader>
-                <CardTitle className="font-headline text-2xl">
-                  Eventos para {selectedDate.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                 {selectedDayEvents.raw.length > 0 && (
-                    <div className="mb-4">
-                        <div className="flex items-center gap-2 mb-2">
-                            <RawIcon className="h-6 w-6" />
-                            <h3 className="font-semibold text-lg">RAW</h3>
-                        </div>
-                        <ul className="space-y-2 pl-2 border-l-2 border-red-500/50 ml-3">
-                            {selectedDayEvents.raw.map((event, index) => (
-                                <li key={`raw-${index}`} className="flex flex-col items-start p-1 rounded-md">
-                                  <div><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</div>
-                                  <Button variant="ghost" size="sm" onClick={() => handleEventClick({ ...event, type: 'raw', id: event.id, year: selectedDate.getFullYear() }, selectedDate)} className="mt-1 self-start">
-                                    <Info className="h-4 w-4 mr-2"/>
-                                    Detalles
-                                  </Button>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                 )}
-                 {selectedDayEvents.smackdown.length > 0 && (
-                    <div className="mb-4">
-                        <div className="flex items-center gap-2 mb-2">
-                            <SmackDownIcon className="h-6 w-6" />
-                            <h3 className="font-semibold text-lg">SmackDown</h3>
-                        </div>
-                        <ul className="space-y-2 pl-2 border-l-2 border-blue-500/50 ml-3">
-                            {selectedDayEvents.smackdown.map((event, index) => (
-                                <li key={`sd-${index}`} className="flex flex-col items-start p-1 rounded-md">
-                                  <div><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</div>
-                                   <Button variant="ghost" size="sm" onClick={() => handleEventClick({ ...event, type: 'smackdown', id: event.id, year: selectedDate.getFullYear() }, selectedDate)} className="mt-1 self-start">
-                                    <Info className="h-4 w-4 mr-2"/>
-                                    Detalles
-                                  </Button>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                 )}
-                 {selectedDayEvents.ppvs.length > 0 && (
-                    <div>
-                        <div className="flex items-center gap-2 mb-2">
-                            <PpvIcon className="h-6 w-6 text-accent" />
-                            <h3 className="font-semibold text-lg">PPVs</h3>
-                        </div>
-                        <ul className="space-y-2 pl-2 border-l-2 border-amber-500/50 ml-3">
-                            {selectedDayEvents.ppvs.map((event, index) => (
-                                <li key={`ppv-${index}`} className="flex flex-col items-start p-1 rounded-md">
-                                    <div className="font-bold">{event.name}</div>
-                                    <div><MapPin className="inline h-4 w-4 mr-2 text-muted-foreground" />{event.location}</div>
-                                    <Button variant="ghost" size="sm" onClick={() => handleEventClick({ ...event, type: 'ppv', id: event.id, year: selectedDate.getFullYear() }, selectedDate)} className="mt-1 self-start">
-                                    <Info className="h-4 w-4 mr-2"/>
-                                    Detalles
-                                    </Button>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                 )}
-              </CardContent>
-            </Card>
-          ) : (
-            <Card className="flex items-center justify-center h-full">
-              <CardContent className="text-center text-muted-foreground p-6">
-                <CalendarDays className="mx-auto h-12 w-12 mb-4" />
-                <p>Selecciona un día en el calendario para ver los detalles del evento.</p>
-              </CardContent>
-            </Card>
-          )}
-        </div>
-      </div>
+        {Object.entries(eventsByMonth).map(([monthYear, events]) => (
+            <div key={monthYear} className="mb-12">
+                <h2 className="font-headline text-3xl text-primary mb-6">{monthYear.split(' ')[0]}</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                    {events.map(event => (
+                        <Card 
+                            key={event.id}
+                            className={cn(
+                                "cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl border-2",
+                                getCardStyle(event.type)
+                            )}
+                            onClick={() => handleEventClick(event)}
+                        >
+                            <CardContent className="p-4 flex flex-col justify-between h-full">
+                                <div className="flex items-start gap-4">
+                                    <div className={cn("flex-shrink-0 w-12 h-12 rounded-md flex items-center justify-center font-bold text-2xl", getDateBoxStyle(event.type))}>
+                                        {event.date}
+                                    </div>
+                                    <div className="flex-grow">
+                                        <h3 className="font-bold">
+                                            {event.type === 'ppv' ? (event as PPVEvent).name : event.type.charAt(0).toUpperCase() + event.type.slice(1)}
+                                        </h3>
+                                        <p className="text-sm text-muted-foreground">{event.location}</p>
+                                    </div>
+                                </div>
+                                <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
+                                    <EventTypeIcon type={event.type} />
+                                    <span>{event.type === 'ppv' ? 'PPV' : event.type.charAt(0).toUpperCase() + event.type.slice(1)}</span>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
+            </div>
+        ))}
       
-      <div className="max-w-4xl mx-auto mb-12">
+      <div className="max-w-4xl mx-auto my-12">
         <form onSubmit={handleSearch} className="flex gap-2 items-center">
           <div className="relative flex-grow">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -475,7 +335,7 @@ setIsSearchDialogOpen(false);
 
       <div className="text-center">
         <Button onClick={handleDownload} variant="outline">
-          <Download />
+          <Download className="h-4 w-4 mr-2" />
           Descargar Datos
         </Button>
       </div>
@@ -540,7 +400,7 @@ setIsSearchDialogOpen(false);
                   <div>
                     <div className="flex items-center gap-2 text-sm">
                       <CalendarDays className="h-4 w-4" />
-                      <span>{selectedDate?.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                      <span>{new Date(selectedEvent.year, getMonthNumber(selectedEvent.month), parseInt(selectedEvent.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
                       <MapPin className="h-4 w-4" />
@@ -596,7 +456,7 @@ setIsSearchDialogOpen(false);
                               </SelectContent>
                             </Select>
                         </div>
-                        <Separator className="my-4"/>
+                         <Separator className="my-4"/>
                         <div>
                           <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
                             <List className="h-5 w-5 text-accent" />
@@ -616,7 +476,7 @@ setIsSearchDialogOpen(false);
                     <Separator />
                     
                     <div>
-                      <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
+                        <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
                           <Sparkles className="h-5 w-5 text-accent" />
                           Resumen del Show
                         </h3>
@@ -627,7 +487,7 @@ setIsSearchDialogOpen(false);
                         )}
                         
                         <Button onClick={handleGenerateSummary} disabled={isAiSummaryLoading} variant="outline" size="sm" className="mt-2">
-                          {isAiSummaryLoading ? <LoaderCircle className="animate-spin" /> : <Sparkles />}
+                          {isAiSummaryLoading ? <LoaderCircle className="animate-spin mr-2" /> : <Sparkles className="mr-2 h-4 w-4" />}
                           {isAiSummaryLoading ? "Generando..." : "Generar resumen con IA"}
                         </Button>
 
@@ -637,7 +497,6 @@ setIsSearchDialogOpen(false);
                           </div>
                         )}
                     </div>
-
                   </div>
                 </ScrollArea>
               </div>
@@ -648,7 +507,3 @@ setIsSearchDialogOpen(false);
     </div>
   );
 }
-
-
-
-    
