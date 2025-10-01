@@ -16,6 +16,7 @@ import {
   Ticket,
   ListChecks,
   CheckCircle,
+  ChevronDown,
 } from "lucide-react";
 
 import type { MonthData, Event, PPVEvent } from "@/lib/events-data";
@@ -40,6 +41,11 @@ import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 interface EventGridProps {
   initialEvents: MonthData[];
@@ -295,18 +301,28 @@ export function EventGrid({ initialEvents }: EventGridProps) {
                     </div>
                     
                     {selectedEvent.description && (
-                      <div className="p-4 bg-card rounded-lg">
-                          <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
-                            <Info className="h-5 w-5 text-primary" />
-                            Resumen del Evento
-                          </h3>
-                          <div className="p-3 bg-muted/50 rounded-lg">
-                            <p className="text-sm text-muted-foreground italic">{selectedEvent.description}</p>
-                          </div>
-                      </div>
+                      <Collapsible>
+                        <div className="p-4 bg-card rounded-lg border">
+                          <CollapsibleTrigger className="flex w-full items-center justify-between">
+                            <h3 className="font-semibold text-lg flex items-center gap-2">
+                              <Info className="h-5 w-5 text-primary" />
+                              Resumen del Evento
+                            </h3>
+                            <Button variant="ghost" size="sm" className="w-9 p-0">
+                              <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                              <span className="sr-only">Toggle</span>
+                            </Button>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <div className="p-3 bg-muted/50 rounded-lg mt-2">
+                              <p className="text-sm text-muted-foreground italic">{selectedEvent.description}</p>
+                            </div>
+                          </CollapsibleContent>
+                        </div>
+                      </Collapsible>
                     )}
 
-                    <div className="p-4 bg-card rounded-lg space-y-3">
+                    <div className="p-4 bg-card rounded-lg space-y-3 border">
                         <h3 className="font-semibold text-lg flex items-center gap-2">
                             <CheckCircle className="h-5 w-5 text-primary" />
                             Estado de Visualización
