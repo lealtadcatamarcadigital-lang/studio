@@ -4,12 +4,9 @@
 import React, { useState, useMemo, useEffect } from "react";
 import Image from 'next/image';
 import {
-  Search,
   Download,
-  LoaderCircle,
   CalendarDays,
   MapPin,
-  Sparkles,
   List,
   Info,
   Eye,
@@ -22,13 +19,8 @@ import {
 } from "lucide-react";
 
 import type { MonthData, Event, PPVEvent } from "@/lib/events-data";
-import {
-  searchEventInsights,
-  type AISearchEventInsightsOutput,
-} from "@/ai/flows/ai-search-event-insights";
-import { generateEventSummary, type AIGenerateEventSummaryOutput } from "@/ai/flows/ai-generate-event-summary";
+
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -44,7 +36,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -142,15 +133,9 @@ const MatchCard = ({ match }: { match: string }) => {
 
 export function EventGrid({ initialEvents }: EventGridProps) {
   const { toast } = useToast();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<AISearchEventInsightsOutput | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSearchDialogOpen, setIsSearchDialogOpen] = useState(false);
   
   const [selectedEvent, setSelectedEvent] = useState<DetailedEvent | null>(null);
   const [isEventDetailsOpen, setIsEventDetailsOpen] = useState(false);
-  const [aiSummary, setAiSummary] = useState<AIGenerateEventSummaryOutput | null>(null);
-  const [isAiSummaryLoading, setIsAiSummaryLoading] = useState(false);
   
   const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
 
@@ -177,60 +162,6 @@ export function EventGrid({ initialEvents }: EventGridProps) {
   
   const allEvents = useMemo(() => flattenEvents(initialEvents), [initialEvents]);
   const eventsByMonth = useMemo(() => groupEventsByMonth(allEvents), [allEvents]);
-  const eventMap = useMemo(() => new Map(allEvents.map(event => [event.id, event])), [allEvents]);
-
-  const flattenEventsToSearchableObjects = (data: MonthData[]) => {
-    const eventObjects: { id: string; text: string }[] = [];
-    data.forEach((month, monthIndex) => {
-      month.raw.forEach((event, eventIndex) => {
-        eventObjects.push({
-          id: `${month.monthId}-${month.year}-raw-${eventIndex}`,
-          text: `RAW en ${month.month} ${event.date}, ${month.year}: ${event.location}`
-        });
-      });
-      month.smackdown.forEach((event, eventIndex) => {
-        eventObjects.push({
-          id: `${month.monthId}-${month.year}-smackdown-${eventIndex}`,
-          text: `SmackDown en ${month.month} ${event.date}, ${month.year}: ${event.location}`
-        });
-      });
-      month.ppvs.forEach((event, eventIndex) => {
-        eventObjects.push({
-          id: `${month.monthId}-${month.year}-ppv-${eventIndex}`,
-          text: `PPV ${event.name} en ${month.month} ${event.date}, ${month.year}: ${event.location}`
-        });
-      });
-    });
-    return eventObjects;
-  };
-
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!searchQuery.trim()) return;
-
-    setIsLoading(true);
-    setIsSearchDialogOpen(true);
-    setSearchResults(null);
-
-    const eventObjects = flattenEventsToSearchableObjects(initialEvents);
-    try {
-      const results = await searchEventInsights({
-        query: searchQuery,
-        eventData: eventObjects,
-      });
-      setSearchResults(results);
-    } catch (error) {
-      console.error("AI search failed:", error);
-      toast({
-        variant: "destructive",
-        title: "Error de búsqueda",
-        description: "No se pudo completar la búsqueda de IA. Inténtalo de nuevo.",
-      });
-      setIsSearchDialogOpen(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleDownload = () => {
     try {
@@ -260,42 +191,7 @@ export function EventGrid({ initialEvents }: EventGridProps) {
   const handleEventClick = (event: DetailedEvent) => {
     setSelectedEvent(event);
     setIsEventDetailsOpen(true);
-    setAiSummary(null);
   };
-
-  const handleSearchResultClick = (eventId: string) => {
-      const event = eventMap.get(eventId);
-      if (event) {
-          handleEventClick(event);
-          setIsSearchDialogOpen(false);
-      }
-  };
-  
-  const handleGenerateSummary = async () => {
-    if (!selectedEvent) return;
-    
-    setIsAiSummaryLoading(true);
-    setAiSummary(null);
-
-    try {
-        const eventName = selectedEvent.type === 'ppv' ? (selectedEvent as PPVEvent).name : selectedEvent.type.toUpperCase();
-        const result = await generateEventSummary({
-            eventName: eventName,
-            matches: selectedEvent.matches || [],
-        });
-        setAiSummary(result);
-    } catch(error) {
-        console.error("AI summary generation failed:", error);
-        toast({
-            variant: "destructive",
-            title: "Error de IA",
-            description: "No se pudo generar el resumen. Inténtalo de nuevo.",
-        });
-    } finally {
-        setIsAiSummaryLoading(false);
-    }
-  };
-
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -349,82 +245,12 @@ export function EventGrid({ initialEvents }: EventGridProps) {
             </div>
         ))}
       
-      <div className="max-w-4xl mx-auto my-12">
-        <form onSubmit={handleSearch} className="flex gap-2 items-center">
-          <div className="relative flex-grow">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Busca eventos por ciudad, nombre de PPV, etc. (p.ej. 'WrestleMania' o 'eventos en Houston')"
-              className="pl-10 h-12 text-base"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-          <Button type="submit" size="lg" disabled={isLoading} className="h-12">
-            {isLoading ? (
-              <LoaderCircle className="animate-spin" />
-            ) : (
-              <Search />
-            )}
-            <span className="hidden md:inline ml-2">Buscar con IA</span>
-          </Button>
-        </form>
-      </div>
-
-      <div className="text-center">
+      <div className="text-center my-12">
         <Button onClick={handleDownload} variant="outline">
           <Download className="h-4 w-4 mr-2" />
           Descargar Datos
         </Button>
       </div>
-
-      <Dialog open={isSearchDialogOpen} onOpenChange={setIsSearchDialogOpen}>
-        <DialogContent className="max-w-2xl h-[80vh] flex flex-col">
-          <DialogHeader>
-            <DialogTitle className="font-headline text-2xl">Resultados:</DialogTitle>
-          </DialogHeader>
-          <div className="flex-grow min-h-0">
-            <ScrollArea className="h-full pr-4 -mr-4">
-              {isLoading && (
-                <div className="flex items-center justify-center h-full">
-                  <div className="text-center space-y-4">
-                    <LoaderCircle className="mx-auto h-12 w-12 animate-spin text-primary" />
-                    <p className="text-muted-foreground">
-                      La IA está analizando los eventos...
-                    </p>
-                  </div>
-                </div>
-              )}
-              {searchResults && (
-                <div className="space-y-4">
-                  {searchResults.results.length > 0 ? (
-                    searchResults.results.map((result, index) => (
-                      <div
-                        key={index}
-                        className="p-4 border rounded-lg bg-card/50 cursor-pointer hover:bg-accent/50"
-                        onClick={() => handleSearchResultClick(result.eventId)}
-                      >
-                        <p className="font-semibold mb-2">
-                          {result.eventText}
-                        </p>
-                        <Separator className="my-2" />
-                        <p className="text-sm text-muted-foreground">
-                          {result.insights}
-                        </p>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-muted-foreground text-center py-8">
-                      No se encontraron eventos relevantes para tu búsqueda.
-                    </p>
-                  )}
-                </div>
-              )}
-            </ScrollArea>
-          </div>
-        </DialogContent>
-      </Dialog>
 
       <Dialog open={isEventDetailsOpen} onOpenChange={setIsEventDetailsOpen}>
         <DialogContent className="max-w-2xl h-[80vh] flex flex-col bg-background">
@@ -454,54 +280,7 @@ export function EventGrid({ initialEvents }: EventGridProps) {
                       </div>
                     </div>
 
-                    <div>
-                      <h3 className="font-semibold text-lg flex items-center gap-2 mb-3">
-                        <ListChecks className="h-5 w-5 text-primary" />
-                        Cartelera de Luchas
-                      </h3>
-                      {selectedEvent.matches && selectedEvent.matches.length > 0 ? (
-                        <div className="space-y-2">
-                          {selectedEvent.matches.map((match, i) => <MatchCard key={i} match={match} />)}
-                        </div>
-                      ) : (
-                        <p className="text-muted-foreground text-sm">No se ha anunciado la cartelera de combates.</p>
-                      )}
-                    </div>
-                    
-                    <div className="p-4 bg-card rounded-lg">
-                        <div className="flex items-start justify-between gap-4">
-                            <div>
-                                <h3 className="font-semibold text-lg flex items-center gap-2">
-                                  <Sparkles className="h-5 w-5 text-primary" />
-                                  Avance del Evento con IA
-                                </h3>
-                                <p className="text-muted-foreground text-sm mt-1">Genere un resumen histórico del evento.</p>
-                            </div>
-                            <Button onClick={handleGenerateSummary} disabled={isAiSummaryLoading} className="bg-red-600 hover:bg-red-700 text-white flex-shrink-0">
-                              {isAiSummaryLoading ? <LoaderCircle className="animate-spin" /> : "Generar Avance"}
-                            </Button>
-                        </div>
-                        
-
-                        {isAiSummaryLoading && (
-                            <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-                                <LoaderCircle className="animate-spin h-4 w-4" />
-                                <span>Analizando las rivalidades...</span>
-                            </div>
-                        )}
-
-                        {aiSummary && (
-                          <div className="mt-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
-                            <p className="text-sm text-primary-foreground/90">{aiSummary.summary}</p>
-                          </div>
-                        )}
-                         {selectedEvent.description && !aiSummary && !isAiSummaryLoading &&(
-                          <div className="mt-4 p-3 bg-muted/50 rounded-lg">
-                            <p className="text-sm text-muted-foreground italic">{selectedEvent.description}</p>
-                          </div>
-                        )}
-                    </div>
-                     <div className="p-4 bg-card rounded-lg space-y-3">
+                    <div className="p-4 bg-card rounded-lg space-y-3">
                         <h3 className="font-semibold text-lg flex items-center gap-2">
                             <CheckCircle className="h-5 w-5 text-primary" />
                             Estado de Visualización
@@ -535,6 +314,32 @@ export function EventGrid({ initialEvents }: EventGridProps) {
                             </SelectContent>
                         </Select>
                      </div>
+
+                    <div>
+                      <h3 className="font-semibold text-lg flex items-center gap-2 mb-3">
+                        <ListChecks className="h-5 w-5 text-primary" />
+                        Cartelera de Luchas
+                      </h3>
+                      {selectedEvent.matches && selectedEvent.matches.length > 0 ? (
+                        <div className="space-y-2">
+                          {selectedEvent.matches.map((match, i) => <MatchCard key={i} match={match} />)}
+                        </div>
+                      ) : (
+                        <p className="text-muted-foreground text-sm">No se ha anunciado la cartelera de combates.</p>
+                      )}
+                    </div>
+                    
+                    {selectedEvent.description && (
+                      <div className="p-4 bg-card rounded-lg">
+                          <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
+                            <Info className="h-5 w-5 text-primary" />
+                            Resumen del Evento
+                          </h3>
+                          <div className="p-3 bg-muted/50 rounded-lg">
+                            <p className="text-sm text-muted-foreground italic">{selectedEvent.description}</p>
+                          </div>
+                      </div>
+                    )}
                   </div>
                 </ScrollArea>
               </div>
