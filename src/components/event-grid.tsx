@@ -18,6 +18,7 @@ import {
   Tv,
   Ticket,
   ListChecks,
+  CheckCircle,
 } from "lucide-react";
 
 import type { MonthData, Event, PPVEvent } from "@/lib/events-data";
@@ -154,16 +155,24 @@ export function EventGrid({ initialEvents }: EventGridProps) {
   const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
 
   useEffect(() => {
-    const storedStatuses = localStorage.getItem('attitude-rewind-statuses');
-    if(storedStatuses) {
-      setEventStatuses(JSON.parse(storedStatuses));
+    try {
+      const storedStatuses = localStorage.getItem('attitude-rewind-statuses');
+      if (storedStatuses) {
+        setEventStatuses(JSON.parse(storedStatuses));
+      }
+    } catch (error) {
+      console.error("Could not parse event statuses from localStorage:", error);
     }
   }, []);
   
   const handleStatusChange = (eventId: string, status: EventStatus) => {
     const newStatuses = { ...eventStatuses, [eventId]: status };
     setEventStatuses(newStatuses);
-    localStorage.setItem('attitude-rewind-statuses', JSON.stringify(newStatuses));
+    try {
+      localStorage.setItem('attitude-rewind-statuses', JSON.stringify(newStatuses));
+    } catch (error) {
+      console.error("Could not save event statuses to localStorage:", error);
+    }
   };
   
   const allEvents = useMemo(() => flattenEvents(initialEvents), [initialEvents]);
@@ -300,7 +309,9 @@ export function EventGrid({ initialEvents }: EventGridProps) {
             <div key={monthYear} className="mb-12">
                 <h2 className="font-headline text-3xl text-primary mb-6">{monthYear.split(' ')[0]}</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                    {events.map(event => (
+                    {events.map(event => {
+                        const status = eventStatuses[event.id] || 'disponible';
+                        return (
                         <Card 
                             key={event.id}
                             className={cn(
@@ -310,24 +321,30 @@ export function EventGrid({ initialEvents }: EventGridProps) {
                             onClick={() => handleEventClick(event)}
                         >
                             <CardContent className="p-4 flex flex-col justify-between h-full">
-                                <div className="flex items-start gap-4">
-                                    <div className={cn("flex-shrink-0 w-12 h-12 rounded-md flex items-center justify-center font-bold text-2xl", getDateBoxStyle(event.type))}>
-                                        {event.date}
-                                    </div>
-                                    <div className="flex-grow">
-                                        <h3 className="font-bold">
-                                            {event.type === 'ppv' ? (event as PPVEvent).name : getEventTypeDisplay(event.type)}
-                                        </h3>
-                                        <p className="text-sm text-muted-foreground">{event.location}</p>
+                                <div>
+                                    <div className="flex items-start gap-4">
+                                        <div className={cn("flex-shrink-0 w-12 h-12 rounded-md flex items-center justify-center font-bold text-2xl", getDateBoxStyle(event.type))}>
+                                            {event.date}
+                                        </div>
+                                        <div className="flex-grow">
+                                            <h3 className="font-bold">
+                                                {event.type === 'ppv' ? (event as PPVEvent).name : getEventTypeDisplay(event.type)}
+                                            </h3>
+                                            <p className="text-sm text-muted-foreground">{event.location}</p>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-                                    <EventTypeIcon type={event.type} />
-                                    <span>{getEventTypeDisplay(event.type)}</span>
+                                <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
+                                    <div className="flex items-center gap-2">
+                                        <EventTypeIcon type={event.type} />
+                                        <span>{getEventTypeDisplay(event.type)}</span>
+                                    </div>
+                                    {status === 'visto' && <Eye className="h-4 w-4 text-green-500" />}
+                                    {status === 'no-visto' && <EyeOff className="h-4 w-4 text-red-500" />}
                                 </div>
                             </CardContent>
                         </Card>
-                    ))}
+                    )})}
                 </div>
             </div>
         ))}
@@ -410,7 +427,7 @@ export function EventGrid({ initialEvents }: EventGridProps) {
       </Dialog>
 
       <Dialog open={isEventDetailsOpen} onOpenChange={setIsEventDetailsOpen}>
-        <DialogContent className="max-w-2xl h-[80vh] flex flex-col">
+        <DialogContent className="max-w-2xl h-[80vh] flex flex-col bg-background">
           {selectedEvent && (
             <>
               <DialogHeader className="text-left">
@@ -484,6 +501,40 @@ export function EventGrid({ initialEvents }: EventGridProps) {
                           </div>
                         )}
                     </div>
+                     <div className="p-4 bg-card rounded-lg space-y-3">
+                        <h3 className="font-semibold text-lg flex items-center gap-2">
+                            <CheckCircle className="h-5 w-5 text-primary" />
+                            Estado de Visualización
+                        </h3>
+                        <Select
+                            value={eventStatuses[selectedEvent.id] || 'disponible'}
+                            onValueChange={(value) => handleStatusChange(selectedEvent.id, value as EventStatus)}
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Seleccionar estado" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="disponible">
+                                    <div className="flex items-center gap-2">
+                                        <Circle className="h-4 w-4 text-muted-foreground" />
+                                        Disponible
+                                    </div>
+                                </SelectItem>
+                                <SelectItem value="visto">
+                                    <div className="flex items-center gap-2">
+                                        <Eye className="h-4 w-4 text-green-500" />
+                                        Visto
+                                    </div>
+                                </SelectItem>
+                                <SelectItem value="no-visto">
+                                    <div className="flex items-center gap-2">
+                                        <EyeOff className="h-4 w-4 text-red-500" />
+                                        No Visto
+                                    </div>
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
+                     </div>
                   </div>
                 </ScrollArea>
               </div>
@@ -494,7 +545,5 @@ export function EventGrid({ initialEvents }: EventGridProps) {
     </div>
   );
 }
-
-    
 
     
