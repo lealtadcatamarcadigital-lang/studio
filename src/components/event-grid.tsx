@@ -280,6 +280,32 @@ export function EventGrid({ initialEvents }: EventGridProps) {
                       </div>
                     </div>
 
+                    <div>
+                      <h3 className="font-semibold text-lg flex items-center gap-2 mb-3">
+                        <ListChecks className="h-5 w-5 text-primary" />
+                        Cartelera de Luchas
+                      </h3>
+                      {selectedEvent.matches && selectedEvent.matches.length > 0 ? (
+                        <div className="space-y-2">
+                          {selectedEvent.matches.map((match, i) => <MatchCard key={i} match={match} />)}
+                        </div>
+                      ) : (
+                        <p className="text-muted-foreground text-sm">No se ha anunciado la cartelera de combates.</p>
+                      )}
+                    </div>
+                    
+                    {selectedEvent.description && (
+                      <div className="p-4 bg-card rounded-lg">
+                          <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
+                            <Info className="h-5 w-5 text-primary" />
+                            Resumen del Evento
+                          </h3>
+                          <div className="p-3 bg-muted/50 rounded-lg">
+                            <p className="text-sm text-muted-foreground italic">{selectedEvent.description}</p>
+                          </div>
+                      </div>
+                    )}
+
                     <div className="p-4 bg-card rounded-lg space-y-3">
                         <h3 className="font-semibold text-lg flex items-center gap-2">
                             <CheckCircle className="h-5 w-5 text-primary" />
@@ -314,32 +340,6 @@ export function EventGrid({ initialEvents }: EventGridProps) {
                             </SelectContent>
                         </Select>
                      </div>
-
-                    <div>
-                      <h3 className="font-semibold text-lg flex items-center gap-2 mb-3">
-                        <ListChecks className="h-5 w-5 text-primary" />
-                        Cartelera de Luchas
-                      </h3>
-                      {selectedEvent.matches && selectedEvent.matches.length > 0 ? (
-                        <div className="space-y-2">
-                          {selectedEvent.matches.map((match, i) => <MatchCard key={i} match={match} />)}
-                        </div>
-                      ) : (
-                        <p className="text-muted-foreground text-sm">No se ha anunciado la cartelera de combates.</p>
-                      )}
-                    </div>
-                    
-                    {selectedEvent.description && (
-                      <div className="p-4 bg-card rounded-lg">
-                          <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
-                            <Info className="h-5 w-5 text-primary" />
-                            Resumen del Evento
-                          </h3>
-                          <div className="p-3 bg-muted/50 rounded-lg">
-                            <p className="text-sm text-muted-foreground italic">{selectedEvent.description}</p>
-                          </div>
-                      </div>
-                    )}
                   </div>
                 </ScrollArea>
               </div>
@@ -350,5 +350,3 @@ export function EventGrid({ initialEvents }: EventGridProps) {
     </div>
   );
 }
-
-    
