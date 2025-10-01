@@ -410,7 +410,7 @@ export function EventGrid({ initialEvents }: EventGridProps) {
       </Dialog>
 
       <Dialog open={isEventDetailsOpen} onOpenChange={setIsEventDetailsOpen}>
-        <DialogContent className="max-w-2xl h-[80vh] flex flex-col bg-muted/30 dark:bg-card">
+        <DialogContent className="max-w-2xl h-[80vh] flex flex-col">
           {selectedEvent && (
             <>
               <DialogHeader className="text-left">
@@ -494,5 +494,7 @@ export function EventGrid({ initialEvents }: EventGridProps) {
     </div>
   );
 }
+
+    
 
     
