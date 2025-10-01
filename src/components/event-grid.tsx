@@ -303,15 +303,14 @@ export function EventGrid({ initialEvents }: EventGridProps) {
                     {selectedEvent.description && (
                       <Collapsible>
                         <div className="p-4 bg-card rounded-lg border">
-                          <CollapsibleTrigger className="flex w-full items-center justify-between">
-                            <h3 className="font-semibold text-lg flex items-center gap-2">
-                              <Info className="h-5 w-5 text-primary" />
-                              Resumen del Evento
-                            </h3>
-                            <Button variant="ghost" size="sm" className="w-9 p-0">
-                              <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                              <span className="sr-only">Toggle</span>
-                            </Button>
+                          <CollapsibleTrigger className="flex w-full items-center justify-between group">
+                              <h3 className="font-semibold text-lg flex items-center gap-2">
+                                <Info className="h-5 w-5 text-primary" />
+                                Resumen del Evento
+                              </h3>
+                              <Button variant="ghost" size="sm" className="w-9 p-0 as-child">
+                                <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                              </Button>
                           </CollapsibleTrigger>
                           <CollapsibleContent>
                             <div className="p-3 bg-muted/50 rounded-lg mt-2">
