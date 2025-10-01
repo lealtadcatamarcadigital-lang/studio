@@ -273,6 +273,17 @@ export function EventGrid({ initialEvents }: EventGridProps) {
               <div className="flex-grow min-h-0">
                 <ScrollArea className="h-full pr-6">
                   <div className="space-y-6">
+                    {selectedEvent.type === 'ppv' && (selectedEvent as PPVEvent).coverUrl && (
+                        <div className="rounded-lg overflow-hidden border shadow-lg">
+                            <Image 
+                                src={(selectedEvent as PPVEvent).coverUrl!}
+                                alt={`Portada de ${(selectedEvent as PPVEvent).name}`}
+                                width={700}
+                                height={400}
+                                className="w-full h-auto object-cover"
+                            />
+                        </div>
+                    )}
                     
                     <div className="flex flex-wrap items-center gap-4 text-sm">
                       <Badge className={cn("text-sm", getShowBadgeStyle(selectedEvent.type))}>{getEventTypeDisplay(selectedEvent.type)}</Badge>
@@ -308,8 +319,10 @@ export function EventGrid({ initialEvents }: EventGridProps) {
                                 <Info className="h-5 w-5 text-primary" />
                                 Resumen del Evento
                               </h3>
-                              <Button variant="ghost" size="sm" className="w-9 p-0 as-child">
-                                <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                              <Button variant="ghost" size="sm" className="w-9 p-0" asChild>
+                                <span className="flex items-center">
+                                  <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                                </span>
                               </Button>
                           </CollapsibleTrigger>
                           <CollapsibleContent>
