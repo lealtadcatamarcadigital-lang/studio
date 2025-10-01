@@ -209,7 +209,7 @@ export function EventGrid({ initialEvents }: EventGridProps) {
 
         {Object.entries(eventsByMonth).map(([monthYear, events]) => (
             <div key={monthYear} className="mb-12">
-                <h2 className="font-headline text-3xl text-primary mb-6">{monthYear.split(' ')[0]}</h2>
+                <h2 className="font-headline text-3xl text-primary mb-4">{monthYear.split(' ')[0]}</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                     {events.map(event => {
                         const status = eventStatuses[event.id] || 'disponible';
