@@ -3,6 +3,7 @@
 
 import React, { useMemo } from 'react';
 import type { MonthData } from '@/lib/events-data';
+import { WWF_2000_DATA } from '@/lib/events-data-2000';
 import { flattenEvents, getMonthNumber } from './event-grid';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
@@ -97,5 +98,3 @@ export function WrestlerDetails({ wrestlerName, initialEvents }: WrestlerDetails
     </div>
   );
 }
-
-    

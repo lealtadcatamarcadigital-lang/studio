@@ -1,5 +1,5 @@
 
-import { WWF_2000_DATA } from '@/lib/events-data';
+import { WWF_2000_DATA } from '@/lib/events-data-2000';
 import { WrestlerDetails } from '@/components/wrestler-details';
 import { WrestlingMaskIcon } from '@/components/icons/wrestling-mask-icon';
 
@@ -24,5 +24,3 @@ export default function WrestlerPage({ params }: { params: { name: string } }) {
     </main>
   );
 }
-
-    
