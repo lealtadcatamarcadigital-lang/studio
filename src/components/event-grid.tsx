@@ -54,10 +54,10 @@ interface EventGridProps {
 
 type EventType = 'raw' | 'smackdown' | 'ppv';
 type DetailedEvent = (Event | PPVEvent) & { type: EventType, id: string, year: number, month: string };
-type EventStatus = "disponible" | "visto" | "no-visto";
-type EventStatusMap = { [eventId: string]: EventStatus };
+export type EventStatus = "disponible" | "visto" | "no-visto";
+export type EventStatusMap = { [eventId: string]: EventStatus };
 
-const flattenEvents = (data: MonthData[]): DetailedEvent[] => {
+export const flattenEvents = (data: MonthData[]): DetailedEvent[] => {
   const allEvents: DetailedEvent[] = [];
   data.forEach(month => {
     month.raw.forEach((event, index) => allEvents.push({ ...event, type: 'raw', id: `${month.monthId}-${month.year}-raw-${index}`, year: month.year, month: month.month }));
@@ -79,7 +79,7 @@ const groupEventsByMonth = (events: DetailedEvent[]) => {
   }, {} as Record<string, DetailedEvent[]>);
 };
 
-const getMonthNumber = (monthName: string) => {
+export const getMonthNumber = (monthName: string) => {
     const monthMap: { [key: string]: number } = { Enero: 0, Febrero: 1, Marzo: 2, Abril: 3, Mayo: 4, Junio: 5, Julio: 6, Agosto: 7, Septiembre: 8, Octubre: 9, Noviembre: 10, Diciembre: 11 };
     return monthMap[monthName];
 };
@@ -216,12 +216,6 @@ export function EventGrid({ initialEvents }: EventGridProps) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <header className="text-center mb-8">
-        <h1 className="font-headline text-4xl md:text-5xl font-bold">
-          <span className="text-black dark:text-white">Attitude Rewind</span>
-        </h1>
-      </header>
-
       <div className="flex flex-col sm:flex-row gap-6 mb-12 justify-center">
         <div className="flex flex-col items-center gap-2">
             <span className="text-sm font-medium">Filtrar por Show</span>
@@ -420,5 +414,3 @@ export function EventGrid({ initialEvents }: EventGridProps) {
     </div>
   );
 }
-
-    
