@@ -28,8 +28,8 @@ export default function Home() {
       <Dialog>
         <DialogTrigger asChild>
             <div className="fixed bottom-8 right-8 z-10">
-                <Button size="icon" className="rounded-full h-14 w-14 shadow-lg">
-                    <BarChart2 className="h-6 w-6" />
+                <Button size="icon" className="rounded-full h-14 w-14 shadow-lg bg-black hover:bg-black/90">
+                    <BarChart2 className="h-6 w-6 text-red-500" />
                     <span className="sr-only">Ver Estadísticas</span>
                 </Button>
             </div>
