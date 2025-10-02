@@ -241,7 +241,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '21', location: 'Charlotte, NC', description: 'Construcción para Royal Rumble 2001. Se anuncian los primeros participantes.', matches: ['WWF Championship: Kurt Angle vs. The Undertaker', 'The Rock & Stone Cold Steve Austin vs. The Dudley Boyz', 'Chris Jericho vs. Edge'] },
     ],
     ppvs: [
-      { date: '10', name: 'Armageddon', location: 'Birmingham, AL', description: 'Kurt Angle retiene el título en una caótica lucha Hell in a Cell de 6 hombres. The Radicalz se establecen como una facción dominante.', matches: ['6-Man Hell in a Cell for WWF Championship: Kurt Angle vs. The Rock vs. Stone Cold Steve Austin vs. Triple H vs. The Undertaker vs. Rikishi', 'Last Man Standing Match: Chris Jericho vs. Kane', 'WWF Tag Team Championship: Right to Censor vs. Edge & Christian vs. The Dudley Boyz'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/e/e9/Armageddon_2000.jpg' },
+      { date: '10', name: 'Armageddon', location: 'Birmingham, AL', description: 'Kurt Angle retiene el título en una caótica lucha Hell in a Cell de 6 hombres. The Radicalz se establecen como una facción dominante.', matches: ['6-Man Hell in a Cell for WWF Championship: Kurt Angle vs. The Rock vs. Stone Cold Steve Austin vs. Triple H vs. The Undertaker vs. Rikishi', 'Last Man Standing Match: Chris Jericho vs. Kane', 'WWF Tag Team Championship: Right to Censor vs. Edge & Christian vs. The Dudley Boyz'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/9/91/WWF_Armageddon_2000_poster.jpg' },
     ],
   },
   {
@@ -266,5 +266,3 @@ export const WWF_2000_DATA: MonthData[] = [
     ],
   },
 ];
-
-    
