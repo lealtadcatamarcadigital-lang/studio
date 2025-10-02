@@ -148,7 +148,6 @@ export function EventGrid({ initialEvents }: EventGridProps) {
   const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
 
   const [showFilter, setShowFilter] = useState<"all" | EventType>("all");
-  const [statusFilter, setStatusFilter] = useState<"all" | EventStatus>("all");
 
   useEffect(() => {
     try {
@@ -176,11 +175,9 @@ export function EventGrid({ initialEvents }: EventGridProps) {
   const filteredEvents = useMemo(() => {
     return allEvents.filter(event => {
       const showMatch = showFilter === 'all' || event.type === showFilter;
-      const status = eventStatuses[event.id] || 'disponible';
-      const statusMatch = statusFilter === 'all' || status === statusFilter;
-      return showMatch && statusMatch;
+      return showMatch;
     });
-  }, [allEvents, showFilter, statusFilter, eventStatuses]);
+  }, [allEvents, showFilter, eventStatuses]);
 
   const eventsByMonth = useMemo(() => groupEventsByMonth(filteredEvents), [filteredEvents]);
 
@@ -224,15 +221,6 @@ export function EventGrid({ initialEvents }: EventGridProps) {
                 <ToggleGroupItem value="raw">RAW</ToggleGroupItem>
                 <ToggleGroupItem value="smackdown">SmackDown</ToggleGroupItem>
                 <ToggleGroupItem value="ppv">PPV</ToggleGroupItem>
-            </ToggleGroup>
-        </div>
-        <div className="flex flex-col items-center gap-2">
-            <span className="text-sm font-medium">Filtrar por Estado</span>
-            <ToggleGroup type="single" value={statusFilter} onValueChange={(value) => setStatusFilter(value as any || 'all')} className="justify-center">
-                <ToggleGroupItem value="all">Todos</ToggleGroupItem>
-                <ToggleGroupItem value="disponible">Disponible</ToggleGroupItem>
-                <ToggleGroupItem value="visto">Visto</ToggleGroupItem>
-                <ToggleGroupItem value="no-visto">No Visto</ToggleGroupItem>
             </ToggleGroup>
         </div>
       </div>
@@ -414,5 +402,7 @@ export function EventGrid({ initialEvents }: EventGridProps) {
     </div>
   );
 }
+
+    
 
     
