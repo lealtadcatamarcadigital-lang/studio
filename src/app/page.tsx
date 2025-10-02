@@ -13,7 +13,6 @@ export default function Home() {
           <h1 className="font-headline text-4xl md:text-5xl font-bold">
             <span className="text-black dark:text-white">Attitude Rewind</span>
           </h1>
-          <p className="text-muted-foreground mt-2">Un viaje cronológico por los eventos de la WWF en 2000 y 2001.</p>
         </header>
 
         <div className="text-center mb-4">
