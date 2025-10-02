@@ -11,6 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { StatsDashboard } from "@/components/stats-dashboard";
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function Home() {
   return (
@@ -33,11 +34,13 @@ export default function Home() {
                 </Button>
             </div>
         </DialogTrigger>
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="w-[95vw] max-w-4xl rounded-lg">
           <DialogHeader>
             <DialogTitle className="font-headline text-3xl">Estadísticas</DialogTitle>
           </DialogHeader>
-          <StatsDashboard initialEvents={WWF_2000_DATA} />
+          <ScrollArea className="h-[70vh] pr-4">
+            <StatsDashboard initialEvents={WWF_2000_DATA} />
+          </ScrollArea>
         </DialogContent>
       </Dialog>
     </main>
