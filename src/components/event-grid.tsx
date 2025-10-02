@@ -240,7 +240,7 @@ export function EventGrid({ initialEvents }: EventGridProps) {
         {Object.keys(eventsByMonth).length > 0 ? (
           Object.entries(eventsByMonth).map(([monthYear, events]) => (
               <div key={monthYear} className="mb-8">
-                  <h2 className="font-headline text-3xl text-primary mb-4">{monthYear.split(' ')[0]}</h2>
+                  <h2 className="font-headline text-3xl font-bold text-foreground mb-4">{monthYear.split(' ')[0]}</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                       {events.map(event => {
                           const status = eventStatuses[event.id] || 'disponible';
@@ -350,16 +350,16 @@ export function EventGrid({ initialEvents }: EventGridProps) {
                     {selectedEvent.description && (
                       <Collapsible>
                         <div className="p-4 bg-card rounded-lg border">
-                          <CollapsibleTrigger className="flex w-full items-center justify-between group">
-                              <h3 className="font-semibold text-lg flex items-center gap-2">
-                                <Info className="h-5 w-5 text-primary" />
-                                Resumen del Evento
-                              </h3>
-                              <Button variant="ghost" size="sm" className="w-9 p-0" asChild>
-                                <span className="flex items-center">
-                                  <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                                </span>
-                              </Button>
+                          <CollapsibleTrigger asChild>
+                            <div className="flex w-full items-center justify-between group cursor-pointer">
+                                <h3 className="font-semibold text-lg flex items-center gap-2">
+                                  <Info className="h-5 w-5 text-primary" />
+                                  Resumen del Evento
+                                </h3>
+                                <div className="p-1 rounded-md group-hover:bg-accent">
+                                    <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                                </div>
+                            </div>
                           </CollapsibleTrigger>
                           <CollapsibleContent>
                             <div className="p-3 bg-muted/50 rounded-lg mt-2">
