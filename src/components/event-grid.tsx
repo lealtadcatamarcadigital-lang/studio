@@ -216,7 +216,7 @@ export function EventGrid({ initialEvents }: EventGridProps) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col sm:flex-row gap-6 mb-12 justify-center">
+      <div className="flex flex-col sm:flex-row gap-6 mb-8 justify-center">
         <div className="flex flex-col items-center gap-2">
             <span className="text-sm font-medium">Filtrar por Show</span>
             <ToggleGroup type="single" value={showFilter} onValueChange={(value) => setShowFilter(value as any || 'all')} className="justify-center">
@@ -414,3 +414,5 @@ export function EventGrid({ initialEvents }: EventGridProps) {
     </div>
   );
 }
+
+    
