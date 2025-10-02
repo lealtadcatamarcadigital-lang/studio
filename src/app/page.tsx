@@ -2,7 +2,7 @@
 import { EventGrid } from '@/components/event-grid';
 import { WWF_2000_DATA } from '@/lib/events-data-2000';
 import { Button } from '@/components/ui/button';
-import { BarChart2 } from 'lucide-react';
+import { BarChart2, CalendarIcon } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { StatsDashboard } from "@/components/stats-dashboard";
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { EventsCalendar } from '@/components/events-calendar';
 
 export default function Home() {
   return (
@@ -25,24 +26,39 @@ export default function Home() {
       </div>
       <EventGrid initialEvents={WWF_2000_DATA} />
 
-      <Dialog>
-        <DialogTrigger asChild>
-            <div className="fixed bottom-8 right-8 z-10">
-                <Button size="icon" className="rounded-full h-14 w-14 shadow-lg bg-black hover:bg-black/90">
-                    <BarChart2 className="h-6 w-6 text-red-500" />
-                    <span className="sr-only">Ver Estadísticas</span>
-                </Button>
-            </div>
-        </DialogTrigger>
-        <DialogContent className="w-[95vw] max-w-4xl rounded-lg">
-          <DialogHeader>
-            <DialogTitle className="font-headline text-3xl">Estadísticas</DialogTitle>
-          </DialogHeader>
-          <ScrollArea className="h-[70vh] pr-4">
-            <StatsDashboard initialEvents={WWF_2000_DATA} />
-          </ScrollArea>
-        </DialogContent>
-      </Dialog>
+      <div className="fixed bottom-8 right-8 z-10 flex flex-col items-center gap-4">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button size="icon" className="rounded-full h-14 w-14 shadow-lg bg-white hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 border">
+              <CalendarIcon className="h-6 w-6 text-primary" />
+              <span className="sr-only">Ver Calendario</span>
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="w-[95vw] max-w-fit rounded-lg">
+            <DialogHeader>
+              <DialogTitle className="font-headline text-3xl">Calendario de Eventos</DialogTitle>
+            </DialogHeader>
+             <EventsCalendar initialEvents={WWF_2000_DATA} />
+          </DialogContent>
+        </Dialog>
+
+        <Dialog>
+          <DialogTrigger asChild>
+              <Button size="icon" className="rounded-full h-14 w-14 shadow-lg bg-black hover:bg-black/90">
+                  <BarChart2 className="h-6 w-6 text-red-500" />
+                  <span className="sr-only">Ver Estadísticas</span>
+              </Button>
+          </DialogTrigger>
+          <DialogContent className="w-[95vw] max-w-4xl rounded-lg">
+            <DialogHeader>
+              <DialogTitle className="font-headline text-3xl">Estadísticas</DialogTitle>
+            </DialogHeader>
+            <ScrollArea className="h-[70vh] pr-4">
+              <StatsDashboard initialEvents={WWF_2000_DATA} />
+            </ScrollArea>
+          </DialogContent>
+        </Dialog>
+      </div>
     </main>
   );
 }
