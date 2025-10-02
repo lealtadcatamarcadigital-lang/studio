@@ -143,7 +143,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '27', location: 'Worcester, MA', description: 'El triángulo amoroso entre Triple H, Stephanie y Kurt Angle se intensifica.', matches: ['WWF Championship: The Rock vs. Kurt Angle', 'The Undertaker vs. The Big Show', 'Triple H vs. Chris Jericho'] },
     ],
     ppvs: [
-      { date: '23', name: 'Fully Loaded', location: 'Dallas, TX', description: 'The Rock retiene el título contra Chris Benoit. Triple H derrota a Chris Jericho en una brutal Last Man Standing match.', matches: ['WWF Championship: The Rock vs. Chris Benoit', 'Last Man Standing: Triple H vs. Chris Jericho', 'The Undertaker vs. Kurt Angle', 'WWF Tag Team Championship: The Acolytes vs. Edge & Christian'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/c/c0/Fully_Loaded_2000.jpg' },
+      { date: '23', name: 'Fully Loaded', location: 'Dallas, TX', description: 'The Rock retiene el título contra Chris Benoit. Triple H derrota a Chris Jericho en una brutal Last Man Standing match.', matches: ['WWF Championship: The Rock vs. Chris Benoit', 'Last Man Standing: Triple H vs. Chris Jericho', 'The Undertaker vs. Kurt Angle', 'WWF Tag Team Championship: The Acolytes vs. Edge & Christian'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/c/c0/WWFFullyLoaded.jpg' },
     ],
   },
   {
