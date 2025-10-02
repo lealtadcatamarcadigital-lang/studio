@@ -46,12 +46,14 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 interface EventGridProps {
   initialEvents: MonthData[];
 }
 
-type DetailedEvent = (Event | PPVEvent) & { type: 'raw' | 'smackdown' | 'ppv', id: string, year: number, month: string };
+type EventType = 'raw' | 'smackdown' | 'ppv';
+type DetailedEvent = (Event | PPVEvent) & { type: EventType, id: string, year: number, month: string };
 type EventStatus = "disponible" | "visto" | "no-visto";
 type EventStatusMap = { [eventId: string]: EventStatus };
 
@@ -145,6 +147,9 @@ export function EventGrid({ initialEvents }: EventGridProps) {
   
   const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
 
+  const [showFilter, setShowFilter] = useState<"all" | EventType>("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | EventStatus>("all");
+
   useEffect(() => {
     try {
       const storedStatuses = localStorage.getItem('attitude-rewind-statuses');
@@ -167,7 +172,17 @@ export function EventGrid({ initialEvents }: EventGridProps) {
   };
   
   const allEvents = useMemo(() => flattenEvents(initialEvents), [initialEvents]);
-  const eventsByMonth = useMemo(() => groupEventsByMonth(allEvents), [allEvents]);
+  
+  const filteredEvents = useMemo(() => {
+    return allEvents.filter(event => {
+      const showMatch = showFilter === 'all' || event.type === showFilter;
+      const status = eventStatuses[event.id] || 'disponible';
+      const statusMatch = statusFilter === 'all' || status === statusFilter;
+      return showMatch && statusMatch;
+    });
+  }, [allEvents, showFilter, statusFilter, eventStatuses]);
+
+  const eventsByMonth = useMemo(() => groupEventsByMonth(filteredEvents), [filteredEvents]);
 
   const handleDownload = () => {
     try {
@@ -201,55 +216,82 @@ export function EventGrid({ initialEvents }: EventGridProps) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <header className="text-center mb-12">
+      <header className="text-center mb-8">
         <h1 className="font-headline text-4xl md:text-5xl font-bold">
           <span className="text-black dark:text-white">Attitude Rewind</span>
         </h1>
       </header>
 
-        {Object.entries(eventsByMonth).map(([monthYear, events]) => (
-            <div key={monthYear} className="mb-12">
-                <h2 className="font-headline text-3xl text-primary mb-4">{monthYear.split(' ')[0]}</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                    {events.map(event => {
-                        const status = eventStatuses[event.id] || 'disponible';
-                        return (
-                        <Card 
-                            key={event.id}
-                            className={cn(
-                                "cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl border-2",
-                                getCardStyle(event.type)
-                            )}
-                            onClick={() => handleEventClick(event)}
-                        >
-                            <CardContent className="p-4 flex flex-col justify-between h-full">
-                                <div>
-                                    <div className="flex items-start gap-4">
-                                        <div className={cn("flex-shrink-0 w-12 h-12 rounded-md flex items-center justify-center font-bold text-2xl", getDateBoxStyle(event.type))}>
-                                            {event.date}
-                                        </div>
-                                        <div className="flex-grow">
-                                            <h3 className="font-bold">
-                                                {event.type === 'ppv' ? (event as PPVEvent).name : getEventTypeDisplay(event.type)}
-                                            </h3>
-                                            <p className="text-sm text-muted-foreground">{event.location}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
-                                    <div className="flex items-center gap-2">
-                                        <EventTypeIcon type={event.type} />
-                                        <span>{getEventTypeDisplay(event.type)}</span>
-                                    </div>
-                                    {status === 'visto' && <Eye className="h-4 w-4 text-green-500" />}
-                                    {status === 'no-visto' && <EyeOff className="h-4 w-4 text-red-500" />}
-                                </div>
-                            </CardContent>
-                        </Card>
-                    )})}
-                </div>
-            </div>
-        ))}
+      <div className="flex flex-col sm:flex-row gap-6 mb-12 justify-center">
+        <div className="flex flex-col items-center gap-2">
+            <span className="text-sm font-medium">Filtrar por Show</span>
+            <ToggleGroup type="single" value={showFilter} onValueChange={(value) => setShowFilter(value as any || 'all')} className="justify-center">
+                <ToggleGroupItem value="all">Todos</ToggleGroupItem>
+                <ToggleGroupItem value="raw">RAW</ToggleGroupItem>
+                <ToggleGroupItem value="smackdown">SmackDown</ToggleGroupItem>
+                <ToggleGroupItem value="ppv">PPV</ToggleGroupItem>
+            </ToggleGroup>
+        </div>
+        <div className="flex flex-col items-center gap-2">
+            <span className="text-sm font-medium">Filtrar por Estado</span>
+            <ToggleGroup type="single" value={statusFilter} onValueChange={(value) => setStatusFilter(value as any || 'all')} className="justify-center">
+                <ToggleGroupItem value="all">Todos</ToggleGroupItem>
+                <ToggleGroupItem value="disponible">Disponible</ToggleGroupItem>
+                <ToggleGroupItem value="visto">Visto</ToggleGroupItem>
+                <ToggleGroupItem value="no-visto">No Visto</ToggleGroupItem>
+            </ToggleGroup>
+        </div>
+      </div>
+
+        {Object.keys(eventsByMonth).length > 0 ? (
+          Object.entries(eventsByMonth).map(([monthYear, events]) => (
+              <div key={monthYear} className="mb-8">
+                  <h2 className="font-headline text-3xl text-primary mb-4">{monthYear.split(' ')[0]}</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                      {events.map(event => {
+                          const status = eventStatuses[event.id] || 'disponible';
+                          return (
+                          <Card 
+                              key={event.id}
+                              className={cn(
+                                  "cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl border-2",
+                                  getCardStyle(event.type)
+                              )}
+                              onClick={() => handleEventClick(event)}
+                          >
+                              <CardContent className="p-4 flex flex-col justify-between h-full">
+                                  <div>
+                                      <div className="flex items-start gap-4">
+                                          <div className={cn("flex-shrink-0 w-12 h-12 rounded-md flex items-center justify-center font-bold text-2xl", getDateBoxStyle(event.type))}>
+                                              {event.date}
+                                          </div>
+                                          <div className="flex-grow">
+                                              <h3 className="font-bold">
+                                                  {event.type === 'ppv' ? (event as PPVEvent).name : getEventTypeDisplay(event.type)}
+                                              </h3>
+                                              <p className="text-sm text-muted-foreground">{event.location}</p>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
+                                      <div className="flex items-center gap-2">
+                                          <EventTypeIcon type={event.type} />
+                                          <span>{getEventTypeDisplay(event.type)}</span>
+                                      </div>
+                                      {status === 'visto' && <Eye className="h-4 w-4 text-green-500" />}
+                                      {status === 'no-visto' && <EyeOff className="h-4 w-4 text-red-500" />}
+                                  </div>
+                              </CardContent>
+                          </Card>
+                      )})}
+                  </div>
+              </div>
+          ))
+        ) : (
+          <div className="text-center py-16">
+            <p className="text-muted-foreground">No se encontraron eventos con los filtros seleccionados.</p>
+          </div>
+        )}
       
       <div className="text-center my-12">
         <Button onClick={handleDownload} variant="outline">
@@ -378,3 +420,5 @@ export function EventGrid({ initialEvents }: EventGridProps) {
     </div>
   );
 }
+
+    
