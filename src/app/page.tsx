@@ -19,7 +19,7 @@ export default function Home() {
       <div className="container mx-auto px-4 py-4">
         <header className="text-center mb-4">
           <h1 className="font-headline text-4xl md:text-5xl font-bold">
-            <span className="text-black dark:text-white">Attitude Rewind</span>
+            <span className="text-black dark:text-white">Attitude </span><span className="text-red-500">Rewind</span>
           </h1>
         </header>
       </div>
