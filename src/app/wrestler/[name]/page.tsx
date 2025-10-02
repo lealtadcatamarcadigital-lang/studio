@@ -2,15 +2,17 @@
 'use client';
 
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useParams } from 'next/navigation';
 import { WWF_2000_DATA } from '@/lib/events-data-2000';
 import { WrestlerDetails } from '@/components/wrestler-details';
 import { WrestlingMaskIcon } from '@/components/icons/wrestling-mask-icon';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 
-export default function WrestlerPage({ params }: { params: { name: string } }) {
-  const wrestlerName = decodeURIComponent(params.name.replace(/_/g, ' '));
+export default function WrestlerPage() {
+  const params = useParams();
+  const name = typeof params.name === 'string' ? params.name : '';
+  const wrestlerName = decodeURIComponent(name.replace(/_/g, ' '));
   const searchParams = useSearchParams();
   const fromEvent = searchParams.get('from');
   const backUrl = fromEvent ? `/#${fromEvent}` : '/';
