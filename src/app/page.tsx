@@ -16,7 +16,7 @@ export default function Home() {
           <p className="text-muted-foreground mt-2">Un viaje cronológico por los eventos de la WWF en 2000 y 2001.</p>
         </header>
 
-        <div className="text-center mb-8">
+        <div className="text-center mb-4">
             <Link href="/stats">
                 <Button variant="outline">
                     <BarChart2 className="h-4 w-4 mr-2" />
