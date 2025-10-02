@@ -8,14 +8,6 @@ import { BarChart2 } from 'lucide-react';
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <div className="fixed top-1/3 right-0 z-10 -mr-6">
-        <Link href="/stats">
-          <Button variant="outline" className="transform rotate-90 origin-bottom-right rounded-b-none">
-              <BarChart2 className="h-4 w-4 mr-2 -rotate-90" />
-              Ver Estadísticas
-          </Button>
-        </Link>
-      </div>
       <div className="container mx-auto px-4 py-4">
         <header className="text-center mb-4">
           <h1 className="font-headline text-4xl md:text-5xl font-bold">
@@ -24,6 +16,15 @@ export default function Home() {
         </header>
       </div>
       <EventGrid initialEvents={WWF_2000_DATA} />
+
+      <div className="fixed bottom-8 right-8 z-10">
+        <Link href="/stats">
+          <Button size="icon" className="rounded-full h-14 w-14 shadow-lg">
+              <BarChart2 className="h-6 w-6" />
+              <span className="sr-only">Ver Estadísticas</span>
+          </Button>
+        </Link>
+      </div>
     </main>
   );
 }
