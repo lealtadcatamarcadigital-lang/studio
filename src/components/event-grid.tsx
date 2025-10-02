@@ -217,7 +217,7 @@ export function EventGrid({ initialEvents }: EventGridProps) {
         <div className="flex flex-col items-center gap-2">
             <span className="text-sm font-medium">Filtrar por Show</span>
             <ToggleGroup type="single" value={showFilter} onValueChange={(value) => setShowFilter(value as any || 'all')} className="justify-center">
-                <ToggleGroupItem value="all">Todos</ToggleGroupItem>
+                <ToggleGroupItem value="all" className="data-[state=on]:bg-black data-[state=on]:text-red-500">Todos</ToggleGroupItem>
                 <ToggleGroupItem value="raw" className="data-[state=on]:bg-red-500 data-[state=on]:text-white">RAW</ToggleGroupItem>
                 <ToggleGroupItem value="smackdown" className="data-[state=on]:bg-blue-500 data-[state=on]:text-white">SmackDown</ToggleGroupItem>
                 <ToggleGroupItem value="ppv" className="data-[state=on]:bg-amber-500 data-[state=on]:text-white">PPV</ToggleGroupItem>
@@ -402,6 +402,8 @@ export function EventGrid({ initialEvents }: EventGridProps) {
     </div>
   );
 }
+
+    
 
     
 
