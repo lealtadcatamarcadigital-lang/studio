@@ -1,9 +1,16 @@
 
-import Link from 'next/link';
 import { EventGrid } from '@/components/event-grid';
 import { WWF_2000_DATA } from '@/lib/events-data-2000';
 import { Button } from '@/components/ui/button';
 import { BarChart2 } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { StatsDashboard } from "@/components/stats-dashboard";
 
 export default function Home() {
   return (
@@ -17,14 +24,22 @@ export default function Home() {
       </div>
       <EventGrid initialEvents={WWF_2000_DATA} />
 
-      <div className="fixed bottom-8 right-8 z-10">
-        <Link href="/stats">
-          <Button size="icon" className="rounded-full h-14 w-14 shadow-lg">
-              <BarChart2 className="h-6 w-6" />
-              <span className="sr-only">Ver Estadísticas</span>
-          </Button>
-        </Link>
-      </div>
+      <Dialog>
+        <DialogTrigger asChild>
+            <div className="fixed bottom-8 right-8 z-10">
+                <Button size="icon" className="rounded-full h-14 w-14 shadow-lg">
+                    <BarChart2 className="h-6 w-6" />
+                    <span className="sr-only">Ver Estadísticas</span>
+                </Button>
+            </div>
+        </DialogTrigger>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle className="font-headline text-3xl">Estadísticas</DialogTitle>
+          </DialogHeader>
+          <StatsDashboard initialEvents={WWF_2000_DATA} />
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
