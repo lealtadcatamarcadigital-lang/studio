@@ -98,3 +98,5 @@ export function WrestlerDetails({ wrestlerName, initialEvents }: WrestlerDetails
     </div>
   );
 }
+
+    
