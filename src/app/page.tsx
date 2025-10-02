@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       <div className="container mx-auto px-4 py-4">
-        <header className="text-center mb-8">
+        <header className="text-center mb-4">
           <h1 className="font-headline text-4xl md:text-5xl font-bold">
             <span className="text-black dark:text-white">Attitude Rewind</span>
           </h1>
