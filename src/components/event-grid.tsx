@@ -156,7 +156,7 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
 };
 
 
-const MatchCard = ({ match }: { match: string }) => {
+const MatchCard = ({ match, eventId }: { match: string; eventId: string }) => {
     const parts = match.split(':');
     const mainMatch = parts[0];
     const stipulation = parts.length > 1 ? parts.slice(1).join(':').trim() : null;
@@ -168,7 +168,7 @@ const MatchCard = ({ match }: { match: string }) => {
             <p className="font-semibold text-card-foreground">
                  {parsedMatch.map((part, index) => 
                     part.wrestler ? (
-                        <Link key={index} href={`/wrestler/${part.text.replace(/ /g, '_')}`} className="text-primary hover:underline">
+                        <Link key={index} href={`/wrestler/${part.text.replace(/ /g, '_')}?from=${eventId}`} className="text-primary hover:underline">
                             {part.text}
                         </Link>
                     ) : (
@@ -279,8 +279,9 @@ export function EventGrid({ initialEvents }: EventGridProps) {
                           return (
                           <Card 
                               key={event.id}
+                              id={event.id}
                               className={cn(
-                                  "cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl border-2",
+                                  "cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl border-2 scroll-mt-24",
                                   getCardStyle(event.type)
                               )}
                               onClick={() => handleEventClick(event)}
@@ -372,7 +373,7 @@ export function EventGrid({ initialEvents }: EventGridProps) {
                       </h3>
                       {selectedEvent.matches && selectedEvent.matches.length > 0 ? (
                         <div className="space-y-2">
-                          {selectedEvent.matches.map((match, i) => <MatchCard key={i} match={match} />)}
+                          {selectedEvent.matches.map((match, i) => <MatchCard key={i} match={match} eventId={selectedEvent.id} />)}
                         </div>
                       ) : (
                         <p className="text-muted-foreground text-sm">No se ha anunciado la cartelera de combates.</p>
@@ -446,5 +447,3 @@ export function EventGrid({ initialEvents }: EventGridProps) {
     </div>
   );
 }
-
-    
