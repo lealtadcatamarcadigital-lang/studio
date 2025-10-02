@@ -164,7 +164,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '31', location: 'Chicago, IL', description: 'Eddie Guerrero gana el título Intercontinental a Chyna.', matches: ['WWF Intercontinental Championship: Eddie Guerrero vs. Chyna', 'The Rock vs. Chris Benoit vs. The Undertaker vs. Kane', 'Kurt Angle vs. Triple H'] },
     ],
     ppvs: [
-      { date: '27', name: 'SummerSlam', location: 'Raleigh, NC', description: 'The Rock retiene el título después de que Triple H atacara a Kurt Angle. Edge & Christian ganan el primer TLC Match.', matches: ['WWF Championship: The Rock vs. Triple H vs. Kurt Angle', 'TLC Match for the WWF Tag Team Championship: Edge & Christian vs. The Hardy Boyz vs. The Dudley Boyz', 'The Undertaker vs. Kane', 'WWF Intercontinental Championship: Chyna & Eddie Guerrero vs. Val Venis & Trish Stratus'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/1/15/SummerSlam_2000.jpg' },
+      { date: '27', name: 'SummerSlam', location: 'Raleigh, NC', description: 'The Rock retiene el título después de que Triple H atacara a Kurt Angle. Edge & Christian ganan el primer TLC Match.', matches: ['WWF Championship: The Rock vs. Triple H vs. Kurt Angle', 'TLC Match for the WWF Tag Team Championship: Edge & Christian vs. The Hardy Boyz vs. The Dudley Boyz', 'The Undertaker vs. Kane', 'WWF Intercontinental Championship: Chyna & Eddie Guerrero vs. Val Venis & Trish Stratus'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/1/15/SummerSlam2000poster.jpg' },
     ],
   },
   {
@@ -203,7 +203,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '19', location: 'Meadowlands, NJ', description: 'Último show antes de No Mercy. Rikishi es arrestado después de atacar a Stone Cold con un coche.', matches: ['WWF Championship No DQ Match: The Rock vs. The Dudley Boyz', 'Kurt Angle vs. Triple H', 'Chris Jericho vs. Chris Benoit'] },
     ],
     ppvs: [
-      { date: '22', name: 'No Mercy', location: 'Albany, NY', description: 'Kurt Angle derrota a The Rock para ganar el Campeonato de la WWF. Stone Cold vs. Rikishi termina en No Contest.', matches: ['WWF Championship No DQ Match: Kurt Angle vs. The Rock', 'No Holds Barred Match: Stone Cold Steve Austin vs. Rikishi', 'Steel Cage Match: Chris Jericho vs. X-Pac', 'WWF Tag Team Championship Tables Match: The Hardy Boyz vs. Los Conquistadores (Edge & Christian)'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/4/4f/No_Mercy_2000.jpg' },
+      { date: '22', name: 'No Mercy', location: 'Albany, NY', description: 'Kurt Angle derrota a The Rock para ganar el Campeonato de la WWF. Stone Cold vs. Rikishi termina en No Contest.', matches: ['WWF Championship No DQ Match: Kurt Angle vs. The Rock', 'No Holds Barred Match: Stone Cold Steve Austin vs. Rikishi', 'Steel Cage Match: Chris Jericho vs. X-Pac', 'WWF Tag Team Championship Tables Match: The Hardy Boyz vs. Los Conquistadores (Edge & Christian)'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/4/4f/No_mercy_2000.jpg' },
     ],
   },
   {
@@ -222,7 +222,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '16', location: 'Sunrise, FL', description: 'Último show antes de Survivor Series. Caos total entre todas las facciones.', matches: ['The Rock, Stone Cold, The Undertaker & Chris Jericho vs. Kurt Angle, Triple H, Edge & Christian & Rikishi', 'WWF Tag Team Championship: Bull Buchanan & The Goodfather vs. The Hardy Boyz', 'Val Venis vs. Billy Gunn'] },
     ],
     ppvs: [
-      { date: '19', name: 'Survivor Series', location: 'Tampa, FL', description: 'Stone Cold deja caer a Triple H desde una grúa dentro de un coche. Kurt Angle retiene el título contra The Undertaker.', matches: ['No Disqualification Match: Stone Cold Steve Austin vs. Triple H', 'WWF Championship: Kurt Angle vs. The Undertaker', 'Survivor Series Elimination Match: The Radicalz vs. DX & K-Kwik', 'Survivor Series Elimination Match: The Rock, Chris Jericho, Kane & The Undertaker vs. Kurt Angle, Edge, Christian & Rikishi'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/3/3e/Survivor_Series_2000.jpg' },
+      { date: '19', name: 'Survivor Series', location: 'Tampa, FL', description: 'Stone Cold deja caer a Triple H desde una grúa dentro de un coche. Kurt Angle retiene el título contra The Undertaker.', matches: ['No Disqualification Match: Stone Cold Steve Austin vs. Triple H', 'WWF Championship: Kurt Angle vs. The Undertaker', 'Survivor Series Elimination Match: The Radicalz vs. DX & K-Kwik', 'Survivor Series Elimination Match: The Rock, Chris Jericho, Kane & The Undertaker vs. Kurt Angle, Edge, Christian & Rikishi'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/3/3e/SS_00.jpg' },
     ],
   },
   {
@@ -241,7 +241,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '21', location: 'Charlotte, NC', description: 'Construcción para Royal Rumble 2001. Se anuncian los primeros participantes.', matches: ['WWF Championship: Kurt Angle vs. The Undertaker', 'The Rock & Stone Cold Steve Austin vs. The Dudley Boyz', 'Chris Jericho vs. Edge'] },
     ],
     ppvs: [
-      { date: '10', name: 'Armageddon', location: 'Birmingham, AL', description: 'Kurt Angle retiene el título en una caótica lucha Hell in a Cell de 6 hombres. The Radicalz se establecen como una facción dominante.', matches: ['6-Man Hell in a Cell for WWF Championship: Kurt Angle vs. The Rock vs. Stone Cold Steve Austin vs. Triple H vs. The Undertaker vs. Rikishi', 'Last Man Standing Match: Chris Jericho vs. Kane', 'WWF Tag Team Championship: Right to Censor vs. Edge & Christian vs. The Dudley Boyz'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/9/91/WWF_Armageddon_2000_poster.jpg' },
+      { date: '10', name: 'Armageddon', location: 'Birmingham, AL', description: 'Kurt Angle retiene el título en una caótica lucha Hell in a Cell de 6 hombres. The Radicalz se establecen como una facción dominante.', matches: ['6-Man Hell in a Cell for WWF Championship: Kurt Angle vs. The Rock vs. Stone Cold Steve Austin vs. Triple H vs. The Undertaker vs. Rikishi', 'Last Man Standing Match: Chris Jericho vs. Kane', 'WWF Tag Team Championship: Right to Censor vs. Edge & Christian vs. The Dudley Boyz'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/e/e9/Armageddon00.jpg' },
     ],
   },
   {
@@ -262,7 +262,7 @@ export const WWF_2000_DATA: MonthData[] = [
         { date: '25', location: 'Washington, D.C.', description: 'Stone Cold, el ganador del Rumble, busca su camino a WrestleMania. Triple H emerge como un obstáculo.', matches: ['WWF Championship: Kurt Angle vs. Kane', 'The Rock vs. Chris Benoit', 'The Hardy Boyz vs. The APA'] },
     ],
     ppvs: [
-        { date: '21', name: 'Royal Rumble', location: 'New Orleans, LA', description: 'Stone Cold Steve Austin gana el Royal Rumble Match por tercera vez. Kurt Angle retiene el título contra Triple H.', matches: ['30-Man Royal Rumble Match', 'WWF Championship: Kurt Angle vs. Triple H', 'Ladder Match for the WWF Intercontinental Championship: Chris Jericho vs. Chris Benoit', 'WWF Tag Team Championship: The Dudley Boyz vs. Edge & Christian'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/3/36/WWF_Royal_Rumble_2001.jpg' },
+        { date: '21', name: 'Royal Rumble', location: 'New Orleans, LA', description: 'Stone Cold Steve Austin gana el Royal Rumble Match por tercera vez. Kurt Angle retiene el título contra Triple H.', matches: ['30-Man Royal Rumble Match', 'WWF Championship: Kurt Angle vs. Triple H', 'Ladder Match for the WWF Intercontinental Championship: Chris Jericho vs. Chris Benoit', 'WWF Tag Team Championship: The Dudley Boyz vs. Edge & Christian'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/0/04/Royal_Rumble_2001.jpg' },
     ],
   },
 ];
