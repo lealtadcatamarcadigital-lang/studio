@@ -2,12 +2,12 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import type { MonthData } from '@/lib/events-data';
+import type { MonthData, Match } from '@/lib/events-data';
 import { WWF_2000_DATA } from '@/lib/events-data-2000';
 import { flattenEvents, getMonthNumber } from './event-grid';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
-import { CalendarDays, Tv, Ticket } from 'lucide-react';
+import { CalendarDays, Tv, Ticket, Star } from 'lucide-react';
 
 interface WrestlerDetailsProps {
   wrestlerName: string;
@@ -47,9 +47,9 @@ export function WrestlerDetails({ wrestlerName, initialEvents }: WrestlerDetails
         (event.matches || []).map(match => ({ event, match }))
       )
       .filter(({ match }) => {
-        // Use a regex to find the wrestler's name as a whole word
+        const matchText = typeof match === 'string' ? match : match.match;
         const wrestlerRegex = new RegExp(`\\b${wrestlerName}\\b`, 'i');
-        return wrestlerRegex.test(match);
+        return wrestlerRegex.test(matchText);
       })
       .map(({ event, match }) => ({
         ...event,
@@ -69,25 +69,38 @@ export function WrestlerDetails({ wrestlerName, initialEvents }: WrestlerDetails
       </Card>
 
       <div className="space-y-4">
-        {wrestlerMatches.map((event, index) => (
-          <Card key={`${event.id}-${index}`} className="overflow-hidden">
-            <CardHeader>
-              <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-xl mb-1">{event.match}</CardTitle>
-                    <CardDescription className="flex items-center gap-2">
-                        <CalendarDays className="h-4 w-4" />
-                        {new Date(event.year, getMonthNumber(event.month), parseInt(event.date)).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
-                    </CardDescription>
-                  </div>
-                  <Badge className={getShowBadgeStyle(event.type)}>
-                    <EventTypeIcon type={event.type} />
-                    <span className="ml-2">{event.type === 'ppv' ? event.name : getEventTypeDisplay(event.type)}</span>
-                  </Badge>
-              </div>
-            </CardHeader>
-          </Card>
-        ))}
+        {wrestlerMatches.map((event, index) => {
+          const matchText = typeof event.match === 'string' ? event.match : event.match.match;
+          const rating = typeof event.match !== 'string' ? event.match.rating : undefined;
+
+          return (
+            <Card key={`${event.id}-${index}`} className="overflow-hidden">
+              <CardHeader>
+                <div className="flex justify-between items-start gap-4">
+                    <div className="flex-grow">
+                      <CardTitle className="text-xl mb-1">{matchText}</CardTitle>
+                      <CardDescription className="flex items-center gap-2">
+                          <CalendarDays className="h-4 w-4" />
+                          {new Date(event.year, getMonthNumber(event.month), parseInt(event.date)).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
+                      </CardDescription>
+                    </div>
+                    <div className="flex-shrink-0 flex flex-col items-end gap-2">
+                      <Badge className={getShowBadgeStyle(event.type)}>
+                        <EventTypeIcon type={event.type} />
+                        <span className="ml-2">{event.type === 'ppv' ? event.name : getEventTypeDisplay(event.type)}</span>
+                      </Badge>
+                      {rating && (
+                          <div className="flex items-center gap-1 text-amber-500">
+                              <Star className="h-4 w-4 fill-current" />
+                              <span className="font-bold text-sm">{rating.toFixed(1)}</span>
+                          </div>
+                      )}
+                    </div>
+                </div>
+              </CardHeader>
+            </Card>
+          );
+        })}
       </div>
 
        {wrestlerMatches.length === 0 && (
@@ -98,5 +111,3 @@ export function WrestlerDetails({ wrestlerName, initialEvents }: WrestlerDetails
     </div>
   );
 }
-
-    

@@ -18,9 +18,10 @@ import {
   ListChecks,
   CheckCircle,
   ChevronDown,
+  Star,
 } from "lucide-react";
 
-import type { MonthData, Event, PPVEvent } from "@/lib/events-data";
+import type { MonthData, Event, PPVEvent, Match } from "@/lib/events-data";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -156,26 +157,37 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
 };
 
 
-const MatchCard = ({ match, eventId }: { match: string; eventId: string }) => {
-    const parts = match.split(':');
+const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
+    const matchText = typeof match === 'string' ? match : match.match;
+    const rating = typeof match !== 'string' ? match.rating : undefined;
+
+    const parts = matchText.split(':');
     const mainMatch = parts[0];
     const stipulation = parts.length > 1 ? parts.slice(1).join(':').trim() : null;
 
-    const parsedMatch = parseWrestlers(match);
+    const parsedMatch = parseWrestlers(matchText);
 
     return (
         <div className="bg-card border rounded-lg p-3">
-            <p className="font-semibold text-card-foreground">
-                 {parsedMatch.map((part, index) => 
-                    part.wrestler ? (
-                        <Link key={index} href={`/wrestler/${part.text.replace(/ /g, '_')}?from=${eventId}`} className="text-primary hover:underline">
-                            {part.text}
-                        </Link>
-                    ) : (
-                        <span key={index}>{part.text}</span>
-                    )
+            <div className="flex justify-between items-start">
+                <p className="font-semibold text-card-foreground">
+                    {parsedMatch.map((part, index) => 
+                        part.wrestler ? (
+                            <Link key={index} href={`/wrestler/${part.text.replace(/ /g, '_')}?from=${eventId}`} className="text-primary hover:underline">
+                                {part.text}
+                            </Link>
+                        ) : (
+                            <span key={index}>{part.text}</span>
+                        )
+                    )}
+                </p>
+                {rating && (
+                    <div className="flex items-center gap-1 text-amber-500 flex-shrink-0 ml-2">
+                        <Star className="h-4 w-4 fill-current" />
+                        <span className="font-bold text-sm">{rating.toFixed(1)}</span>
+                    </div>
                 )}
-            </p>
+            </div>
             {stipulation && (
                  <p className="text-red-600 dark:text-red-500 text-xs font-bold tracking-wider uppercase mt-1">{stipulation}</p>
             )}

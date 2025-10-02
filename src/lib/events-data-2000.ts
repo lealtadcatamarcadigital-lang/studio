@@ -20,7 +20,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '27', location: 'Baltimore, MD', description: 'Cactus Jack ataca a Triple H, construyendo su lucha para No Way Out.', matches: ['The Rock vs. Kurt Angle', 'Kane vs. The Big Show', 'Tazz vs. Test'] },
     ],
     ppvs: [
-      { date: '23', name: 'Royal Rumble', location: 'New York, NY', description: 'The Rock gana el Royal Rumble Match. Triple H retiene el título contra Cactus Jack en una brutal Street Fight.', matches: ['Street Fight for WWF Championship: Triple H vs. Cactus Jack', '30-Man Royal Rumble Match', 'WWF Intercontinental Championship: Chris Jericho vs. Chyna vs. Hardcore Holly', 'WWF Tag Team Championship Tables Match: The Dudley Boyz vs. The Hardy Boyz'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/b/bb/Royal_Rumble_2000.jpg' },
+      { date: '23', name: 'Royal Rumble', location: 'New York, NY', description: 'The Rock gana el Royal Rumble Match. Triple H retiene el título contra Cactus Jack en una brutal Street Fight.', matches: [{match: 'Street Fight for WWF Championship: Triple H vs. Cactus Jack', rating: 4.8}, {match: '30-Man Royal Rumble Match', rating: 3.5}, 'WWF Intercontinental Championship: Chris Jericho vs. Chyna vs. Hardcore Holly', 'WWF Tag Team Championship Tables Match: The Dudley Boyz vs. The Hardy Boyz'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/b/bb/Royal_Rumble_2000.jpg' },
     ],
   },
   {
@@ -40,7 +40,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '24', location: 'St. Louis, MO', description: 'The Big Show derrota a The Rock con ayuda de Shane McMahon.', matches: ['The Rock vs. The Big Show: #1 Contender Match at WrestleMania', 'Triple H vs. Rikishi', 'Edge & Christian vs. The Dudley Boyz'] },
     ],
     ppvs: [
-      { date: '27', name: 'No Way Out', location: 'Hartford, CT', description: 'Triple H derrota a Cactus Jack en un Hell in a Cell para retener el título y retirar a Mick Foley. The Big Show derrota a The Rock.', matches: ['Hell in a Cell for WWF Championship: Triple H vs. Cactus Jack', 'The Rock vs. The Big Show', 'WWF Intercontinental Championship: Kurt Angle vs. Chris Jericho', 'WWF Tag Team Championship: The Dudley Boyz vs. New Age Outlaws'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/e/ed/No_Way_Out_2000_logo.jpg' },
+      { date: '27', name: 'No Way Out', location: 'Hartford, CT', description: 'Triple H derrota a Cactus Jack en un Hell in a Cell para retener el título y retirar a Mick Foley. The Big Show derrota a The Rock.', matches: [{match: 'Hell in a Cell for WWF Championship: Triple H vs. Cactus Jack', rating: 5.0}, 'The Rock vs. The Big Show', 'WWF Intercontinental Championship: Kurt Angle vs. Chris Jericho', 'WWF Tag Team Championship: The Dudley Boyz vs. New Age Outlaws'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/e/ed/No_Way_Out_2000_logo.jpg' },
     ],
   },
   {
@@ -69,7 +69,7 @@ export const WWF_2000_DATA: MonthData[] = [
     raw: [
       { date: '3', location: 'Los Angeles, CA', description: 'The Rock busca venganza contra Vince McMahon y Triple H.', matches: ['WWF Championship: Triple H vs. The Rock', 'Chris Jericho vs. Eddie Guerrero', 'Kane vs. Bull Buchanan'] },
       { date: '10', location: 'Philadelphia, PA', description: 'Stone Cold Steve Austin regresa para ayudar a The Rock.', matches: ['The Rock & The Acolytes vs. Triple H, Chris Benoit & Perry Saturn', 'WWF Tag Team Championship: Edge & Christian vs. The Hardy Boyz', 'Tazz vs. Triple H'] },
-      { date: '17', location: 'State College, PA', description: 'Chris Jericho molesta a Triple H y Stephanie, ganándose una oportunidad titular.', matches: ['WWF Championship: Triple H vs. Chris Jericho (decisión revertida)', 'The Rock vs. X-Pac & Road Dogg', 'Kurt Angle vs. Tazz'] },
+      { date: '17', location: 'State College, PA', description: 'Chris Jericho molesta a Triple H y Stephanie, ganándose una oportunidad titular.', matches: [{match: 'WWF Championship: Triple H vs. Chris Jericho (decisión revertida)', rating: 4.0}, 'The Rock vs. X-Pac & Road Dogg', 'Kurt Angle vs. Tazz'] },
       { date: '24', location: 'Charlotte, NC', description: 'Linda McMahon anuncia que The Rock tendrá ayuda en Backlash: Stone Cold Steve Austin.', matches: ['The Rock & Chris Jericho vs. Triple H & Chris Benoit', 'WWF Tag Team Championship: Edge & Christian vs. The Dudley Boyz', 'Eddie Guerrero vs. The Godfather'] },
     ],
     smackdown: [
@@ -79,8 +79,8 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '27', location: 'Raleigh, NC', description: 'Stone Cold Steve Austin destruye el autobús de DX, anunciando su regreso.', matches: ['The Rock & The Dudley Boyz vs. Triple H, X-Pac & Road Dogg', 'Chris Benoit vs. Kurt Angle', 'WWF Hardcore Championship: Crash Holly vs. Matt Hardy'] },
     ],
     ppvs: [
-      { date: '2', name: 'WrestleMania 2000', location: 'Anaheim, CA', description: 'Una lucha fatal de 4 esquinas por el título. Vince McMahon traiciona a The Rock, permitiendo que Triple H retenga.', matches: ['WWF Championship: Triple H vs. The Rock vs. The Big Show vs. Mick Foley', 'Triangle Ladder Match: Edge & Christian vs. The Hardy Boyz vs. The Dudley Boyz', 'Two-Fall Intercontinental & European Championship Match: Kurt Angle vs. Chris Benoit vs. Chris Jericho'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/a/ab/WM2000Poster.jpeg' },
-      { date: '30', name: 'Backlash', location: 'Washington, D.C.', description: '¡The Rock finalmente derrota a Triple H para ganar el Campeonato de la WWF, gracias a la ayuda de Stone Cold Steve Austin!', matches: ['WWF Championship: The Rock vs. Triple H (con Shane McMahon como árbitro)', 'WWF Intercontinental Championship: Chris Benoit vs. Chris Jericho', 'WWF Tag Team Championship: Edge & Christian vs. D-X (X-Pac & Road Dogg)'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/c/c6/Backlash_2000_poster.jpg' },
+      { date: '2', name: 'WrestleMania 2000', location: 'Anaheim, CA', description: 'Una lucha fatal de 4 esquinas por el título. Vince McMahon traiciona a The Rock, permitiendo que Triple H retenga.', matches: ['WWF Championship: Triple H vs. The Rock vs. The Big Show vs. Mick Foley', {match: 'Triangle Ladder Match: Edge & Christian vs. The Hardy Boyz vs. The Dudley Boyz', rating: 4.5}, 'Two-Fall Intercontinental & European Championship Match: Kurt Angle vs. Chris Benoit vs. Chris Jericho'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/a/ab/WM2000Poster.jpeg' },
+      { date: '30', name: 'Backlash', location: 'Washington, D.C.', description: '¡The Rock finalmente derrota a Triple H para ganar el Campeonato de la WWF, gracias a la ayuda de Stone Cold Steve Austin!', matches: [{match: 'WWF Championship: The Rock vs. Triple H (con Shane McMahon como árbitro)', rating: 4.5}, 'WWF Intercontinental Championship: Chris Benoit vs. Chris Jericho', 'WWF Tag Team Championship: Edge & Christian vs. D-X (X-Pac & Road Dogg)'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/c/c6/Backlash_2000_poster.jpg' },
     ],
   },
   {
@@ -101,7 +101,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '25', location: 'Evansville, IN', description: 'El caos reina con el regreso de The Undertaker.', matches: ['The Rock vs. X-Pac & Road Dogg', 'WWF Tag Team Championship: Edge & Christian vs. Too Cool', 'Kurt Angle vs. Chris Jericho'] },
     ],
     ppvs: [
-      { date: '21', name: 'Judgment Day', location: 'Louisville, KY', description: 'Triple H derrota a The Rock en un Iron Man Match gracias a la intervención de un The Undertaker que regresa, para ganar el título.', matches: ['60-Minute Iron Man Match for the WWF Championship: The Rock vs. Triple H', 'Submission Match: Chris Benoit vs. Chris Jericho', 'Tables Match: D-X (X-Pac & Road Dogg) vs. The Dudley Boyz'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/3/3d/2000JudgmentDay.jpg' },
+      { date: '21', name: 'Judgment Day', location: 'Louisville, KY', description: 'Triple H derrota a The Rock en un Iron Man Match gracias a la intervención de un The Undertaker que regresa, para ganar el título.', matches: [{match: '60-Minute Iron Man Match for the WWF Championship: The Rock vs. Triple H', rating: 4.8}, 'Submission Match: Chris Benoit vs. Chris Jericho', 'Tables Match: D-X (X-Pac & Road Dogg) vs. The Dudley Boyz'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/3/3d/2000JudgmentDay.jpg' },
     ],
   },
   {
@@ -143,7 +143,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '27', location: 'Worcester, MA', description: 'El triángulo amoroso entre Triple H, Stephanie y Kurt Angle se intensifica.', matches: ['WWF Championship: The Rock vs. Kurt Angle', 'The Undertaker vs. The Big Show', 'Triple H vs. Chris Jericho'] },
     ],
     ppvs: [
-      { date: '23', name: 'Fully Loaded', location: 'Dallas, TX', description: 'The Rock retiene el título contra Chris Benoit. Triple H derrota a Chris Jericho en una brutal Last Man Standing match.', matches: ['WWF Championship: The Rock vs. Chris Benoit', 'Last Man Standing: Triple H vs. Chris Jericho', 'The Undertaker vs. Kurt Angle', 'WWF Tag Team Championship: The Acolytes vs. Edge & Christian'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/c/c0/WWFFullyLoaded.jpg' },
+      { date: '23', name: 'Fully Loaded', location: 'Dallas, TX', description: 'The Rock retiene el título contra Chris Benoit. Triple H derrota a Chris Jericho en una brutal Last Man Standing match.', matches: ['WWF Championship: The Rock vs. Chris Benoit', {match: 'Last Man Standing: Triple H vs. Chris Jericho', rating: 4.6}, 'The Undertaker vs. Kurt Angle', 'WWF Tag Team Championship: The Acolytes vs. Edge & Christian'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/c/c0/WWFFullyLoaded.jpg' },
     ],
   },
   {
@@ -164,7 +164,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '31', location: 'Chicago, IL', description: 'Eddie Guerrero gana el título Intercontinental a Chyna.', matches: ['WWF Intercontinental Championship: Eddie Guerrero vs. Chyna', 'The Rock vs. Chris Benoit vs. The Undertaker vs. Kane', 'Kurt Angle vs. Triple H'] },
     ],
     ppvs: [
-      { date: '27', name: 'SummerSlam', location: 'Raleigh, NC', description: 'The Rock retiene el título después de que Triple H atacara a Kurt Angle. Edge & Christian ganan el primer TLC Match.', matches: ['WWF Championship: The Rock vs. Triple H vs. Kurt Angle', 'TLC Match for the WWF Tag Team Championship: Edge & Christian vs. The Hardy Boyz vs. The Dudley Boyz', 'The Undertaker vs. Kane', 'WWF Intercontinental Championship: Chyna & Eddie Guerrero vs. Val Venis & Trish Stratus'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/1/15/SummerSlam2000poster.jpg' },
+      { date: '27', name: 'SummerSlam', location: 'Raleigh, NC', description: 'The Rock retiene el título después de que Triple H atacara a Kurt Angle. Edge & Christian ganan el primer TLC Match.', matches: ['WWF Championship: The Rock vs. Triple H vs. Kurt Angle', {match: 'TLC Match for the WWF Tag Team Championship: Edge & Christian vs. The Hardy Boyz vs. The Dudley Boyz', rating: 4.8}, 'The Undertaker vs. Kane', 'WWF Intercontinental Championship: Chyna & Eddie Guerrero vs. Val Venis & Trish Stratus'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/1/15/SummerSlam2000poster.jpg' },
     ],
   },
   {
@@ -175,7 +175,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '4', location: 'Lexington, KY', description: 'Mick Foley investiga quién atropelló a Stone Cold en Survivor Series 99.', matches: ['The Rock & The Undertaker vs. Kurt Angle & Chris Benoit', 'WWF Tag Team Championship: Edge & Christian vs. The Hardy Boyz', 'Eddie Guerrero vs. Triple H'] },
       { date: '11', location: 'Kansas City, MO', description: 'The Rock se enfrenta a una serie de oponentes elegidos por sus rivales.', matches: ['WWF Championship: The Rock vs. Christian', 'The Undertaker vs. Kurt Angle', 'The Hardy Boyz vs. Kaientai'] },
       { date: '18', location: 'Chicago, IL', description: 'Se anuncia una lucha fatal de 4 esquinas para Unforgiven. Stone Cold regresa.', matches: ['WWF Championship: The Rock vs. The Undertaker vs. Chris Benoit vs. Kane', 'Triple H vs. T & A', 'The Hardy Boyz vs. Edge & Christian'] },
-      { date: '25', location: 'State College, PA', description: 'La noche después de Unforgiven. The Rock celebra. Stone Cold busca venganza.', matches: ['WWF Championship: The Rock vs. Chris Benoit', 'The Hardy Boyz vs. Edge & Christian: Ladder Match', 'Triple H vs. Kurt Angle'] },
+      { date: '25', location: 'State College, PA', description: 'La noche después de Unforgiven. The Rock celebra. Stone Cold busca venganza.', matches: ['WWF Championship: The Rock vs. Chris Benoit', {match: 'The Hardy Boyz vs. Edge & Christian: Ladder Match', rating: 4.7}, 'Triple H vs. Kurt Angle'] },
     ],
     smackdown: [
       { date: '7', location: 'Houston, TX', description: 'The Rock es puesto en luchas difíciles por Mick Foley.', matches: ['The Rock & The Hardy Boyz vs. Chris Benoit, Edge & Christian', 'The Undertaker vs. Triple H', 'Kane vs. Kurt Angle'] },
@@ -241,7 +241,7 @@ export const WWF_2000_DATA: MonthData[] = [
       { date: '21', location: 'Charlotte, NC', description: 'Construcción para Royal Rumble 2001. Se anuncian los primeros participantes.', matches: ['WWF Championship: Kurt Angle vs. The Undertaker', 'The Rock & Stone Cold Steve Austin vs. The Dudley Boyz', 'Chris Jericho vs. Edge'] },
     ],
     ppvs: [
-      { date: '10', name: 'Armageddon', location: 'Birmingham, AL', description: 'Kurt Angle retiene el título en una caótica lucha Hell in a Cell de 6 hombres. The Radicalz se establecen como una facción dominante.', matches: ['6-Man Hell in a Cell for WWF Championship: Kurt Angle vs. The Rock vs. Stone Cold Steve Austin vs. Triple H vs. The Undertaker vs. Rikishi', 'Last Man Standing Match: Chris Jericho vs. Kane', 'WWF Tag Team Championship: Right to Censor vs. Edge & Christian vs. The Dudley Boyz'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/e/e9/Armageddon00.jpg' },
+      { date: '10', name: 'Armageddon', location: 'Birmingham, AL', description: 'Kurt Angle retiene el título en una caótica lucha Hell in a Cell de 6 hombres. The Radicalz se establecen como una facción dominante.', matches: [{match: '6-Man Hell in a Cell for WWF Championship: Kurt Angle vs. The Rock vs. Stone Cold Steve Austin vs. Triple H vs. The Undertaker vs. Rikishi', rating: 4.5}, 'Last Man Standing Match: Chris Jericho vs. Kane', 'WWF Tag Team Championship: Right to Censor vs. Edge & Christian vs. The Dudley Boyz'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/e/e9/Armageddon00.jpg' },
     ],
   },
   {
@@ -262,7 +262,7 @@ export const WWF_2000_DATA: MonthData[] = [
         { date: '25', location: 'Washington, D.C.', description: 'Stone Cold, el ganador del Rumble, busca su camino a WrestleMania. Triple H emerge como un obstáculo.', matches: ['WWF Championship: Kurt Angle vs. Kane', 'The Rock vs. Chris Benoit', 'The Hardy Boyz vs. The APA'] },
     ],
     ppvs: [
-        { date: '21', name: 'Royal Rumble', location: 'New Orleans, LA', description: 'Stone Cold Steve Austin gana el Royal Rumble Match por tercera vez. Kurt Angle retiene el título contra Triple H.', matches: ['30-Man Royal Rumble Match', 'WWF Championship: Kurt Angle vs. Triple H', 'Ladder Match for the WWF Intercontinental Championship: Chris Jericho vs. Chris Benoit', 'WWF Tag Team Championship: The Dudley Boyz vs. Edge & Christian'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/0/04/Royal_Rumble_2001.jpg' },
+        { date: '21', name: 'Royal Rumble', location: 'New Orleans, LA', description: 'Stone Cold Steve Austin gana el Royal Rumble Match por tercera vez. Kurt Angle retiene el título contra Triple H.', matches: [{match: '30-Man Royal Rumble Match', rating: 4.2}, 'WWF Championship: Kurt Angle vs. Triple H', {match: 'Ladder Match for the WWF Intercontinental Championship: Chris Jericho vs. Chris Benoit', rating: 4.9}, 'WWF Tag Team Championship: The Dudley Boyz vs. Edge & Christian'], coverUrl: 'https://upload.wikimedia.org/wikipedia/en/0/04/Royal_Rumble_2001.jpg' },
     ],
   },
 ];

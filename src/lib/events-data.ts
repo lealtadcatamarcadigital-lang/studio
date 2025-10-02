@@ -1,8 +1,10 @@
+export type Match = string | { match: string; rating?: number };
+
 export interface Event {
   date: string;
   location: string;
   description?: string;
-  matches?: string[];
+  matches?: Match[];
 }
 
 export interface PPVEvent extends Event {
