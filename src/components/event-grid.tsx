@@ -3,6 +3,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import Image from 'next/image';
+import Link from 'next/link';
 import {
   Download,
   CalendarDays,
@@ -124,16 +125,59 @@ const getDateBoxStyle = (type: 'raw' | 'smackdown' | 'ppv') => {
     }
 };
 
+const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] => {
+    const parts = match.split(':');
+    const mainMatch = parts.length > 1 ? parts.slice(1).join(':') : parts[0];
+    const title = parts.length > 1 ? `${parts[0]}: ` : '';
+
+    const wrestlerNames = new Set(["Triple H", "The Big Show", "The Rock", "Al Snow", "Jeff Hardy", "Bubba Ray Dudley", "New Age Outlaws", "The Acolytes", "Kane", "Albert", "Test", "The Big Boss Man", "Matt Hardy", "D-Von Dudley", "Cactus Jack", "Crash Holly", "Hardcore Holly", "The Radicalz", "Benoit", "Guerrero", "Saturn", "Malenko", "DX", "X-Pac", "Road Dogg", "Billy Gunn", "Tazz", "Kurt Angle", "The Godfather", "Chris Benoit", "Rikishi", "Dean Malenko", "Perry Saturn", "Edge", "Christian", "Gangrel", "Chyna", "The British Bulldog", "D'Lo Brown", "The Dudley Boyz", "Shane McMahon", "Mankind", "Eddie Guerrero", "Bob Backlund", "Bull Buchanan", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Too Cool", "The Undertaker", "Grand Master Sexay", "T & A", "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", "Los Conquistadores", "Right to Censor", "Drew Carey"]);
+    
+    // Improved regex to better split the string
+    const regex = new RegExp(`(${[...wrestlerNames].sort((a,b) => b.length - a.length).join('|')}|vs\\.|&)`, 'g');
+    const segments = mainMatch.split(regex).filter(Boolean);
+
+    const result: { text: string; wrestler: boolean }[] = [{ text: title, wrestler: false }];
+
+    segments.forEach(segment => {
+        const trimmedSegment = segment.trim();
+        if (wrestlerNames.has(trimmedSegment)) {
+            result.push({ text: trimmedSegment, wrestler: true });
+        } else {
+            const last = result[result.length - 1];
+            if (!last.wrestler) {
+                last.text += segment;
+            } else {
+                result.push({ text: segment, wrestler: false });
+            }
+        }
+    });
+
+    return result;
+};
+
+
 const MatchCard = ({ match }: { match: string }) => {
     const parts = match.split(':');
     const mainMatch = parts[0];
     const stipulation = parts.length > 1 ? parts.slice(1).join(':').trim() : null;
 
+    const parsedMatch = parseWrestlers(match);
+
     return (
         <div className="bg-card border rounded-lg p-3">
-            <p className="font-semibold text-card-foreground">{mainMatch}</p>
+            <p className="font-semibold text-card-foreground">
+                 {parsedMatch.map((part, index) => 
+                    part.wrestler ? (
+                        <Link key={index} href={`/wrestler/${part.text.replace(/ /g, '_')}`} className="text-primary hover:underline">
+                            {part.text}
+                        </Link>
+                    ) : (
+                        <span key={index}>{part.text}</span>
+                    )
+                )}
+            </p>
             {stipulation && (
-                <p className="text-red-600 dark:text-red-500 text-xs font-bold tracking-wider uppercase mt-1">{stipulation}</p>
+                 <p className="text-red-600 dark:text-red-500 text-xs font-bold tracking-wider uppercase mt-1">{stipulation}</p>
             )}
         </div>
     );
@@ -402,13 +446,5 @@ export function EventGrid({ initialEvents }: EventGridProps) {
     </div>
   );
 }
-
-    
-
-    
-
-    
-
-    
 
     
