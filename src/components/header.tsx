@@ -57,7 +57,7 @@ export function Header({
   const FilterMenu = ({ isMobile = false }: { isMobile?: boolean }) => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size={isMobile ? 'default' : 'icon'}>
+        <Button variant="ghost" size={isMobile ? 'default' : 'icon'} className="text-white hover:text-white hover:bg-white/10">
             <Filter className="h-4 w-4" />
             {isMobile && <span className="ml-2">Filtros</span>}
         </Button>
@@ -86,20 +86,20 @@ export function Header({
   );
 
   return (
-    <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-sm border-b">
+    <header className="sticky top-0 z-20 bg-blue-950/90 backdrop-blur-sm border-b border-blue-900">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center gap-4">
-            <Link href="/" className="font-headline text-2xl font-bold">
-              <span className="text-foreground">Attitude</span><span className="text-red-500">Rewind</span>
+            <Link href="/" className="font-headline text-2xl font-bold text-white">
+              <span className="text-white">Attitude</span><span className="text-red-500">Rewind</span>
             </Link>
 
             <div className="flex-1 flex justify-center px-4 lg:px-16">
                  <div className="relative w-full max-w-lg">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input 
                         type="search"
                         placeholder="Buscar eventos, luchadores, shows..."
-                        className="pl-10 w-full bg-muted"
+                        className="pl-10 w-full bg-blue-900/50 text-white border-blue-800 placeholder-gray-400 focus:bg-blue-900"
                         value={searchQuery}
                         onChange={(e) => onSearchQueryChange(e.target.value)}
                     />
@@ -112,14 +112,14 @@ export function Header({
 
             <Sheet>
                 <SheetTrigger asChild>
-                    <Button variant="ghost" size="icon" className="md:hidden">
+                    <Button variant="ghost" size="icon" className="md:hidden text-white hover:text-white hover:bg-white/10">
                         <Menu className="h-5 w-5" />
                         <span className="sr-only">Abrir Menú</span>
                     </Button>
                 </SheetTrigger>
-                <SheetContent>
+                <SheetContent className="bg-sidebar text-sidebar-foreground">
                     <SheetHeader>
-                        <SheetTitle>Menú</SheetTitle>
+                        <SheetTitle className="text-sidebar-foreground">Menú</SheetTitle>
                     </SheetHeader>
                     <div className="py-4">
                        <FilterMenu isMobile={true} />
