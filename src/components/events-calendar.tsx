@@ -36,9 +36,21 @@ const getEventTypeDisplay = (type: 'raw' | 'smackdown' | 'ppv') => {
 export function EventsCalendar({ initialEvents }: EventsCalendarProps) {
   const allEvents = useMemo(() => flattenEvents(initialEvents), [initialEvents]);
   const [currentMonth, setCurrentMonth] = useState(new Date(2000, 0, 1));
-  const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date(2000, 0, 3));
+  const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined);
   const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
   const [activeTab, setActiveTab] = useState("calendar");
+
+  useEffect(() => {
+    if (initialEvents.length > 0) {
+      const firstMonth = initialEvents[0];
+      const firstEventDate = new Date(firstMonth.year, getMonthNumber(firstMonth.month), 1);
+      setCurrentMonth(firstEventDate);
+      setSelectedDay(undefined);
+    } else {
+      setSelectedDay(undefined);
+    }
+  }, [initialEvents]);
+
 
   React.useEffect(() => {
     try {
@@ -110,8 +122,17 @@ export function EventsCalendar({ initialEvents }: EventsCalendarProps) {
     });
   }, [selectedDay, allEvents]);
   
-  const minDate = new Date(2000, 0, 1);
-  const maxDate = new Date(2001, 11, 31);
+  const minDate = useMemo(() => {
+    if (initialEvents.length === 0) return new Date(2000, 0, 1);
+    const firstYear = initialEvents[0].year;
+    return new Date(firstYear, 0, 1);
+  }, [initialEvents]);
+
+  const maxDate = useMemo(() => {
+    if (initialEvents.length === 0) return new Date(2001, 11, 31);
+    const lastYear = initialEvents[initialEvents.length - 1].year;
+    return new Date(lastYear, 11, 31);
+  }, [initialEvents]);
   
   const handleMonthChange = (newMonth: Date) => {
     if (newMonth >= minDate && newMonth <= maxDate) {
@@ -133,8 +154,8 @@ export function EventsCalendar({ initialEvents }: EventsCalendarProps) {
                     onSelect={handleSelectDay}
                     month={currentMonth}
                     onMonthChange={handleMonthChange}
-                    fromYear={2000}
-                    toYear={2001}
+                    fromYear={minDate.getFullYear()}
+                    toYear={maxDate.getFullYear()}
                     captionLayout="dropdown-buttons"
                     modifiers={modifiers}
                     modifiersClassNames={{
@@ -169,7 +190,10 @@ export function EventsCalendar({ initialEvents }: EventsCalendarProps) {
                                     <CardContent className="text-sm">
                                         <p className="font-semibold mb-2">Luchas destacadas:</p>
                                         <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
-                                            {event.matches.slice(0, 2).map((match, i) => <li key={i}>{match}</li>)}
+                                            {event.matches.slice(0, 2).map((match, i) => {
+                                                const matchText = typeof match === 'string' ? match : match.match;
+                                                return <li key={i}>{matchText}</li>
+                                            })}
                                         </ul>
                                     </CardContent>
                                 )}
@@ -187,4 +211,3 @@ export function EventsCalendar({ initialEvents }: EventsCalendarProps) {
     </div>
   );
 }
-

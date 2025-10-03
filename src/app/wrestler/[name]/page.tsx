@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { useSearchParams, useParams } from 'next/navigation';
-import { WWF_2000_DATA } from '@/lib/events-data-2000';
+import { WWF_ALL_DATA } from '@/lib/events-data-all';
 import { WrestlerDetails } from '@/components/wrestler-details';
 import { WrestlingMaskIcon } from '@/components/icons/wrestling-mask-icon';
 import { Button } from '@/components/ui/button';
@@ -38,8 +38,10 @@ export default function WrestlerPage() {
           <p className="text-muted-foreground mt-2">Historial de Combates</p>
         </header>
 
-        <WrestlerDetails wrestlerName={wrestlerName} initialEvents={WWF_2000_DATA} />
+        <WrestlerDetails wrestlerName={wrestlerName} initialEvents={WWF_ALL_DATA} />
       </div>
     </main>
   );
 }
+
+    

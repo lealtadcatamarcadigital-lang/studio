@@ -3,7 +3,7 @@
 
 import React, { useMemo } from 'react';
 import type { MonthData, Match } from '@/lib/events-data';
-import { WWF_2000_DATA } from '@/lib/events-data-2000';
+import { WWF_ALL_DATA } from '@/lib/events-data-all';
 import { flattenEvents, getMonthNumber } from './event-grid';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
