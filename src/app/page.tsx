@@ -22,7 +22,6 @@ import type { EventType } from '@/components/event-grid';
 export default function Home() {
   const [yearFilter, setYearFilter] = useState<string>('all');
   const [showFilter, setShowFilter] = useState<EventType | 'all'>('all');
-  const [searchQuery, setSearchQuery] = useState('');
 
   const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
 
@@ -38,23 +37,8 @@ export default function Home() {
         events = events.filter(event => event.type === showFilter);
     }
     
-    if (searchQuery) {
-      const lowercasedQuery = searchQuery.toLowerCase();
-      events = events.filter(event => {
-        const eventName = event.type === 'ppv' ? event.name.toLowerCase() : getEventTypeDisplay(event.type).toLowerCase();
-        const eventLocation = event.location.toLowerCase();
-        const matches = (event.matches || []).map(m => typeof m === 'string' ? m.toLowerCase() : m.match.toLowerCase()).join(' ');
-
-        return (
-          eventName.includes(lowercasedQuery) ||
-          eventLocation.includes(lowercasedQuery) ||
-          matches.includes(lowercasedQuery)
-        );
-      });
-    }
-    
     return events;
-  }, [allEvents, yearFilter, showFilter, searchQuery]);
+  }, [allEvents, yearFilter, showFilter]);
   
   const getEventTypeDisplay = (type: 'raw' | 'smackdown' | 'ppv') => {
       switch(type) {
@@ -94,8 +78,6 @@ export default function Home() {
         onYearFilterChange={setYearFilter}
         showFilter={showFilter}
         onShowFilterChange={setShowFilter}
-        searchQuery={searchQuery}
-        onSearchQueryChange={setSearchQuery}
       />
       
       <EventGrid 
