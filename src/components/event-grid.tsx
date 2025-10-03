@@ -48,23 +48,23 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { WWF_ALL_DATA } from "@/lib/events-data-all";
 
 interface EventGridProps {
-  initialEvents: MonthData[];
-  showFilter: EventType | 'all';
+  events: DetailedEvent[];
 }
 
 export type EventType = 'raw' | 'smackdown' | 'ppv';
-type DetailedEvent = (Event | PPVEvent) & { type: EventType, id: string, year: number, month: string };
+export type DetailedEvent = (Event | PPVEvent) & { type: EventType, id: string, year: number, month: string, monthId: string };
 export type EventStatus = "disponible" | "visto" | "no-visto";
 export type EventStatusMap = { [eventId: string]: EventStatus };
 
 export const flattenEvents = (data: MonthData[]): DetailedEvent[] => {
   const allEvents: DetailedEvent[] = [];
   data.forEach(month => {
-    month.raw.forEach((event, index) => allEvents.push({ ...event, type: 'raw', id: `${month.monthId}-${month.year}-raw-${index}`, year: month.year, month: month.month }));
-    month.smackdown.forEach((event, index) => allEvents.push({ ...event, type: 'smackdown', id: `${month.monthId}-${month.year}-smackdown-${index}`, year: month.year, month: month.month }));
-    month.ppvs.forEach((event, index) => allEvents.push({ ...event, type: 'ppv', id: `${month.monthId}-${month.year}-ppv-${index}`, year: month.year, month: month.month }));
+    month.raw.forEach((event, index) => allEvents.push({ ...event, type: 'raw', id: `${month.monthId}-${month.year}-raw-${index}`, year: month.year, month: month.month, monthId: month.monthId }));
+    month.smackdown.forEach((event, index) => allEvents.push({ ...event, type: 'smackdown', id: `${month.monthId}-${month.year}-smackdown-${index}`, year: month.year, month: month.month, monthId: month.monthId }));
+    month.ppvs.forEach((event, index) => allEvents.push({ ...event, type: 'ppv', id: `${month.monthId}-${month.year}-ppv-${index}`, year: month.year, month: month.month, monthId: month.monthId }));
   });
   allEvents.sort((a, b) => new Date(a.year, getMonthNumber(a.month), parseInt(a.date)).getTime() - new Date(b.year, getMonthNumber(b.month), parseInt(b.date)).getTime());
   return allEvents;
@@ -195,7 +195,7 @@ const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
     );
 };
 
-export function EventGrid({ initialEvents, showFilter }: EventGridProps) {
+export function EventGrid({ events }: EventGridProps) {
   const { toast } = useToast();
   
   const [selectedEvent, setSelectedEvent] = useState<DetailedEvent | null>(null);
@@ -224,21 +224,12 @@ export function EventGrid({ initialEvents, showFilter }: EventGridProps) {
     }
   };
   
-  const allEvents = useMemo(() => flattenEvents(initialEvents), [initialEvents]);
-  
-  const filteredEvents = useMemo(() => {
-    return allEvents.filter(event => {
-      const showMatch = showFilter === 'all' || event.type === showFilter;
-      return showMatch;
-    });
-  }, [allEvents, showFilter]);
-
-  const eventsByMonth = useMemo(() => groupEventsByMonth(filteredEvents), [filteredEvents]);
+  const eventsByMonth = useMemo(() => groupEventsByMonth(events), [events]);
 
   const handleDownload = () => {
     try {
       const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
-        JSON.stringify(initialEvents, null, 2)
+        JSON.stringify(WWF_ALL_DATA, null, 2)
       )}`;
       const link = document.createElement("a");
       link.href = jsonString;
@@ -271,7 +262,7 @@ export function EventGrid({ initialEvents, showFilter }: EventGridProps) {
         {Object.keys(eventsByMonth).length > 0 ? (
           Object.entries(eventsByMonth).map(([monthYear, events]) => (
               <div key={monthYear} className="mb-8">
-                  <h2 className="font-headline text-3xl font-bold text-foreground mb-4 sticky top-0 bg-background/80 backdrop-blur-sm py-2 z-10">{monthYear.split(' ')[0]}</h2>
+                  <h2 className="font-headline text-3xl font-bold text-foreground mb-4 sticky top-16 bg-background/80 backdrop-blur-sm py-2 z-10">{monthYear.split(' ')[0]}</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                       {events.map(event => {
                           const status = eventStatuses[event.id] || 'disponible';
@@ -280,7 +271,7 @@ export function EventGrid({ initialEvents, showFilter }: EventGridProps) {
                               key={event.id}
                               id={event.id}
                               className={cn(
-                                  "cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl border-2 scroll-mt-24",
+                                  "cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl border-2 scroll-mt-24 bg-card",
                                   getCardStyle(event.type)
                               )}
                               onClick={() => handleEventClick(event)}
