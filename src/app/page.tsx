@@ -13,54 +13,40 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { StatsDashboard } from "@/components/stats-dashboard";
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { EventsCalendar } from '@/components/events-calendar';
+import { Header } from '@/components/header';
+import type { EventType } from '@/components/event-grid';
 
 export default function Home() {
   const [yearFilter, setYearFilter] = useState<string>('all');
+  const [showFilter, setShowFilter] = useState<EventType | 'all'>('all');
 
   const filteredEvents = useMemo(() => {
-    if (yearFilter === 'all') {
-      return WWF_ALL_DATA;
+    let events = WWF_ALL_DATA;
+
+    if (yearFilter !== 'all') {
+      const year = parseInt(yearFilter);
+      events = events.filter(month => month.year === year);
     }
-    const year = parseInt(yearFilter);
-    return WWF_ALL_DATA.filter(month => month.year === year);
+    
+    return events;
   }, [yearFilter]);
 
   return (
     <main className="min-h-screen">
-      <div className="container mx-auto px-4 py-4">
-        <header className="text-center mb-4">
-          <h1 className="font-headline text-4xl md:text-5xl font-bold">
-            <span className="text-black dark:text-white">Attitude </span><span className="text-red-500">Rewind</span>
-          </h1>
-        </header>
-
-        <div className="flex justify-center mb-6">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">Filtrar por Año</span>
-            <Select value={yearFilter} onValueChange={setYearFilter}>
-              <SelectTrigger className="w-[120px]">
-                <SelectValue placeholder="Seleccionar año" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos</SelectItem>
-                <SelectItem value="2000">2000</SelectItem>
-                <SelectItem value="2001">2001</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      </div>
-      <EventGrid initialEvents={filteredEvents} />
+      <Header
+        yearFilter={yearFilter}
+        onYearFilterChange={setYearFilter}
+        showFilter={showFilter}
+        onShowFilterChange={setShowFilter}
+      />
+      
+      <EventGrid 
+        initialEvents={filteredEvents}
+        showFilter={showFilter}
+      />
 
       <div className="fixed bottom-8 right-8 z-10 flex flex-col items-center gap-4">
         <Dialog>
@@ -98,5 +84,3 @@ export default function Home() {
     </main>
   );
 }
-
-    

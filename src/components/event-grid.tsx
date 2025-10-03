@@ -48,13 +48,13 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 interface EventGridProps {
   initialEvents: MonthData[];
+  showFilter: EventType | 'all';
 }
 
-type EventType = 'raw' | 'smackdown' | 'ppv';
+export type EventType = 'raw' | 'smackdown' | 'ppv';
 type DetailedEvent = (Event | PPVEvent) & { type: EventType, id: string, year: number, month: string };
 export type EventStatus = "disponible" | "visto" | "no-visto";
 export type EventStatusMap = { [eventId: string]: EventStatus };
@@ -86,7 +86,7 @@ export const getMonthNumber = (monthName: string) => {
     return monthMap[monthName];
 };
 
-const getEventTypeDisplay = (type: 'raw' | 'smackdown' | 'ppv') => {
+export const getEventTypeDisplay = (type: 'raw' | 'smackdown' | 'ppv') => {
     switch(type) {
         case 'raw': return 'RAW';
         case 'smackdown': return 'SmackDown';
@@ -195,15 +195,13 @@ const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
     );
 };
 
-export function EventGrid({ initialEvents }: EventGridProps) {
+export function EventGrid({ initialEvents, showFilter }: EventGridProps) {
   const { toast } = useToast();
   
   const [selectedEvent, setSelectedEvent] = useState<DetailedEvent | null>(null);
   const [isEventDetailsOpen, setIsEventDetailsOpen] = useState(false);
   
   const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
-
-  const [showFilter, setShowFilter] = useState<"all" | EventType>("all");
 
   useEffect(() => {
     try {
@@ -269,18 +267,7 @@ export function EventGrid({ initialEvents }: EventGridProps) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col sm:flex-row gap-6 mb-8 justify-center">
-        <div className="flex flex-col items-center gap-2">
-            <span className="text-sm font-medium">Filtrar por Show</span>
-            <ToggleGroup type="single" value={showFilter} onValueChange={(value) => setShowFilter(value as any || 'all')} className="justify-center">
-                <ToggleGroupItem value="all" className="data-[state=on]:bg-black data-[state=on]:text-red-500">Todos</ToggleGroupItem>
-                <ToggleGroupItem value="raw" className="data-[state=on]:bg-red-500 data-[state=on]:text-white">RAW</ToggleGroupItem>
-                <ToggleGroupItem value="smackdown" className="data-[state=on]:bg-blue-500 data-[state=on]:text-white">SmackDown</ToggleGroupItem>
-                <ToggleGroupItem value="ppv" className="data-[state=on]:bg-amber-500 data-[state=on]:text-white">PPV</ToggleGroupItem>
-            </ToggleGroup>
-        </div>
-      </div>
-
+      
         {Object.keys(eventsByMonth).length > 0 ? (
           Object.entries(eventsByMonth).map(([monthYear, events]) => (
               <div key={monthYear} className="mb-8">
