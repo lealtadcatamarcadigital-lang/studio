@@ -7,21 +7,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, CalendarDays, ChevronDown, CheckCircle, Circle, Eye, EyeOff, Info, ListChecks, MapPin, Star, Ticket, Tv } from 'lucide-react';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
-import { flattenEvents, getMonthNumber, getEventTypeDisplay, type DetailedEvent, type EventStatus, type EventStatusMap } from '@/components/event-grid';
+import { flattenEvents, getMonthNumber, getEventTypeDisplay, type DetailedEvent, type EventStatus, type EventStatusMap, getShowBadgeStyle } from '@/components/event-grid';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import type { Match } from '@/lib/events-data';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-
-const getShowBadgeStyle = (type: 'raw' | 'smackdown' | 'ppv') => {
-    switch (type) {
-        case 'raw': return 'bg-red-500 hover:bg-red-500/80 text-white';
-        case 'smackdown': return 'bg-blue-500 hover:bg-blue-500/80 text-white';
-        case 'ppv': return 'bg-amber-500 hover:bg-amber-500/80 text-white';
-    }
-};
 
 const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] => {
     const parts = match.split(':');
@@ -35,12 +27,12 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
         "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grandmaster Sexay", "The Acolytes", "Faarooq", "Bradshaw", 
         "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", 
         "T & A", "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", "Los Conquistadores", "Right to Censor", "Drew Carey", 
-        "The Hardy Boyz", "The Radicalz", "D-Generation X", "The New Age Outlaws", "DX", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
+        "The Hardy Boyz", "The Radicalz", "D-Generation X", "DX", "The New Age Outlaws", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
         "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", "Too Cool", "The Hollys",
-        "John Layfield", "Ron Simmons", "Bubba Ray", "Taka Michinoku", "Funaki", "Matt"
+        "John Layfield", "Ron Simmons", "Bubba Ray", "Taka Michinoku", "Funaki", "Matt", "D-Generation X"
     ]);
     
-    const regex = new RegExp(`(${[...wrestlerNames].sort((a,b) => b.length - a.length).map(name => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')}|vs\\.|&)`, 'g');
+    const regex = new RegExp(`(${[...wrestlerNames].sort((a,b) => b.length - a.length).map(name => name.replace(/[.*+?^${'()'}|\\[\\]\\\\]/g, '\\$&')).join('|')}|vs\\.|&)`, 'g');
     const segments = mainMatch.split(regex).filter(Boolean);
 
     const result: { text: string; wrestler: boolean }[] = [{ text: title, wrestler: false }];
@@ -145,10 +137,6 @@ export default function EventPage() {
     }
 
     const isPpvWithCover = event.type === 'ppv' && (event as any).coverUrl;
-    const isRaw = event.type === 'raw';
-    const hasImage = isPpvWithCover || isRaw;
-    const imageUrl = isPpvWithCover ? (event as any).coverUrl : (isRaw ? 'https://i.pinimg.com/736x/11/bd/95/11bd95fe71b2e8c1fe48ebd4dc597646.jpg' : '');
-    const altText = isPpvWithCover ? `Portada de ${(event as any).name}` : 'WWF Raw is War';
 
     return (
         <main className="min-h-screen bg-background">
@@ -170,13 +158,13 @@ export default function EventPage() {
 
             <div className="container mx-auto max-w-6xl px-4 py-8">
                 <div className="space-y-6">
-                    <div className={cn("flex flex-col md:flex-row gap-8", hasImage && "items-start")}>
-                        {hasImage && (
+                    <div className={cn("flex flex-col md:flex-row gap-8", isPpvWithCover && "items-start")}>
+                        {isPpvWithCover && (
                             <div className="md:w-1/3 flex-shrink-0">
                                 <div className="rounded-lg overflow-hidden border shadow-lg">
                                     <Image 
-                                        src={imageUrl!}
-                                        alt={altText}
+                                        src={(event as any).coverUrl}
+                                        alt={`Portada de ${(event as any).name}`}
                                         width={400}
                                         height={600}
                                         className="w-full h-auto object-cover"

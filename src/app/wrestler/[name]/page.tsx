@@ -69,8 +69,26 @@ export default function WrestlerPage() {
       </header>
 
       <div className="container mx-auto max-w-6xl px-4 py-8">
-        <WrestlerDetails wrestlerName={wrestlerName} />
-
+        <div className="flex flex-col md:flex-row items-start gap-8">
+            <div className="md:w-1/3 flex-shrink-0">
+                {wrestler && wrestler.imageUrl && (
+                    <div className="rounded-lg overflow-hidden border shadow-lg">
+                        <Image
+                            src={wrestler.imageUrl}
+                            alt={`Foto de ${wrestlerName}`}
+                            width={400}
+                            height={600}
+                            className="w-full h-auto object-cover"
+                        />
+                    </div>
+                )}
+                <h2 className="text-3xl font-bold font-headline mt-4">{wrestlerName}</h2>
+            </div>
+            <div className="flex-grow w-full">
+                <WrestlerDetails wrestlerName={wrestlerName} />
+            </div>
+        </div>
+        
         <div className="space-y-6 mt-8">
             <h2 className="text-2xl font-bold pt-4">Historial de Combates</h2>
             <div className="space-y-4">
