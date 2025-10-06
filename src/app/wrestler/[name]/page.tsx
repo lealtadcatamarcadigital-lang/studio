@@ -2,7 +2,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { useSearchParams, useParams } from 'next/navigation';
 import { WrestlerDetails } from '@/components/wrestler-details';
 import { Button } from '@/components/ui/button';
