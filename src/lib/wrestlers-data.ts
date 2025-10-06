@@ -38,10 +38,10 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/Afb1T4zuH1aFm5M5W5hUotIrvB1.jpg"
     },
     "Chris Benoit": {
-        imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Chris_Benoit_tribute.jpg/440px-Chris_Benoit_tribute.jpg"
+        imageUrl: "https://i.pinimg.com/736x/e6/73/c9/e673c960c5f92eb2f473f4f9835a1608.jpg"
     },
     "Eddie Guerrero": {
-        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/vCiLdpr1aYyYtqGZcDxS4aLgB4V.jpg"
+        imageUrl: "https://i.pinimg.com/736x/cf/e7/b4/cfe7b47983af72cc81d8ded3865b7e31.jpg"
     },
     "Edge": {
         imageUrl: "https://i.pinimg.com/736x/2b/58/17/2b581716b87f9be6b37a64b329dc1d15.jpg"
@@ -96,5 +96,14 @@ export const wrestlersData: Record<string, WrestlerData> = {
     },
     "X-Pac": {
         imageUrl: "https://i.pinimg.com/1200x/d5/79/35/d5793533992e793daef55590b972ecbe.jpg"
+    },
+    "Tazz": {
+        imageUrl: "https://i.pinimg.com/736x/14/d9/17/14d9178db9de647b04fbfc6fcdde853d.jpg"
+    },
+    "Crash Holly": {
+        imageUrl: "https://i.pinimg.com/736x/1d/b8/01/1db8014f150f86a3b7d5edce98dd6f2c.jpg"
+    },
+    "Steve Blackman": {
+        imageUrl: "https://i.pinimg.com/736x/17/55/aa/1755aa102cb51112d5ffbe68e2b32238.jpg"
     }
 };

@@ -245,6 +245,7 @@ export default function EventPage() {
                                         <Eye className="h-4 w-4 text-green-500" />
                                         Visto
                                     </div>
+
                                 </SelectItem>
                                 <SelectItem value="no-visto">
                                     <div className="flex items-center gap-2">
