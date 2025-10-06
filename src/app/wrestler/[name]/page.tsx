@@ -9,13 +9,12 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, CalendarDays, Star, Tv, Ticket } from 'lucide-react';
 import { wrestlersData } from '@/lib/wrestlers-data';
 import { useMemo } from 'react';
-import { flattenEvents, getEventTypeDisplay, getMonthNumber } from '@/components/event-grid';
+import { flattenEvents, getMonthNumber, getEventTypeDisplay, getShowBadgeStyle } from '@/components/event-grid';
 import type { Match } from '@/lib/events-data';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
-import { getShowBadgeStyle } from '@/components/event-grid';
 
 const getShowIcon = (type: 'raw' | 'smackdown' | 'ppv') => {
     return type === 'ppv' ? <Ticket className="h-3 w-3" /> : <Tv className="h-3 w-3" />;
@@ -44,7 +43,6 @@ export default function WrestlerPage() {
       )
       .filter(({ match }) => {
         const matchText = typeof match === 'string' ? match : match.match;
-        // A more robust check for wrestler name
         const regex = new RegExp(`\\b${wrestlerName.replace(/[.*+?^${'()'}|\\[\\]\\\\]/g, '\\$&')}\\b`, 'i');
         return regex.test(matchText);
       })
@@ -73,9 +71,9 @@ export default function WrestlerPage() {
       </header>
 
       <div className="container mx-auto max-w-6xl px-4 py-8">
+        <h2 className="text-3xl font-bold font-headline mb-4">{wrestlerName}</h2>
         <div className="flex flex-col md:flex-row items-start gap-8">
             <div className="md:w-1/3 flex-shrink-0 space-y-4">
-                <h2 className="text-3xl font-bold font-headline">{wrestlerName}</h2>
                 {wrestler && wrestler.imageUrl && (
                     <div className="rounded-lg overflow-hidden border shadow-lg">
                         <Image
