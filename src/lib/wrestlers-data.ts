@@ -49,6 +49,9 @@ export const wrestlersData: Record<string, WrestlerData> = {
     "Jeff Hardy": {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/g5w5wYtzzrF1aMYt23C1sXW3zF1.jpg"
     },
+    "Bubba Ray Dudley": {
+        imageUrl: "https://i.pinimg.com/1200x/f2/24/ab/f224abee2dce0349adde6e6122a73804.jpg"
+    },
     "Lita": {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/2i0Fp4yY9a53lJjP2D3eHnOHJ5A.jpg"
     },

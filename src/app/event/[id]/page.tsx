@@ -106,6 +106,7 @@ export default function EventPage() {
     const event = useMemo(() => allEvents.find(e => e.id === eventId), [allEvents, eventId]);
     
     const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
+    const router = useRouter();
 
     useEffect(() => {
         try {
@@ -138,16 +139,18 @@ export default function EventPage() {
 
     return (
         <main className="min-h-screen bg-background">
-            <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-sm border-b">
+            <header className="sticky top-0 z-20 bg-card/80 backdrop-blur-sm border-b">
                 <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-                    <Link href="/" className="flex items-center gap-2 font-headline text-2xl font-bold text-white">
-                        <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/WWF-Attitude-Era-Logo.png/2560px-WWF-Attitude-Era-Logo.png" alt="Attitude Era Logo" width={40} height={40} className="h-10 w-auto" />
-                    </Link>
+                    <Button variant="ghost" onClick={() => router.back()} className="flex items-center gap-2">
+                        <ArrowLeft className="h-4 w-4" />
+                        Volver
+                    </Button>
                     <div className="flex-1 flex justify-center items-center gap-4 text-center">
-                         <h1 className="font-headline text-2xl md:text-3xl font-bold">
+                         <h1 className="text-xl md:text-2xl font-bold">
                             {event.type === 'ppv' ? (event as any).name : `WWF ${getEventTypeDisplay(event.type)}`}
                         </h1>
                     </div>
+                    <div className="w-12"></div> {/* Spacer */}
                 </div>
             </header>
 
@@ -253,5 +256,3 @@ export default function EventPage() {
         </main>
     )
 }
-
-    

@@ -2,7 +2,6 @@
 "use client";
 
 import React from 'react';
-import Image from 'next/image';
 import { Menu, Filter, Tv, Ticket, List } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -48,16 +47,16 @@ export function Header({
   onShowFilterChange,
   yearFilter,
   onYearFilterChange,
-  title,
 }: HeaderProps) {
 
   const FilterMenu = ({ isMobile = false }: { isMobile?: boolean }) => (
-    <div className={cn(isMobile ? "flex flex-col gap-4" : "flex items-center gap-2")}>
+    <div className={cn("flex flex-col gap-4", isMobile ? "p-4" : "")}>
+        <h3 className="font-semibold">Filtrar por Show</h3>
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" size={isMobile ? 'default' : 'sm'} className={cn(isMobile ? "justify-start" : "")}>
-                    <Filter className="h-4 w-4" />
-                    <span className="ml-2">Show: {showOptions.find(s => s.value === showFilter)?.label}</span>
+                <Button variant="outline" className="justify-start w-full">
+                    <Filter className="h-4 w-4 mr-2" />
+                    {showOptions.find(s => s.value === showFilter)?.label}
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
@@ -72,11 +71,12 @@ export function Header({
             </DropdownMenuContent>
         </DropdownMenu>
 
+        <h3 className="font-semibold mt-4">Filtrar por Año</h3>
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" size={isMobile ? 'default' : 'sm'} className={cn(isMobile ? "justify-start" : "")}>
-                    <Filter className="h-4 w-4" />
-                    <span className="ml-2">Año: {yearOptions.find(y => y.value === yearFilter)?.label}</span>
+                <Button variant="outline" className="justify-start w-full">
+                    <Filter className="h-4 w-4 mr-2" />
+                    {yearOptions.find(y => y.value === yearFilter)?.label}
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
@@ -93,25 +93,22 @@ export function Header({
   );
 
   return (
-    <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-sm border-b">
+    <header className="sticky top-0 z-20 bg-card shadow-md" style={{ backgroundColor: '#2A3B57' }}>
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between gap-4">
-            <h1 className="text-2xl font-bold font-headline">
-                {title}
+            <h1 className="text-2xl font-bold font-headline" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                <span className="text-white">Attitude</span>
+                <span className="text-red-500">Rewind</span>
             </h1>
-            
-            <div className="hidden md:flex">
-                <FilterMenu />
-            </div>
 
             <Sheet>
                 <SheetTrigger asChild>
-                    <Button variant="outline" size="icon" className="md:hidden">
-                        <Menu className="h-5 w-5" />
+                    <Button variant="ghost" size="icon" className="md:hidden text-white hover:bg-white/10">
+                        <Menu className="h-6 w-6" />
                         <span className="sr-only">Abrir Menú</span>
                     </Button>
                 </SheetTrigger>
-                <SheetContent>
+                <SheetContent className="bg-card text-card-foreground">
                     <SheetHeader>
                         <SheetTitle>Filtros</SheetTitle>
                     </SheetHeader>

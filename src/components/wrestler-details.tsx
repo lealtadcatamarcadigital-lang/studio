@@ -34,18 +34,18 @@ export function WrestlerDetails({ wrestlerName }: WrestlerDetailsProps) {
         const matchText = typeof event.match === 'string' ? event.match : event.match.match;
 
         return (
-          <div key={`${event.id}-${index}`} className="p-4 border rounded-lg">
+          <div key={`${event.id}-${index}`} className="p-4 border rounded-lg bg-card text-card-foreground">
             <p className="font-bold">{matchText}</p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground mt-1">
               {event.type === 'ppv' ? event.name : `WWF ${event.type.charAt(0).toUpperCase() + event.type.slice(1)}`}
               {' - '}
-              {new Date(event.year, getMonthNumber(event.month), parseInt(event.date)).toLocaleDateString()}
+              {new Date(event.year, getMonthNumber(event.month), parseInt(event.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
           </div>
         );
       })}
        {wrestlerMatches.length === 0 && (
-         <p>No se encontraron combates para este luchador.</p>
+         <p className="text-muted-foreground">No se encontraron combates para este luchador.</p>
        )}
     </div>
   );

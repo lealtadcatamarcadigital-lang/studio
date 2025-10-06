@@ -1,44 +1,24 @@
 
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from 'next/link';
 import {
-  Download,
-  CalendarDays,
-  MapPin,
-  List,
-  Info,
-  Eye,
-  EyeOff,
-  Circle,
   Tv,
   Ticket,
-  ListChecks,
-  CheckCircle,
-  ChevronDown,
-  Star,
+  Eye,
+  ChevronDown
 } from "lucide-react";
 
-import type { MonthData, Event, PPVEvent, Match } from "@/lib/events-data";
+import type { MonthData, Event, PPVEvent } from "@/lib/events-data";
 
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
 
 interface EventGridProps {
   events: DetailedEvent[];
@@ -60,11 +40,23 @@ export const flattenEvents = (data: MonthData[]): DetailedEvent[] => {
   return allEvents;
 };
 
-const getShowBadgeStyle = (type: 'raw' | 'smackdown' | 'ppv') => {
+const getShowStyles = (type: 'raw' | 'smackdown' | 'ppv') => {
     switch (type) {
-        case 'raw': return 'bg-red-500 hover:bg-red-500/80 text-white';
-        case 'smackdown': return 'bg-blue-500 hover:bg-blue-500/80 text-white';
-        case 'ppv': return 'bg-amber-500 hover:bg-amber-500/80 text-white';
+        case 'raw': return {
+            card: 'border-red-500',
+            dateBox: 'bg-red-500 text-white',
+            showName: 'text-red-500'
+        };
+        case 'smackdown': return {
+            card: 'border-blue-500',
+            dateBox: 'bg-blue-500 text-white',
+            showName: 'text-blue-500'
+        };
+        case 'ppv': return {
+            card: 'border-amber-500',
+            dateBox: 'bg-amber-500 text-white',
+            showName: 'text-amber-500'
+        };
     }
 };
 
@@ -72,14 +64,6 @@ export const getMonthNumber = (monthName: string) => {
     const monthMap: { [key: string]: number } = { Enero: 0, Febrero: 1, Marzo: 2, Abril: 3, Mayo: 4, Junio: 5, Julio: 6, Agosto: 7, Septiembre: 8, Octubre: 9, Noviembre: 10, Diciembre: 11 };
     return monthMap[monthName];
 };
-
-const EventTypeIcon = ({ type }: { type: EventType }) => {
-    switch(type) {
-        case 'raw': return <Tv className="h-4 w-4" />;
-        case 'smackdown': return <Tv className="h-4 w-4" />;
-        case 'ppv': return <Ticket className="h-4 w-4" />;
-    }
-}
 
 export const getEventTypeDisplay = (type: 'raw' | 'smackdown' | 'ppv') => {
     switch(type) {
@@ -89,27 +73,8 @@ export const getEventTypeDisplay = (type: 'raw' | 'smackdown' | 'ppv') => {
     }
 };
 
-const MatchCard = ({ match }: { match: Match }) => {
-    const matchText = typeof match === 'string' ? match : match.match;
-    const rating = typeof match !== 'string' ? match.rating : undefined;
-
-    return (
-        <div className="bg-muted/50 border-l-4 border-primary p-3 rounded-r-lg">
-            <div className="flex justify-between items-start">
-                <p className="font-semibold text-card-foreground">{matchText}</p>
-                {rating && (
-                    <div className="flex items-center gap-1 text-amber-500 flex-shrink-0 ml-2">
-                        <Star className="h-4 w-4 fill-current" />
-                        <span className="font-bold text-sm">{rating.toFixed(1)}</span>
-                    </div>
-                )}
-            </div>
-        </div>
-    );
-};
 
 export function EventGrid({ events }: EventGridProps) {
-  const { toast } = useToast();
   const [openCollapsibles, setOpenCollapsibles] = useState<Record<string, boolean>>({});
   const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
 
@@ -124,21 +89,16 @@ export function EventGrid({ events }: EventGridProps) {
     }
   }, []);
 
-  const handleStatusChange = (eventId: string, status: EventStatus) => {
-    const newStatuses = { ...eventStatuses, [eventId]: status };
+  const toggleStatus = (eventId: string) => {
+    const currentStatus = eventStatuses[eventId];
+    const newStatus = currentStatus === 'visto' ? 'disponible' : 'visto';
+    const newStatuses = { ...eventStatuses, [eventId]: newStatus };
     setEventStatuses(newStatuses);
     try {
-      localStorage.setItem('attitude-rewind-statuses', JSON.stringify(newStatuses));
+        localStorage.setItem('attitude-rewind-statuses', JSON.stringify(newStatuses));
     } catch (error) {
-      console.error("Could not save event statuses to localStorage:", error);
+        console.error("Could not save event statuses to localStorage:", error);
     }
-  };
-  
-  const handleDownload = () => {
-    toast({
-      title: "Función no disponible",
-      description: "La descarga de eventos aún no está implementada.",
-    });
   };
 
   const toggleCollapsible = (monthId: string) => {
@@ -161,117 +121,48 @@ export function EventGrid({ events }: EventGridProps) {
       <div className="space-y-8">
         {Object.entries(groupedEvents).length > 0 ? (
           Object.entries(groupedEvents).map(([month, monthEvents]) => (
-            <Collapsible key={month} open={openCollapsibles[month] ?? true} onOpenChange={() => toggleCollapsible(month)}>
-              <CollapsibleTrigger asChild>
-                <div className="flex items-center gap-4 cursor-pointer group">
-                  <h2 className="text-2xl font-bold font-headline">{month}</h2>
-                  <ChevronDown className="h-5 w-5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                </div>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-                  {monthEvents.map((event) => (
-                    <Card key={event.id} className="flex flex-col">
-                      <CardContent className="p-4 flex-grow">
-                        <div className="flex justify-between items-start mb-3">
-                          <div>
-                            <Link href={`/event/${event.id}`}>
-                                <h3 className="font-bold text-lg hover:underline">
-                                    {event.type === 'ppv' ? (event as PPVEvent).name : `WWF ${getEventTypeDisplay(event.type)}`}
-                                </h3>
+            <Collapsible key={month} open={openCollapsibles[month] ?? true} onOpenChange={() => toggleCollapsible(month)} asChild>
+                <section>
+                    <CollapsibleTrigger asChild>
+                        <div className="flex items-center gap-4 cursor-pointer group mb-4">
+                        <h2 className="text-2xl font-bold">{month}</h2>
+                        <ChevronDown className="h-5 w-5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                        </div>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                        <div className="flex flex-col gap-4">
+                        {monthEvents.map((event) => {
+                            const styles = getShowStyles(event.type);
+                            const isWatched = eventStatuses[event.id] === 'visto';
+
+                            return (
+                            <Link href={`/event/${event.id}`} key={event.id}>
+                                <Card className={cn("border-2", styles.card)}>
+                                <CardContent className="p-4 flex items-center gap-4">
+                                    <div className={cn("h-16 w-16 flex flex-col items-center justify-center rounded-lg", styles.dateBox)}>
+                                        <span className="text-3xl font-bold">{event.date}</span>
+                                    </div>
+                                    <div className="flex-grow">
+                                        <h3 className="font-bold text-lg">
+                                            {event.type === 'ppv' ? (event as PPVEvent).name : `WWF ${getEventTypeDisplay(event.type)}`}
+                                        </h3>
+                                        <p className="text-sm text-muted-foreground">{event.location}</p>
+                                        <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+                                            {event.type === 'ppv' ? <Ticket className="h-4 w-4" /> : <Tv className="h-4 w-4" />}
+                                            <span>{getEventTypeDisplay(event.type)}</span>
+                                        </div>
+                                    </div>
+                                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleStatus(event.id); }} className="p-2">
+                                       <Eye className={cn("h-6 w-6", isWatched ? 'text-green-500' : 'text-gray-400')} />
+                                    </button>
+                                </CardContent>
+                                </Card>
                             </Link>
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-                                <CalendarDays className="h-4 w-4" />
-                                <span>{new Date(event.year, getMonthNumber(event.month), parseInt(event.date)).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric' })}</span>
-                            </div>
-                          </div>
-                          <Badge className={cn("text-sm", getShowBadgeStyle(event.type))}>
-                              <EventTypeIcon type={event.type} />
-                              <span className="ml-2">{getEventTypeDisplay(event.type)}</span>
-                          </Badge>
+                            );
+                        })}
                         </div>
-                        
-                        <div className="text-sm text-muted-foreground mb-4">
-                          <div className="flex items-center gap-2">
-                            <MapPin className="h-4 w-4" />
-                            <span>{event.location}</span>
-                          </div>
-                        </div>
-
-                        {event.description && (
-                           <Collapsible>
-                            <CollapsibleTrigger className="flex items-center gap-2 text-sm font-semibold mb-2 group w-full justify-between">
-                              <div className="flex items-center gap-2">
-                                <Info className="h-4 w-4 text-primary" />
-                                Resumen
-                              </div>
-                               <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                            </CollapsibleTrigger>
-                            <CollapsibleContent>
-                              <p className="text-xs text-muted-foreground italic bg-muted/50 p-2 rounded-md">{event.description}</p>
-                            </CollapsibleContent>
-                          </Collapsible>
-                        )}
-
-                        <Collapsible>
-                          <CollapsibleTrigger className="flex items-center gap-2 text-sm font-semibold mt-3 group w-full justify-between">
-                            <div className="flex items-center gap-2">
-                              <ListChecks className="h-4 w-4 text-primary" />
-                              Luchas ({event.matches?.length || 0})
-                            </div>
-                            <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                          </CollapsibleTrigger>
-                          <CollapsibleContent className="pt-2 space-y-2">
-                            {event.matches && event.matches.length > 0 ? (
-                                event.matches.map((match, i) => <MatchCard key={i} match={match} />)
-                            ) : (
-                                <p className="text-xs text-muted-foreground">No hay luchas anunciadas.</p>
-                            )}
-                          </CollapsibleContent>
-                        </Collapsible>
-
-                      </CardContent>
-
-                      <div className="bg-card-foreground/5 p-3 mt-auto">
-                        <div className="flex items-center justify-between">
-                           <div className="flex items-center gap-2">
-                                <CheckCircle className="h-5 w-5 text-primary" />
-                                <span className="text-sm font-semibold">Estado</span>
-                            </div>
-                            <Select
-                                value={eventStatuses[event.id] || 'disponible'}
-                                onValueChange={(value) => handleStatusChange(event.id, value as EventStatus)}
-                            >
-                                <SelectTrigger className="w-36 h-8 text-xs">
-                                    <SelectValue placeholder="Seleccionar estado" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="disponible">
-                                        <div className="flex items-center gap-2">
-                                            <Circle className="h-3 w-3 text-muted-foreground" />
-                                            Disponible
-                                        </div>
-                                    </SelectItem>
-                                    <SelectItem value="visto">
-                                        <div className="flex items-center gap-2">
-                                            <Eye className="h-3 w-3 text-green-500" />
-                                            Visto
-                                        </div>
-                                    </SelectItem>
-                                    <SelectItem value="no-visto">
-                                        <div className="flex items-center gap-2">
-                                            <EyeOff className="h-3 w-3 text-red-500" />
-                                            No Visto
-                                        </div>
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-              </CollapsibleContent>
+                    </CollapsibleContent>
+              </section>
             </Collapsible>
           ))
         ) : (

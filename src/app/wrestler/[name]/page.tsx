@@ -2,7 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useSearchParams, useParams } from 'next/navigation';
+import { useSearchParams, useParams, useRouter } from 'next/navigation';
 import { WrestlerDetails } from '@/components/wrestler-details';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
@@ -10,6 +10,7 @@ import { wrestlersData } from '@/lib/wrestlers-data';
 
 export default function WrestlerPage() {
   const params = useParams();
+  const router = useRouter();
   const name = typeof params.name === 'string' ? params.name : '';
   const wrestlerName = decodeURIComponent(name.replace(/_/g, ' '));
   const wrestler = wrestlersData[wrestlerName];
@@ -20,15 +21,16 @@ export default function WrestlerPage() {
 
   return (
     <main className="min-h-screen bg-background">
-      <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-sm border-b">
+      <header className="sticky top-0 z-20 bg-card/80 backdrop-blur-sm border-b">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Button asChild variant="outline">
+          <Button asChild variant="ghost" onClick={() => router.back()}>
             <Link href={backUrl}>
               <ArrowLeft className="h-4 w-4 mr-2" />
               Volver
             </Link>
           </Button>
-          <h1 className="text-2xl font-bold font-headline">{wrestlerName}</h1>
+          <h1 className="text-2xl font-bold">{wrestlerName}</h1>
+          <div className="w-20"></div> {/* Spacer */}
         </div>
       </header>
 
