@@ -9,12 +9,11 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, CalendarDays, Star, Tv, Ticket } from 'lucide-react';
 import { wrestlersData } from '@/lib/wrestlers-data';
 import { useMemo } from 'react';
-import { flattenEvents } from '@/components/event-grid';
+import { flattenEvents, getEventTypeDisplay, getMonthNumber, getShowBadgeStyle } from '@/components/event-grid';
 import type { Match } from '@/lib/events-data';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { getEventTypeDisplay, getMonthNumber, getShowBadgeStyle } from '@/components/event-grid';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
 
 const getShowIcon = (type: 'raw' | 'smackdown' | 'ppv') => {

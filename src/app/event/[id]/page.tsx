@@ -137,6 +137,7 @@ export default function EventPage() {
     }
 
     const isPpvWithCover = event.type === 'ppv' && (event as any).coverUrl;
+    const isRawWithCover = event.type === 'raw';
 
     return (
         <main className="min-h-screen bg-background">
@@ -158,13 +159,26 @@ export default function EventPage() {
 
             <div className="container mx-auto max-w-6xl px-4 py-8">
                 <div className="space-y-6">
-                    <div className={cn("flex flex-col md:flex-row gap-8", isPpvWithCover && "items-start")}>
+                    <div className={cn("flex flex-col md:flex-row gap-8", (isPpvWithCover || isRawWithCover) && "items-start")}>
                         {isPpvWithCover && (
                             <div className="md:w-1/3 flex-shrink-0">
                                 <div className="rounded-lg overflow-hidden border shadow-lg">
                                     <Image 
                                         src={(event as any).coverUrl}
                                         alt={`Portada de ${(event as any).name}`}
+                                        width={400}
+                                        height={600}
+                                        className="w-full h-auto object-cover"
+                                    />
+                                </div>
+                            </div>
+                        )}
+                         {isRawWithCover && !isPpvWithCover && (
+                            <div className="md:w-1/3 flex-shrink-0">
+                                <div className="rounded-lg overflow-hidden border shadow-lg">
+                                    <Image 
+                                        src="https://i.pinimg.com/736x/11/bd/95/11bd95fe71b2e8c1fe48ebd4dc597646.jpg"
+                                        alt="WWF RAW is WAR"
                                         width={400}
                                         height={600}
                                         className="w-full h-auto object-cover"
