@@ -2,15 +2,15 @@
 'use client';
 
 import Link from 'next/link';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { WrestlerDetails } from '@/components/wrestler-details';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, CalendarDays, Star, Tv, Ticket } from 'lucide-react';
 import { wrestlersData } from '@/lib/wrestlers-data';
 import { useMemo } from 'react';
-import { flattenEvents, getEventTypeDisplay, getMonthNumber } from '@/components/event-grid';
-import { getShowBadgeStyle } from '@/components/event-grid';
+import { flattenEvents } from '@/components/event-grid';
+import { getShowBadgeStyle, getEventTypeDisplay, getMonthNumber } from '@/components/event-grid';
 import type { Match } from '@/lib/events-data';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -25,19 +25,13 @@ const getShowIcon = (type: 'raw' | 'smackdown' | 'ppv') => {
 export default function WrestlerPage() {
   const params = useParams();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const from = searchParams.get('from');
 
   const name = typeof params.name === 'string' ? params.name : '';
   const wrestlerName = decodeURIComponent(name.replace(/_/g, ' '));
   const wrestler = wrestlersData[wrestlerName];
   
   const handleBack = () => {
-    if (from) {
-        router.push(from);
-    } else {
-        router.push('/');
-    }
+    router.push('/');
   };
 
   const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
@@ -80,7 +74,7 @@ export default function WrestlerPage() {
 
       <div className="container mx-auto max-w-6xl px-4 py-8">
         <div className="flex flex-col md:flex-row items-start gap-8">
-            <div className="md:w-1/3 flex-shrink-0">
+            <div className="md:w-1/3 flex-shrink-0 space-y-4">
                 {wrestler && wrestler.imageUrl && (
                     <div className="rounded-lg overflow-hidden border shadow-lg">
                         <Image
@@ -92,7 +86,7 @@ export default function WrestlerPage() {
                         />
                     </div>
                 )}
-                <h2 className="text-3xl font-bold font-headline mt-4">{wrestlerName}</h2>
+                <h2 className="text-3xl font-bold font-headline">{wrestlerName}</h2>
             </div>
             <div className="flex-grow w-full">
                 <WrestlerDetails wrestlerName={wrestlerName} />
