@@ -47,7 +47,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/4c44E72d242hVqh33D60gbyd6lT.jpg"
     },
     "Jeff Hardy": {
-        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/4i5fN2kgyS0h4eF6fCQVCj7L5l3.jpg"
+        imageUrl: "https://i.pinimg.com/736x/cb/48/bd/cb48bdd7bcd0cd31d7365114b14b492e.jpg"
     },
     "Lita": {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/2i0Fp4yY9a53lJjP2D3eHnOHJ5A.jpg"
