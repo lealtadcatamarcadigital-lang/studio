@@ -25,10 +25,16 @@ export const wrestlersData: Record<string, WrestlerData> = {
     "Chris Jericho": {
         imageUrl: "https://i.pinimg.com/1200x/76/43/20/764320106150e83a4769085e675fb23f.jpg"
     },
-    "The Big Show": {
+    "Big Show": {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/p2Y1sctn5i5bIHD9r1gJg8zRpl.jpg"
     },
     "Mick Foley": {
+        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/Afb1T4zuH1aFm5M5W5hUotIrvB1.jpg"
+    },
+    "Cactus Jack": {
+        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/Afb1T4zuH1aFm5M5W5hUotIrvB1.jpg"
+    },
+    "Mankind": {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/Afb1T4zuH1aFm5M5W5hUotIrvB1.jpg"
     },
     "Chris Benoit": {
@@ -38,10 +44,10 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/vCiLdpr1aYyYtqGZcDxS4aLgB4V.jpg"
     },
     "Edge": {
-        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/jJ6CHl2P0jMj9Tr1agvdfwjmf3V.jpg"
+        imageUrl: "https://i.pinimg.com/736x/2b/58/17/2b581716b87f9be6b37a64b329dc1d15.jpg"
     },
     "Christian": {
-        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/hTuh33oKj9I42tcoiRSpv12uCGE.jpg"
+        imageUrl: "https://i.pinimg.com/736x/34/84/53/34845312e3a77887fb162da9c8e8d15e.jpg"
     },
     "Matt Hardy": {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/4c44E72d242hVqh33D60gbyd6lT.jpg"
@@ -54,6 +60,9 @@ export const wrestlersData: Record<string, WrestlerData> = {
     },
     "D-Von Dudley": {
         imageUrl: "https://i.pinimg.com/736x/48/2d/57/482d57adbee357c6c9c7c83d537a0acb.jpg"
+    },
+    "The Dudley Boyz": {
+        imageUrl: "https://i.pinimg.com/1200x/f2/24/ab/f224abee2dce0349adde6e6122a73804.jpg"
     },
     "Lita": {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/2i0Fp4yY9a53lJjP2D3eHnOHJ5A.jpg"
@@ -71,7 +80,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/83ILg3r8lG2FvAhCTpWbS2TO9s1.jpg"
     },
     "Rikishi": {
-        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/hX66V51aP6Pysd11pbcS28tIuW.jpg"
+        imageUrl: "https://i.pinimg.com/1200x/59/34/20/593420f9cab303fba59d8a4d138cdd93.jpg"
     },
     "Scotty 2 Hotty": {
         imageUrl: "https://i.pinimg.com/736x/e0/5a/1b/e05a1b74540d71c68e9cb4149c826577.jpg"
@@ -82,9 +91,10 @@ export const wrestlersData: Record<string, WrestlerData> = {
     "Too Cool": {
         imageUrl: "https://i.pinimg.com/736x/e0/5a/1b/e05a1b74540d71c68e9cb4149c826577.jpg"
     },
-    "The Dudley Boyz": {
-        imageUrl: "https://i.pinimg.com/1200x/f2/24/ab/f224abee2dce0349adde6e6122a73804.jpg"
+    "Test": {
+        imageUrl: "https://i.pinimg.com/736x/b8/af/b2/b8afb2664a32f3f9f5da44e3ecd295a2.jpg"
+    },
+    "X-Pac": {
+        imageUrl: "https://i.pinimg.com/1200x/d5/79/35/d5793533992e793daef55590b972ecbe.jpg"
     }
 };
-
-    
