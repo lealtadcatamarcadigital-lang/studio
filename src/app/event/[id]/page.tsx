@@ -100,8 +100,6 @@ const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
 export default function EventPage() {
     const params = useParams();
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const from = searchParams.get('from');
 
     const eventId = typeof params.id === 'string' ? params.id : '';
 
@@ -132,11 +130,7 @@ export default function EventPage() {
     };
 
     const handleBack = () => {
-        if (from) {
-            router.push(from);
-        } else {
-            router.push('/');
-        }
+        router.push('/');
     };
 
     if (!event) {

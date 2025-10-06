@@ -2,7 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { WrestlerDetails } from '@/components/wrestler-details';
 import { Button } from '@/components/ui/button';
@@ -24,13 +24,19 @@ const getShowIcon = (type: 'raw' | 'smackdown' | 'ppv') => {
 export default function WrestlerPage() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const from = searchParams.get('from');
 
   const name = typeof params.name === 'string' ? params.name : '';
   const wrestlerName = decodeURIComponent(name.replace(/_/g, ' '));
   const wrestler = wrestlersData[wrestlerName];
   
   const handleBack = () => {
-    router.push('/');
+    if (from) {
+      router.push(from);
+    } else {
+      router.push('/');
+    }
   };
 
   const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
