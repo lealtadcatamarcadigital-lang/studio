@@ -267,7 +267,7 @@ export default function EventPage() {
                                         <EyeOff className="h-4 w-4 text-red-500" />
                                         No Visto
                                     </div>
--                                </SelectItem>
+                                </SelectItem>
                             </SelectContent>
                         </Select>
                      </div>
@@ -275,5 +275,8 @@ export default function EventPage() {
             </div>
         </main>
     )
+
+    
+}
 
     
