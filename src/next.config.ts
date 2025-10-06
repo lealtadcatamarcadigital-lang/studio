@@ -43,12 +43,6 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'static.wikia.nocookie.net',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
         hostname: 'blogger.googleusercontent.com',
         port: '',
         pathname: '/**',
@@ -56,12 +50,6 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'i.pinimg.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'www.wwe.com',
         port: '',
         pathname: '/**',
       },
