@@ -97,7 +97,7 @@ export function Header({
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between gap-4">
             <Link href="/" className="flex items-center gap-2 font-headline text-2xl font-bold text-white">
-                <Image src="https://static.wikia.nocookie.net/prowrestling/images/0/07/WWF-Attitude-Era-Logo.png" alt="Attitude Era Logo" width={48} height={48} className="h-12 w-auto" />
+                <Image src="https://upload.wikimedia.org/wikipedia/commons/0/07/WWF-Attitude-Era-Logo.png" alt="Attitude Era Logo" width={48} height={48} className="h-12 w-auto" />
                 <div>
                     <span className="text-white">Attitude</span><span className="text-red-500">Rewind</span>
                 </div>
