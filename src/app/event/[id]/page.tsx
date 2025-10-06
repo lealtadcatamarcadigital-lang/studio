@@ -32,11 +32,11 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
         "The Rock", "Triple H", "The Big Show", "Mankind", "Cactus Jack", "Stone Cold Steve Austin", "The Undertaker", "Kane", "Kurt Angle", "Chris Jericho", 
         "Chris Benoit", "Eddie Guerrero", "Dean Malenko", "Perry Saturn", "X-Pac", "Road Dogg", "Billy Gunn", "Edge", "Christian", "Jeff Hardy", "Matt Hardy", 
         "Bubba Ray Dudley", "D-Von Dudley", "Rikishi", "Tazz", "Al Snow", "Test", "Albert", "The Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
-        "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grand Master Sexay", "The Acolytes", "Faarooq", "Bradshaw", 
+        "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grandmaster Sexay", "The Acolytes", "Faarooq", "Bradshaw", 
         "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", 
         "T & A", "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", "Los Conquistadores", "Right to Censor", "Drew Carey", 
         "The Dudley Boyz", "The Hardy Boyz", "New Age Outlaws", "The Radicalz", "DX", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
-        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney"
+        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", "Too Cool"
     ]);
     
     const regex = new RegExp(`(${[...wrestlerNames].sort((a,b) => b.length - a.length).map(name => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')}|vs\\.|&)`, 'g');
@@ -98,13 +98,21 @@ const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
 
 export default function EventPage() {
     const params = useParams();
+    const router = useRouter();
     const eventId = typeof params.id === 'string' ? params.id : '';
 
     const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
     const event = useMemo(() => allEvents.find(e => e.id === eventId), [allEvents, eventId]);
     
     const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
-    const router = useRouter();
+    
+    const backUrl = useMemo(() => {
+        if (typeof window !== 'undefined') {
+            const searchParams = new URLSearchParams(window.location.search);
+            return searchParams.get('from') || '/';
+        }
+        return '/';
+    }, []);
 
     useEffect(() => {
         try {
@@ -137,18 +145,19 @@ export default function EventPage() {
 
     return (
         <main className="min-h-screen bg-background">
-            <header className="sticky top-0 z-20 bg-card/80 backdrop-blur-sm border-b">
+             <header className="sticky top-0 z-20 bg-card shadow-md" style={{ backgroundColor: '#2A3B57' }}>
                 <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-                    <Button variant="ghost" onClick={() => router.back()} className="flex items-center gap-2">
+                    <Button variant="ghost" onClick={() => router.back()} className="flex items-center gap-2 text-white hover:bg-white/10">
                         <ArrowLeft className="h-4 w-4" />
                         Volver
                     </Button>
-                    <div className="flex-1 flex justify-center items-center gap-4 text-center">
-                         <h1 className="text-xl md:text-2xl font-bold">
-                            {event.type === 'ppv' ? (event as any).name : `WWF ${getEventTypeDisplay(event.type)}`}
+                    <Link href="/">
+                        <h1 className="text-2xl font-bold font-headline cursor-pointer">
+                            <span className="text-white">Attitude</span>
+                            <span className="text-red-500">Rewind</span>
                         </h1>
-                    </div>
-                    <div className="w-12"></div> {/* Spacer */}
+                    </Link>
+                    <div className="w-24"></div> {/* Spacer */}
                 </div>
             </header>
 
@@ -254,5 +263,3 @@ export default function EventPage() {
         </main>
     )
 }
-
-    
