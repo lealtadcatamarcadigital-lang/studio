@@ -29,15 +29,15 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
     const title = parts.length > 1 ? `${parts[0]}: ` : '';
 
     const wrestlerNames = new Set([
-        "The Rock", "Triple H", "The Big Show", "Big Show", "Mankind", "Cactus Jack", "Stone Cold Steve Austin", "The Undertaker", "Kane", "Kurt Angle", "Chris Jericho", 
-        "Chris Benoit", "Eddie Guerrero", "Dean Malenko", "Perry Saturn", "X-Pac", "Road Dogg", "Billy Gunn", "Edge", "Christian", "Jeff Hardy", "Matt Hardy", "Matt",
-        "The Dudley Boyz", "Bubba Ray Dudley", "D-Von Dudley", "Bubba Ray", "Rikishi", "Tazz", "Al Snow", "Test", "Albert", "Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
-        "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grandmaster Sexay", "The Acolytes", "Faarooq", "Bradshaw", "John Layfield", "Ron Simmons",
+        "The Rock", "Triple H", "The Big Show", "Mankind", "Cactus Jack", "Stone Cold Steve Austin", "The Undertaker", "Kane", "Kurt Angle", "Chris Jericho", 
+        "Chris Benoit", "Eddie Guerrero", "Dean Malenko", "Perry Saturn", "X-Pac", "Road Dogg", "Billy Gunn", "Edge", "Christian", "Jeff Hardy", "Matt Hardy", 
+        "The Dudley Boyz", "Bubba Ray Dudley", "D-Von Dudley", "Rikishi", "Tazz", "Al Snow", "Test", "Albert", "Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
+        "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grandmaster Sexay", "The Acolytes", "Faarooq", "Bradshaw", 
         "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", 
         "T & A", "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", "Los Conquistadores", "Right to Censor", "Drew Carey", 
         "The Hardy Boyz", "The Radicalz", "D-Generation X", "The New Age Outlaws", "DX", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
-        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", "Too Cool", "The Hollys", "Taka Michinoku", "Funaki",
-        "Prince Albert"
+        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", "Too Cool", "The Hollys",
+        "John Layfield", "Ron Simmons", "Bubba Ray", "Taka Michinoku", "Funaki", "Matt"
     ]);
     
     const regex = new RegExp(`(${[...wrestlerNames].sort((a,b) => b.length - a.length).map(name => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')}|vs\\.|&)`, 'g');
@@ -47,7 +47,7 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
 
     segments.forEach(segment => {
         const trimmedSegment = segment.trim();
-        if (wrestlerNames.has(trimmedSegment)) {
+        if (wrestlerNames.has(trimmedSegment) || wrestlerNames.has(trimmedSegment.replace(/^The /, ''))) {
             result.push({ text: trimmedSegment, wrestler: true });
         } else {
             const last = result[result.length - 1];
@@ -58,6 +58,14 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
             }
         }
     });
+
+    // Post-processing for "Big Show"
+    for (let i = 0; i < result.length; i++) {
+        if (result[i].text.trim() === "Big Show" || result[i].text.trim() === "The Big Show") {
+            result[i].wrestler = true;
+        }
+    }
+
 
     return result;
 };
@@ -106,14 +114,6 @@ export default function EventPage() {
     const event = useMemo(() => allEvents.find(e => e.id === eventId), [allEvents, eventId]);
     
     const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
-    
-    const backUrl = useMemo(() => {
-        if (typeof window !== 'undefined') {
-            const searchParams = new URLSearchParams(window.location.search);
-            return searchParams.get('from') || '/';
-        }
-        return '/';
-    }, []);
 
     useEffect(() => {
         try {
@@ -154,7 +154,7 @@ export default function EventPage() {
         <main className="min-h-screen bg-background">
              <header className="sticky top-0 z-20 bg-card shadow-md" style={{ backgroundColor: '#2A3B57' }}>
                 <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-                    <Button variant="ghost" onClick={() => router.back()} className="flex items-center gap-2 text-white hover:bg-white/10">
+                    <Button variant="ghost" onClick={() => router.push('/')} className="flex items-center gap-2 text-white hover:bg-white/10">
                         <ArrowLeft className="h-4 w-4" />
                         Volver
                     </Button>
@@ -278,5 +278,3 @@ export default function EventPage() {
 
     
 }
-
-    

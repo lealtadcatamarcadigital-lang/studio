@@ -17,15 +17,8 @@ export default function WrestlerPage() {
   const wrestlerName = decodeURIComponent(name.replace(/_/g, ' '));
   const wrestler = wrestlersData[wrestlerName];
   
-  const searchParams = useSearchParams();
-  const fromEvent = searchParams.get('from');
-  
   const handleBack = () => {
-    if (fromEvent) {
-      router.push(fromEvent);
-    } else {
-      router.back();
-    }
+    router.push('/');
   };
 
   return (
