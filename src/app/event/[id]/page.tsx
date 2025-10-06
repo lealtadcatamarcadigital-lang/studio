@@ -76,7 +76,7 @@ const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
                 <p className="font-semibold text-card-foreground">
                     {parsedMatch.map((part, index) => 
                         part.wrestler ? (
-                            <Link key={index} href={`/wrestler/${part.text.replace(/ /g, '_')}?from=${eventId}`} className="text-primary hover:underline">
+                            <Link key={index} href={`/wrestler/${part.text.replace(/ /g, '_')}?from=/event/${eventId}`} className="text-primary hover:underline">
                                 {part.text}
                             </Link>
                         ) : (

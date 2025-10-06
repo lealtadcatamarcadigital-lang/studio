@@ -18,7 +18,7 @@ export default function WrestlerPage() {
   
   const searchParams = useSearchParams();
   const fromEvent = searchParams.get('from');
-  const backUrl = fromEvent ? `/#${fromEvent}` : '/';
+  const backUrl = fromEvent || '/';
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
