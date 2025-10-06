@@ -169,7 +169,7 @@ export default function EventPage() {
 
             <div className="container mx-auto max-w-6xl px-4 py-8">
                 <div className="space-y-6">
-                    <div className={cn("flex flex-col md:flex-row gap-8", isPpvWithCover && "items-start")}>
+                    <div className={cn("flex flex-col md:flex-row gap-8 items-start")}>
                         {isPpvWithCover && (
                             <div className="md:w-1/3 flex-shrink-0">
                                 <div className="rounded-lg overflow-hidden border shadow-lg">
