@@ -5,7 +5,7 @@ export interface WrestlerData {
 
 export const wrestlersData: Record<string, WrestlerData> = {
     "The Rock": {
-        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/5v4p83y5v33dI83L6n2a1CNu3dM.jpg"
+        imageUrl: "https://i.pinimg.com/1200x/59/21/da/5921da5ccc564e14d3a63bfb94636ab0.jpg"
     },
     "Triple H": {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/f8aR4yVaxbdb0Jb5wG2A5C9wH5N.jpg"
@@ -86,3 +86,5 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://i.pinimg.com/1200x/f2/24/ab/f224abee2dce0349adde6e6122a73804.jpg"
     }
 };
+
+    
