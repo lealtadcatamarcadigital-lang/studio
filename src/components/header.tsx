@@ -3,6 +3,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, Tv, Ticket, List, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -95,8 +96,11 @@ export function Header({
     <header className="sticky top-0 z-20 bg-blue-950/90 backdrop-blur-sm border-b border-blue-900">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between gap-4">
-            <Link href="/" className="font-headline text-2xl font-bold text-white">
-              <span className="text-white">Attitude</span><span className="text-red-500">Rewind</span>
+            <Link href="/" className="flex items-center gap-2 font-headline text-2xl font-bold text-white">
+                <Image src="https://i.pinimg.com/1200x/eb/18/c2/eb18c26901d993ecc01b0c51909a4d5d.jpg" alt="Attitude Era Logo" width={32} height={32} className="h-8 w-auto" />
+                <div>
+                    <span className="text-white">Attitude</span><span className="text-red-500">Rewind</span>
+                </div>
             </Link>
             
             <div className="hidden md:flex">
