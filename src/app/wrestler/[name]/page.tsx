@@ -35,7 +35,7 @@ export default function WrestlerPage() {
                 <ArrowLeft className="h-4 w-4" />
                 Volver
             </Button>
-            <div className="flex items-center gap-4 absolute left-1/2 -translate-x-1/2">
+            <div className="flex items-center gap-4">
                 <Avatar className="h-12 w-12 border-2 border-white">
                     <AvatarImage src={wrestler?.imageUrl} alt={wrestlerName} />
                     <AvatarFallback>{wrestlerName.substring(0, 2)}</AvatarFallback>

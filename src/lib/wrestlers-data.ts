@@ -23,7 +23,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/ld0zVv2tT04n5aQf1t4pC9aE2O.jpg"
     },
     "Chris Jericho": {
-        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/95rD8iQCEmDhaY2W4sWj9aQ2vJ5.jpg"
+        imageUrl: "https://i.pinimg.com/1200x/76/43/20/764320106150e83a4769085e675fb23f.jpg"
     },
     "The Big Show": {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/p2Y1sctn5i5bIHD9r1gJg8zRpl.jpg"
