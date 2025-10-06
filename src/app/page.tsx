@@ -84,39 +84,6 @@ export default function Home() {
         events={filteredEvents}
       />
 
-      <div className="fixed bottom-8 right-8 z-10 flex flex-col items-center gap-4">
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button size="icon" className="rounded-full h-14 w-14 shadow-lg bg-card hover:bg-muted border">
-              <CalendarIcon className="h-6 w-6 text-primary" />
-              <span className="sr-only">Ver Calendario</span>
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="w-[95vw] max-w-fit rounded-lg">
-            <DialogHeader>
-              <DialogTitle className="font-headline text-3xl">Calendario de Eventos</DialogTitle>
-            </DialogHeader>
-             <EventsCalendar initialEvents={monthDataForComponents} />
-          </DialogContent>
-        </Dialog>
-
-        <Dialog>
-          <DialogTrigger asChild>
-              <Button size="icon" className="rounded-full h-14 w-14 shadow-lg bg-card hover:bg-muted">
-                  <BarChart2 className="h-6 w-6 text-red-500" />
-                  <span className="sr-only">Ver Estadísticas</span>
-              </Button>
-          </DialogTrigger>
-          <DialogContent className="w-[95vw] max-w-4xl rounded-lg">
-            <DialogHeader>
-              <DialogTitle className="font-headline text-3xl">Estadísticas</DialogTitle>
-            </DialogHeader>
-            <ScrollArea className="h-[70vh] pr-4">
-              <StatsDashboard initialEvents={monthDataForComponents} />
-            </ScrollArea>
-          </DialogContent>
-        </Dialog>
-      </div>
     </main>
   );
 }

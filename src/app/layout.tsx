@@ -2,6 +2,7 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
+import { BottomNav } from '@/components/bottom-nav';
 
 export const metadata: Metadata = {
   title: 'Attitude Rewind',
@@ -27,8 +28,11 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased bg-background">
-        {children}
+        <div className="pb-20">
+          {children}
+        </div>
         <Toaster />
+        <BottomNav />
       </body>
     </html>
   );
