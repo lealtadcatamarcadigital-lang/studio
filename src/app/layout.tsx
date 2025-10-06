@@ -2,15 +2,10 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
-import { BottomNav } from '@/components/bottom-nav';
 
 export const metadata: Metadata = {
   title: 'Attitude Rewind',
   description: 'A chronological tour of WWF events in the years 2000 and 2001.',
-  icons: {
-    icon: '/favicon.ico',
-    apple: '/apple-icon.png',
-  },
 };
 
 export default function RootLayout({
@@ -28,11 +23,8 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased bg-background">
-        <div className="pb-20">
-          {children}
-        </div>
+        {children}
         <Toaster />
-        <BottomNav />
       </body>
     </html>
   );
