@@ -35,10 +35,11 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
         "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grand Master Sexay", "Too Cool", "The Acolytes", "Faarooq", "Bradshaw", 
         "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", 
         "T & A", "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", "Los Conquistadores", "Right to Censor", "Drew Carey", 
-        "The Dudley Boyz", "The Hardy Boyz", "New Age Outlaws", "The Radicalz", "DX"
+        "The Dudley Boyz", "The Hardy Boyz", "New Age Outlaws", "The Radicalz", "DX", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
+        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney"
     ]);
     
-    const regex = new RegExp(`(${[...wrestlerNames].sort((a,b) => b.length - a.length).join('|')}|vs\\.|&)`, 'g');
+    const regex = new RegExp(`(${[...wrestlerNames].sort((a,b) => b.length - a.length).map(name => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')}|vs\\.|&)`, 'g');
     const segments = mainMatch.split(regex).filter(Boolean);
 
     const result: { text: string; wrestler: boolean }[] = [{ text: title, wrestler: false }];
@@ -64,10 +65,7 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
 const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
     const matchText = typeof match === 'string' ? match : match.match;
     const rating = typeof match !== 'string' ? match.rating : undefined;
-
-    const parts = matchText.split(':');
-    const stipulation = parts.length > 1 ? parts.slice(1).join(':').trim() : null;
-
+    
     const parsedMatch = parseWrestlers(matchText);
 
     return (
@@ -91,8 +89,8 @@ const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
                     </div>
                 )}
             </div>
-            {stipulation && (
-                 <p className="text-red-600 dark:text-red-500 text-xs font-bold tracking-wider uppercase mt-1">{stipulation}</p>
+             {matchText.split(':').length > 1 && (
+                 <p className="text-red-600 dark:text-red-500 text-xs font-bold tracking-wider uppercase mt-1">{matchText.split(':').slice(1).join(':').trim()}</p>
             )}
         </div>
     );
@@ -256,3 +254,5 @@ export default function EventPage() {
         </main>
     )
 }
+
+    
