@@ -1,0 +1,264 @@
+
+'use client';
+
+import React, { useState, useEffect, useMemo } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import Image from 'next/image';
+import Link from 'next/link';
+import { ArrowLeft, CalendarDays, ChevronDown, CheckCircle, Circle, Eye, EyeOff, Info, ListChecks, MapPin, Star, Ticket, Tv } from 'lucide-react';
+import { WWF_ALL_DATA } from '@/lib/events-data-all';
+import { flattenEvents, getMonthNumber, getEventTypeDisplay, type DetailedEvent, type EventStatus, type EventStatusMap } from '@/components/event-grid';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+import type { Match } from '@/lib/events-data';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+const getShowBadgeStyle = (type: 'raw' | 'smackdown' | 'ppv') => {
+    switch (type) {
+        case 'raw': return 'bg-red-500 hover:bg-red-500/80 text-white';
+        case 'smackdown': return 'bg-blue-500 hover:bg-blue-500/80 text-white';
+        case 'ppv': return 'bg-amber-500 hover:bg-amber-500/80 text-white';
+    }
+};
+
+const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] => {
+    const parts = match.split(':');
+    const mainMatch = parts.length > 1 ? parts.slice(1).join(':') : parts[0];
+    const title = parts.length > 1 ? `${parts[0]}: ` : '';
+
+    const wrestlerNames = new Set([
+        "The Rock", "Triple H", "The Big Show", "Mankind", "Cactus Jack", "Stone Cold Steve Austin", "The Undertaker", "Kane", "Kurt Angle", "Chris Jericho", 
+        "Chris Benoit", "Eddie Guerrero", "Dean Malenko", "Perry Saturn", "X-Pac", "Road Dogg", "Billy Gunn", "Edge", "Christian", "Jeff Hardy", "Matt Hardy", 
+        "Bubba Ray Dudley", "D-Von Dudley", "Rikishi", "Tazz", "Al Snow", "Test", "Albert", "The Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
+        "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grand Master Sexay", "Too Cool", "The Acolytes", "Faarooq", "Bradshaw", 
+        "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", 
+        "T & A", "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", "Los Conquistadores", "Right to Censor", "Drew Carey", 
+        "The Dudley Boyz", "The Hardy Boyz", "New Age Outlaws", "The Radicalz", "DX"
+    ]);
+    
+    const regex = new RegExp(`(${[...wrestlerNames].sort((a,b) => b.length - a.length).join('|')}|vs\\.|&)`, 'g');
+    const segments = mainMatch.split(regex).filter(Boolean);
+
+    const result: { text: string; wrestler: boolean }[] = [{ text: title, wrestler: false }];
+
+    segments.forEach(segment => {
+        const trimmedSegment = segment.trim();
+        if (wrestlerNames.has(trimmedSegment)) {
+            result.push({ text: trimmedSegment, wrestler: true });
+        } else {
+            const last = result[result.length - 1];
+            if (last && !last.wrestler) {
+                last.text += segment;
+            } else {
+                result.push({ text: segment, wrestler: false });
+            }
+        }
+    });
+
+    return result;
+};
+
+
+const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
+    const matchText = typeof match === 'string' ? match : match.match;
+    const rating = typeof match !== 'string' ? match.rating : undefined;
+
+    const parts = matchText.split(':');
+    const stipulation = parts.length > 1 ? parts.slice(1).join(':').trim() : null;
+
+    const parsedMatch = parseWrestlers(matchText);
+
+    return (
+        <div className="bg-card border rounded-lg p-3">
+            <div className="flex justify-between items-start">
+                <p className="font-semibold text-card-foreground">
+                    {parsedMatch.map((part, index) => 
+                        part.wrestler ? (
+                            <Link key={index} href={`/wrestler/${part.text.replace(/ /g, '_')}?from=${eventId}`} className="text-primary hover:underline">
+                                {part.text}
+                            </Link>
+                        ) : (
+                            <span key={index}>{part.text}</span>
+                        )
+                    )}
+                </p>
+                {rating && (
+                    <div className="flex items-center gap-1 text-amber-500 flex-shrink-0 ml-2">
+                        <Star className="h-4 w-4 fill-current" />
+                        <span className="font-bold text-sm">{rating.toFixed(1)}</span>
+                    </div>
+                )}
+            </div>
+            {stipulation && (
+                 <p className="text-red-600 dark:text-red-500 text-xs font-bold tracking-wider uppercase mt-1">{stipulation}</p>
+            )}
+        </div>
+    );
+};
+
+export default function EventPage() {
+    const params = useParams();
+    const router = useRouter();
+    const eventId = typeof params.id === 'string' ? params.id : '';
+
+    const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
+    const event = useMemo(() => allEvents.find(e => e.id === eventId), [allEvents, eventId]);
+    
+    const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
+
+    useEffect(() => {
+        try {
+          const storedStatuses = localStorage.getItem('attitude-rewind-statuses');
+          if (storedStatuses) {
+            setEventStatuses(JSON.parse(storedStatuses));
+          }
+        } catch (error) {
+          console.error("Could not parse event statuses from localStorage:", error);
+        }
+    }, []);
+      
+    const handleStatusChange = (eventId: string, status: EventStatus) => {
+        const newStatuses = { ...eventStatuses, [eventId]: status };
+        setEventStatuses(newStatuses);
+        try {
+          localStorage.setItem('attitude-rewind-statuses', JSON.stringify(newStatuses));
+        } catch (error) {
+          console.error("Could not save event statuses to localStorage:", error);
+        }
+    };
+
+    if (!event) {
+        return (
+            <main className="min-h-screen flex items-center justify-center">
+                <p>Evento no encontrado</p>
+            </main>
+        )
+    }
+
+    return (
+        <main className="min-h-screen bg-background">
+            <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-sm border-b">
+                <div className="container mx-auto px-4 h-20 flex items-center justify-between">
+                    <div className="absolute top-1/2 -translate-y-1/2 left-4">
+                        <Button asChild variant="outline" size="icon" onClick={() => router.back()}>
+                            <Link href="/">
+                                <ArrowLeft className="h-4 w-4" />
+                                <span className="sr-only">Volver</span>
+                            </Link>
+                        </Button>
+                    </div>
+                    
+                    <div className="flex-1 flex justify-center items-center gap-4 text-center">
+                         <h1 className="font-headline text-2xl md:text-3xl font-bold">
+                            {event.type === 'ppv' ? (event as any).name : `WWF ${getEventTypeDisplay(event.type)}`}
+                        </h1>
+                    </div>
+                </div>
+            </header>
+
+            <div className="container mx-auto max-w-4xl px-4 py-8">
+                <div className="space-y-6">
+                    {event.type === 'ppv' && (event as any).coverUrl && (
+                        <div className="rounded-lg overflow-hidden border shadow-lg">
+                            <Image 
+                                src={(event as any).coverUrl!}
+                                alt={`Portada de ${(event as any).name}`}
+                                width={700}
+                                height={400}
+                                className="w-full h-auto object-cover"
+                            />
+                        </div>
+                    )}
+                    
+                    <div className="flex flex-wrap items-center gap-4 text-sm">
+                      <Badge className={cn("text-sm", getShowBadgeStyle(event.type))}>{getEventTypeDisplay(event.type)}</Badge>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <CalendarDays className="h-4 w-4" />
+                        <span>{new Date(event.year, getMonthNumber(event.month), parseInt(event.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <MapPin className="h-4 w-4" />
+                        <span>{event.location}</span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="font-semibold text-lg flex items-center gap-2 mb-3">
+                        <ListChecks className="h-5 w-5 text-primary" />
+                        Cartelera de Luchas
+                      </h3>
+                      {event.matches && event.matches.length > 0 ? (
+                        <div className="space-y-2">
+                          {event.matches.map((match, i) => <MatchCard key={i} match={match} eventId={event.id} />)}
+                        </div>
+                      ) : (
+                        <p className="text-muted-foreground text-sm">No se ha anunciado la cartelera de combates.</p>
+                      )}
+                    </div>
+                    
+                    {event.description && (
+                      <Collapsible>
+                        <div className="p-4 bg-card rounded-lg border">
+                          <CollapsibleTrigger asChild>
+                            <div className="flex w-full items-center justify-between group cursor-pointer">
+                                <h3 className="font-semibold text-lg flex items-center gap-2">
+                                  <Info className="h-5 w-5 text-primary" />
+                                  Resumen del Evento
+                                </h3>
+                                <div className="p-1 rounded-md group-hover:bg-accent">
+                                    <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                                </div>
+                            </div>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <div className="p-3 bg-muted/50 rounded-lg mt-2">
+                              <p className="text-sm text-muted-foreground italic">{event.description}</p>
+                            </div>
+                          </CollapsibleContent>
+                        </div>
+                      </Collapsible>
+                    )}
+
+                    <div className="p-4 bg-card rounded-lg space-y-3 border">
+                        <h3 className="font-semibold text-lg flex items-center gap-2">
+                            <CheckCircle className="h-5 w-5 text-primary" />
+                            Estado de Visualización
+                        </h3>
+                        <Select
+                            value={eventStatuses[event.id] || 'disponible'}
+                            onValueChange={(value) => handleStatusChange(event.id, value as EventStatus)}
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Seleccionar estado" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="disponible">
+                                    <div className="flex items-center gap-2">
+                                        <Circle className="h-4 w-4 text-muted-foreground" />
+                                        Disponible
+                                    </div>
+                                </SelectItem>
+                                <SelectItem value="visto">
+                                    <div className="flex items-center gap-2">
+                                        <Eye className="h-4 w-4 text-green-500" />
+                                        Visto
+                                    </div>
+                                </SelectItem>
+                                <SelectItem value="no-visto">
+                                    <div className="flex items-center gap-2">
+                                        <EyeOff className="h-4 w-4 text-red-500" />
+                                        No Visto
+                                    </div>
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
+                     </div>
+                  </div>
+            </div>
+        </main>
+    )
+}
+
+    

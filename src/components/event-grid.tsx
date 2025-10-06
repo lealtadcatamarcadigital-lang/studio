@@ -25,29 +25,16 @@ import type { MonthData, Event, PPVEvent, Match } from "@/lib/events-data";
 
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import { WWF_ALL_DATA } from "@/lib/events-data-all";
 
 interface EventGridProps {
@@ -94,22 +81,6 @@ export const getEventTypeDisplay = (type: 'raw' | 'smackdown' | 'ppv') => {
     }
 };
 
-const getShowBadgeStyle = (type: 'raw' | 'smackdown' | 'ppv') => {
-    switch (type) {
-        case 'raw': return 'bg-red-500 hover:bg-red-500/80 text-white';
-        case 'smackdown': return 'bg-blue-500 hover:bg-blue-500/80 text-white';
-        case 'ppv': return 'bg-amber-500 hover:bg-amber-500/80 text-white';
-    }
-};
-
-const EventTypeIcon = ({ type }: { type: 'raw' | 'smackdown' | 'ppv' }) => {
-    switch (type) {
-        case 'raw': return <Tv className="h-4 w-4 text-muted-foreground" />;
-        case 'smackdown': return <Tv className="h-4 w-4 text-muted-foreground" />;
-        case 'ppv': return <Ticket className="h-4 w-4 text-muted-foreground" />;
-    }
-};
-
 const getCardStyle = (type: 'raw' | 'smackdown' | 'ppv') => {
     switch (type) {
         case 'raw': return 'border-red-500/50';
@@ -126,87 +97,16 @@ const getDateBoxStyle = (type: 'raw' | 'smackdown' | 'ppv') => {
     }
 };
 
-const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] => {
-    const parts = match.split(':');
-    const mainMatch = parts.length > 1 ? parts.slice(1).join(':') : parts[0];
-    const title = parts.length > 1 ? `${parts[0]}: ` : '';
-
-    const wrestlerNames = new Set([
-        "The Rock", "Triple H", "The Big Show", "Mankind", "Cactus Jack", "Stone Cold Steve Austin", "The Undertaker", "Kane", "Kurt Angle", "Chris Jericho", 
-        "Chris Benoit", "Eddie Guerrero", "Dean Malenko", "Perry Saturn", "X-Pac", "Road Dogg", "Billy Gunn", "Edge", "Christian", "Jeff Hardy", "Matt Hardy", 
-        "Bubba Ray Dudley", "D-Von Dudley", "Rikishi", "Tazz", "Al Snow", "Test", "Albert", "The Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
-        "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grand Master Sexay", "Too Cool", "The Acolytes", "Faarooq", "Bradshaw", 
-        "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", 
-        "T & A", "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", "Los Conquistadores", "Right to Censor", "Drew Carey", 
-        "The Dudley Boyz", "The Hardy Boyz", "New Age Outlaws", "The Radicalz", "DX"
-    ]);
-    
-    const regex = new RegExp(`(${[...wrestlerNames].sort((a,b) => b.length - a.length).join('|')}|vs\\.|&)`, 'g');
-    const segments = mainMatch.split(regex).filter(Boolean);
-
-    const result: { text: string; wrestler: boolean }[] = [{ text: title, wrestler: false }];
-
-    segments.forEach(segment => {
-        const trimmedSegment = segment.trim();
-        if (wrestlerNames.has(trimmedSegment)) {
-            result.push({ text: trimmedSegment, wrestler: true });
-        } else {
-            const last = result[result.length - 1];
-            if (last && !last.wrestler) {
-                last.text += segment;
-            } else {
-                result.push({ text: segment, wrestler: false });
-            }
-        }
-    });
-
-    return result;
-};
-
-
-const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
-    const matchText = typeof match === 'string' ? match : match.match;
-    const rating = typeof match !== 'string' ? match.rating : undefined;
-
-    const parts = matchText.split(':');
-    const mainMatch = parts[0];
-    const stipulation = parts.length > 1 ? parts.slice(1).join(':').trim() : null;
-
-    const parsedMatch = parseWrestlers(matchText);
-
-    return (
-        <div className="bg-card border rounded-lg p-3">
-            <div className="flex justify-between items-start">
-                <p className="font-semibold text-card-foreground">
-                    {parsedMatch.map((part, index) => 
-                        part.wrestler ? (
-                            <Link key={index} href={`/wrestler/${part.text.replace(/ /g, '_')}?from=${eventId}`} className="text-primary hover:underline">
-                                {part.text}
-                            </Link>
-                        ) : (
-                            <span key={index}>{part.text}</span>
-                        )
-                    )}
-                </p>
-                {rating && (
-                    <div className="flex items-center gap-1 text-amber-500 flex-shrink-0 ml-2">
-                        <Star className="h-4 w-4 fill-current" />
-                        <span className="font-bold text-sm">{rating.toFixed(1)}</span>
-                    </div>
-                )}
-            </div>
-            {stipulation && (
-                 <p className="text-red-600 dark:text-red-500 text-xs font-bold tracking-wider uppercase mt-1">{stipulation}</p>
-            )}
-        </div>
-    );
+const EventTypeIcon = ({ type }: { type: 'raw' | 'smackdown' | 'ppv' }) => {
+    switch (type) {
+        case 'raw': return <Tv className="h-4 w-4 text-muted-foreground" />;
+        case 'smackdown': return <Tv className="h-4 w-4 text-muted-foreground" />;
+        case 'ppv': return <Ticket className="h-4 w-4 text-muted-foreground" />;
+    }
 };
 
 export function EventGrid({ events }: EventGridProps) {
   const { toast } = useToast();
-  
-  const [selectedEvent, setSelectedEvent] = useState<DetailedEvent | null>(null);
-  const [isEventDetailsOpen, setIsEventDetailsOpen] = useState(false);
   
   const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
 
@@ -220,16 +120,6 @@ export function EventGrid({ events }: EventGridProps) {
       console.error("Could not parse event statuses from localStorage:", error);
     }
   }, []);
-  
-  const handleStatusChange = (eventId: string, status: EventStatus) => {
-    const newStatuses = { ...eventStatuses, [eventId]: status };
-    setEventStatuses(newStatuses);
-    try {
-      localStorage.setItem('attitude-rewind-statuses', JSON.stringify(newStatuses));
-    } catch (error) {
-      console.error("Could not save event statuses to localStorage:", error);
-    }
-  };
   
   const eventsByMonth = useMemo(() => groupEventsByMonth(events), [events]);
 
@@ -258,11 +148,6 @@ export function EventGrid({ events }: EventGridProps) {
     }
   };
   
-  const handleEventClick = (event: DetailedEvent) => {
-    setSelectedEvent(event);
-    setIsEventDetailsOpen(true);
-  };
-
   return (
     <div className="container mx-auto px-4 py-8">
       
@@ -274,39 +159,39 @@ export function EventGrid({ events }: EventGridProps) {
                       {events.map(event => {
                           const status = eventStatuses[event.id] || 'disponible';
                           return (
-                          <Card 
-                              key={event.id}
-                              id={event.id}
-                              className={cn(
-                                  "cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl border-2 scroll-mt-24 bg-card",
-                                  getCardStyle(event.type)
-                              )}
-                              onClick={() => handleEventClick(event)}
-                          >
-                              <CardContent className="p-4 flex flex-col justify-between h-full">
-                                  <div>
-                                      <div className="flex items-start gap-4">
-                                          <div className={cn("flex-shrink-0 w-12 h-12 rounded-md flex items-center justify-center font-bold text-2xl", getDateBoxStyle(event.type))}>
-                                              {event.date}
-                                          </div>
-                                          <div className="flex-grow">
-                                              <h3 className="font-bold">
-                                                  {event.type === 'ppv' ? (event as PPVEvent).name : getEventTypeDisplay(event.type)}
-                                              </h3>
-                                              <p className="text-sm text-muted-foreground">{event.location}</p>
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
-                                      <div className="flex items-center gap-2">
-                                          <EventTypeIcon type={event.type} />
-                                          <span>{getEventTypeDisplay(event.type)}</span>
-                                      </div>
-                                      {status === 'visto' && <Eye className="h-4 w-4 text-green-500" />}
-                                      {status === 'no-visto' && <EyeOff className="h-4 w-4 text-red-500" />}
-                                  </div>
-                              </CardContent>
-                          </Card>
+                          <Link href={`/event/${event.id}`} key={event.id}>
+                            <Card 
+                                id={event.id}
+                                className={cn(
+                                    "cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl border-2 scroll-mt-24 bg-card h-full",
+                                    getCardStyle(event.type)
+                                )}
+                            >
+                                <CardContent className="p-4 flex flex-col justify-between h-full">
+                                    <div>
+                                        <div className="flex items-start gap-4">
+                                            <div className={cn("flex-shrink-0 w-12 h-12 rounded-md flex items-center justify-center font-bold text-2xl", getDateBoxStyle(event.type))}>
+                                                {event.date}
+                                            </div>
+                                            <div className="flex-grow">
+                                                <h3 className="font-bold">
+                                                    {event.type === 'ppv' ? (event as PPVEvent).name : getEventTypeDisplay(event.type)}
+                                                </h3>
+                                                <p className="text-sm text-muted-foreground">{event.location}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
+                                        <div className="flex items-center gap-2">
+                                            <EventTypeIcon type={event.type} />
+                                            <span>{getEventTypeDisplay(event.type)}</span>
+                                        </div>
+                                        {status === 'visto' && <Eye className="h-4 w-4 text-green-500" />}
+                                        {status === 'no-visto' && <EyeOff className="h-4 w-4 text-red-500" />}
+                                    </div>
+                                </CardContent>
+                            </Card>
+                          </Link>
                       )})}
                   </div>
               </div>
@@ -324,125 +209,10 @@ export function EventGrid({ events }: EventGridProps) {
         </Button>
       </div>
 
-      <Dialog open={isEventDetailsOpen} onOpenChange={setIsEventDetailsOpen}>
-        <DialogContent className="max-w-2xl h-[80vh] flex flex-col bg-background">
-          {selectedEvent && (
-            <>
-              <DialogHeader className="text-left">
-                 <DialogTitle className="font-headline text-3xl">
-                    {selectedEvent.type === 'ppv' ? (selectedEvent as PPVEvent).name : `WWF ${getEventTypeDisplay(selectedEvent.type)}`}
-                </DialogTitle>
-                <DialogDescription>
-                  {`${new Date(selectedEvent.year, getMonthNumber(selectedEvent.month), parseInt(selectedEvent.date)).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })} · ${selectedEvent.location}`}
-                </DialogDescription>
-              </DialogHeader>
-              <div className="flex-grow min-h-0">
-                <ScrollArea className="h-full pr-6">
-                  <div className="space-y-6">
-                    {selectedEvent.type === 'ppv' && (selectedEvent as PPVEvent).coverUrl && (
-                        <div className="rounded-lg overflow-hidden border shadow-lg">
-                            <Image 
-                                src={(selectedEvent as PPVEvent).coverUrl!}
-                                alt={`Portada de ${(selectedEvent as PPVEvent).name}`}
-                                width={700}
-                                height={400}
-                                className="w-full h-auto object-cover"
-                            />
-                        </div>
-                    )}
-                    
-                    <div className="flex flex-wrap items-center gap-4 text-sm">
-                      <Badge className={cn("text-sm", getShowBadgeStyle(selectedEvent.type))}>{getEventTypeDisplay(selectedEvent.type)}</Badge>
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <CalendarDays className="h-4 w-4" />
-                        <span>{new Date(selectedEvent.year, getMonthNumber(selectedEvent.month), parseInt(selectedEvent.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <MapPin className="h-4 w-4" />
-                        <span>{selectedEvent.location}</span>
-                      </div>
-                    </div>
-
-                    <div>
-                      <h3 className="font-semibold text-lg flex items-center gap-2 mb-3">
-                        <ListChecks className="h-5 w-5 text-primary" />
-                        Cartelera de Luchas
-                      </h3>
-                      {selectedEvent.matches && selectedEvent.matches.length > 0 ? (
-                        <div className="space-y-2">
-                          {selectedEvent.matches.map((match, i) => <MatchCard key={i} match={match} eventId={selectedEvent.id} />)}
-                        </div>
-                      ) : (
-                        <p className="text-muted-foreground text-sm">No se ha anunciado la cartelera de combates.</p>
-                      )}
-                    </div>
-                    
-                    {selectedEvent.description && (
-                      <Collapsible>
-                        <div className="p-4 bg-card rounded-lg border">
-                          <CollapsibleTrigger asChild>
-                            <div className="flex w-full items-center justify-between group cursor-pointer">
-                                <h3 className="font-semibold text-lg flex items-center gap-2">
-                                  <Info className="h-5 w-5 text-primary" />
-                                  Resumen del Evento
-                                </h3>
-                                <div className="p-1 rounded-md group-hover:bg-accent">
-                                    <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                                </div>
-                            </div>
-                          </CollapsibleTrigger>
-                          <CollapsibleContent>
-                            <div className="p-3 bg-muted/50 rounded-lg mt-2">
-                              <p className="text-sm text-muted-foreground italic">{selectedEvent.description}</p>
-                            </div>
-                          </CollapsibleContent>
-                        </div>
-                      </Collapsible>
-                    )}
-
-                    <div className="p-4 bg-card rounded-lg space-y-3 border">
-                        <h3 className="font-semibold text-lg flex items-center gap-2">
-                            <CheckCircle className="h-5 w-5 text-primary" />
-                            Estado de Visualización
-                        </h3>
-                        <Select
-                            value={eventStatuses[selectedEvent.id] || 'disponible'}
-                            onValueChange={(value) => handleStatusChange(selectedEvent.id, value as EventStatus)}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="Seleccionar estado" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="disponible">
-                                    <div className="flex items-center gap-2">
-                                        <Circle className="h-4 w-4 text-muted-foreground" />
-                                        Disponible
-                                    </div>
-                                </SelectItem>
-                                <SelectItem value="visto">
-                                    <div className="flex items-center gap-2">
-                                        <Eye className="h-4 w-4 text-green-500" />
-                                        Visto
-                                    </div>
-                                </SelectItem>
-                                <SelectItem value="no-visto">
-                                    <div className="flex items-center gap-2">
-                                        <EyeOff className="h-4 w-4 text-red-500" />
-                                        No Visto
-                                    </div>
-                                </SelectItem>
-                            </SelectContent>
-                        </Select>
-                     </div>
-                  </div>
-                </ScrollArea>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
+
+    
 
     
