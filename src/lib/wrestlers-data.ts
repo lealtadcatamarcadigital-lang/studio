@@ -26,7 +26,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/95rD8iQCEmDhaY2W4sWj9aQ2vJ5.jpg"
     },
     "The Big Show": {
-        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/hW2is3y2d2ySoLw61b1pWVT0CeC.jpg"
+        imageUrl: "https://i.pinimg.com/736x/31/2d/f7/312df724c28a07ed47c662ec0e2a80de.jpg"
     },
     "Mick Foley": {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/Afb1T4zuH1aFm5M5W5hUotIrvB1.jpg"
