@@ -14,18 +14,15 @@ export default function SuperstarsPage() {
   return (
     <main className="min-h-screen bg-background">
       <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-sm border-b">
-        <div className="container mx-auto px-4 h-20 flex items-center justify-center relative">
-            <div className="absolute top-1/2 -translate-y-1/2 left-4">
-                <Button asChild variant="outline" size="icon">
-                  <Link href="/">
-                    <ArrowLeft className="h-4 w-4" />
-                    <span className="sr-only">Volver</span>
-                  </Link>
-                </Button>
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between relative">
+            <Link href="/" className="flex items-center gap-2 font-headline text-2xl font-bold text-white">
+                <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/WWF-Attitude-Era-Logo.png/2560px-WWF-Attitude-Era-Logo.png" alt="Attitude Era Logo" width={40} height={40} className="h-10 w-auto" />
+            </Link>
+            <div className="flex-1 flex justify-center">
+                <h1 className="font-headline text-2xl md:text-3xl font-bold">
+                    Superstars
+                </h1>
             </div>
-            <h1 className="font-headline text-2xl md:text-3xl font-bold">
-                Superstars de la Attitude Era
-            </h1>
         </div>
       </header>
 
@@ -55,3 +52,5 @@ export default function SuperstarsPage() {
     </main>
   );
 }
+
+    

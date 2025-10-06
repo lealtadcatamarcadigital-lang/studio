@@ -4,7 +4,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, Tv, Ticket, List, Filter, ArrowLeft } from 'lucide-react';
+import { Menu, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -20,7 +20,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import type { EventType } from './event-grid';
 import { cn } from "@/lib/utils";
 
 interface HeaderProps {
@@ -64,16 +63,13 @@ export function Header({
   );
 
   return (
-    <header className="sticky top-0 z-20 bg-blue-950/90 backdrop-blur-sm border-b border-blue-900">
+    <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-sm border-b">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <Button asChild variant="outline" size="icon" className="h-8 w-8">
-                <Link href="/">
-                  <ArrowLeft className="h-4 w-4" />
-                  <span className="sr-only">Volver</span>
-                </Link>
-              </Button>
+            <div className="flex items-center gap-4">
+              <Link href="/" className="flex items-center gap-2 font-headline text-2xl font-bold text-white">
+                  <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/WWF-Attitude-Era-Logo.png/2560px-WWF-Attitude-Era-Logo.png" alt="Attitude Era Logo" width={40} height={40} className="h-10 w-auto" />
+              </Link>
               <h1 className="font-headline text-xl font-bold text-white">{title}</h1>
             </div>
             
@@ -102,3 +98,5 @@ export function Header({
     </header>
   );
 }
+
+    

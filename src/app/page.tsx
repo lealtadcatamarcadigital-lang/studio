@@ -39,7 +39,7 @@ const shows = [
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <header className="sticky top-0 z-20 bg-blue-950/90 backdrop-blur-sm border-b border-blue-900">
+      <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-sm border-b">
         <div className="container mx-auto px-4">
           <div className="flex h-16 items-center justify-between gap-4">
               <Link href="/" className="flex items-center gap-2 font-headline text-2xl font-bold text-white">
@@ -83,3 +83,5 @@ export default function Home() {
     </main>
   );
 }
+
+    
