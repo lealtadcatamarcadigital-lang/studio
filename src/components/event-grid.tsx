@@ -131,7 +131,15 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
     const mainMatch = parts.length > 1 ? parts.slice(1).join(':') : parts[0];
     const title = parts.length > 1 ? `${parts[0]}: ` : '';
 
-    const wrestlerNames = new Set(["The Rock", "Triple H", "The Big Show", "Mankind", "Cactus Jack", "Stone Cold Steve Austin", "The Undertaker", "Kane", "Kurt Angle", "Chris Jericho", "Chris Benoit", "Eddie Guerrero", "Dean Malenko", "Perry Saturn", "X-Pac", "Road Dogg", "Billy Gunn", "Edge", "Christian", "Jeff Hardy", "Matt Hardy", "Bubba Ray Dudley", "D-Von Dudley", "Rikishi", "Tazz", "Al Snow", "Test", "Albert", "The Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grand Master Sexay", "Too Cool", "The Acolytes", "Faarooq", "Bradshaw", "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", "T & A", "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", "Los Conquistadores", "Right to Censor", "Drew Carey", "The Dudley Boyz", "The Hardy Boyz", "New Age Outlaws", "The Radicalz", "DX"]);
+    const wrestlerNames = new Set([
+        "The Rock", "Triple H", "The Big Show", "Mankind", "Cactus Jack", "Stone Cold Steve Austin", "The Undertaker", "Kane", "Kurt Angle", "Chris Jericho", 
+        "Chris Benoit", "Eddie Guerrero", "Dean Malenko", "Perry Saturn", "X-Pac", "Road Dogg", "Billy Gunn", "Edge", "Christian", "Jeff Hardy", "Matt Hardy", 
+        "Bubba Ray Dudley", "D-Von Dudley", "Rikishi", "Tazz", "Al Snow", "Test", "Albert", "The Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
+        "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grand Master Sexay", "Too Cool", "The Acolytes", "Faarooq", "Bradshaw", 
+        "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", 
+        "T & A", "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", "Los Conquistadores", "Right to Censor", "Drew Carey", 
+        "The Dudley Boyz", "The Hardy Boyz", "New Age Outlaws", "The Radicalz", "DX"
+    ]);
     
     const regex = new RegExp(`(${[...wrestlerNames].sort((a,b) => b.length - a.length).join('|')}|vs\\.|&)`, 'g');
     const segments = mainMatch.split(regex).filter(Boolean);
@@ -144,7 +152,7 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
             result.push({ text: trimmedSegment, wrestler: true });
         } else {
             const last = result[result.length - 1];
-            if (!last.wrestler) {
+            if (last && !last.wrestler) {
                 last.text += segment;
             } else {
                 result.push({ text: segment, wrestler: false });
@@ -436,3 +444,5 @@ export function EventGrid({ events }: EventGridProps) {
     </div>
   );
 }
+
+    
