@@ -11,7 +11,6 @@ import {
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
@@ -23,16 +22,16 @@ import {
 } from '@/components/ui/sheet';
 import type { EventType } from './event-grid';
 import { cn } from "@/lib/utils";
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 interface HeaderProps {
   yearFilter: string;
   onYearFilterChange: (value: string) => void;
   showFilter: EventType | 'all';
-  onShowFilterChange: (value: EventType | 'all') => void;
+  onShowFilterChange: (value: EventType) => void;
 }
 
-const showOptions: { value: EventType | 'all'; label: string; icon?: React.ElementType }[] = [
-    { value: 'all', label: 'Todos', icon: List },
+const showOptions: { value: EventType; label: string; icon?: React.ElementType }[] = [
     { value: 'raw', label: 'RAW', icon: Tv },
     { value: 'smackdown', label: 'SmackDown', icon: Tv },
     { value: 'ppv', label: 'PPV', icon: Ticket },
@@ -52,7 +51,7 @@ export function Header({
 }: HeaderProps) {
 
   const FilterMenu = ({ isMobile = false }: { isMobile?: boolean }) => (
-    <div className={cn(isMobile ? "flex flex-col gap-4" : "flex items-center")}>
+    <div className={cn(isMobile ? "flex flex-col gap-4" : "flex items-center gap-2")}>
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size={isMobile ? 'default' : 'sm'} className={cn(isMobile ? "justify-start" : "", "text-white hover:text-white hover:bg-white/10")}>
@@ -71,24 +70,27 @@ export function Header({
             </DropdownMenuContent>
         </DropdownMenu>
 
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size={isMobile ? 'default' : 'sm'} className={cn(isMobile ? "justify-start" : "", "text-white hover:text-white hover:bg-white/10")}>
-                    <Filter className="h-4 w-4" />
-                     <span className="ml-2">Show: {showOptions.find(s => s.value === showFilter)?.label}</span>
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-                <DropdownMenuRadioGroup value={showFilter} onValueChange={onShowFilterChange as (value: string) => void}>
-                    {showOptions.map(show => (
-                        <DropdownMenuRadioItem key={show.value} value={show.value}>
-                            {show.icon && <show.icon className="mr-2 h-4 w-4" />}
-                            {show.label}
-                        </DropdownMenuRadioItem>
-                    ))}
-                </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-        </DropdownMenu>
+        <ToggleGroup 
+            type="single"
+            variant="outline"
+            value={showFilter}
+            onValueChange={(value) => {
+                if (value) onShowFilterChange(value as EventType);
+            }}
+            className={cn(isMobile ? "grid grid-cols-3" : "")}
+        >
+            {showOptions.map(show => (
+                <ToggleGroupItem 
+                    key={show.value} 
+                    value={show.value} 
+                    aria-label={`Filtrar por ${show.label}`}
+                    className="gap-2 text-white hover:text-white data-[state=on]:bg-white/20 data-[state=on]:text-white"
+                >
+                    {show.icon && <show.icon className="h-4 w-4" />}
+                    {isMobile && show.label}
+                </ToggleGroupItem>
+            ))}
+        </ToggleGroup>
     </div>
   );
 

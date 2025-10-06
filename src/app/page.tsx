@@ -9,7 +9,7 @@ import type { EventType } from '@/components/event-grid';
 
 export default function Home() {
   const [yearFilter, setYearFilter] = useState<string>('all');
-  const [showFilter, setShowFilter] = useState<EventType | 'all'>('all');
+  const [showFilter, setShowFilter] = useState<EventType>('raw');
 
   const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
 
