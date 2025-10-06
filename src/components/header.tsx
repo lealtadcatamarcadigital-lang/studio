@@ -55,7 +55,7 @@ export function Header({
     <div className={cn(isMobile ? "flex flex-col gap-4" : "flex items-center gap-2")}>
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size={isMobile ? 'default' : 'sm'} className={cn(isMobile ? "justify-start" : "", "text-white hover:text-white hover:bg-white/10")}>
+                <Button variant="outline" size={isMobile ? 'default' : 'sm'} className={cn(isMobile ? "justify-start" : "")}>
                     <Filter className="h-4 w-4" />
                     <span className="ml-2">Show: {showOptions.find(s => s.value === showFilter)?.label}</span>
                 </Button>
@@ -74,7 +74,7 @@ export function Header({
 
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size={isMobile ? 'default' : 'sm'} className={cn(isMobile ? "justify-start" : "", "text-white hover:text-white hover:bg-white/10")}>
+                <Button variant="outline" size={isMobile ? 'default' : 'sm'} className={cn(isMobile ? "justify-start" : "")}>
                     <Filter className="h-4 w-4" />
                     <span className="ml-2">Año: {yearOptions.find(y => y.value === yearFilter)?.label}</span>
                 </Button>
@@ -96,12 +96,9 @@ export function Header({
     <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-sm border-b">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between gap-4">
-            <div className="flex items-center gap-2 font-headline text-2xl font-bold text-white">
-                <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/WWF-Attitude-Era-Logo.png/2560px-WWF-Attitude-Era-Logo.png" alt="Attitude Era Logo" width={48} height={48} className="h-12 w-auto" />
-                <div>
-                    <span className="text-white">Attitude</span><span className="text-red-500">Rewind</span>
-                </div>
-            </div>
+            <h1 className="text-2xl font-bold font-headline">
+                {title}
+            </h1>
             
             <div className="hidden md:flex">
                 <FilterMenu />
@@ -109,14 +106,14 @@ export function Header({
 
             <Sheet>
                 <SheetTrigger asChild>
-                    <Button variant="ghost" size="icon" className="md:hidden text-white hover:text-white hover:bg-white/10">
+                    <Button variant="outline" size="icon" className="md:hidden">
                         <Menu className="h-5 w-5" />
                         <span className="sr-only">Abrir Menú</span>
                     </Button>
                 </SheetTrigger>
-                <SheetContent className="bg-sidebar text-sidebar-foreground">
+                <SheetContent>
                     <SheetHeader>
-                        <SheetTitle className="text-sidebar-foreground">Filtros</SheetTitle>
+                        <SheetTitle>Filtros</SheetTitle>
                     </SheetHeader>
                     <div className="py-4">
                        <FilterMenu isMobile={true} />

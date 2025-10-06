@@ -7,8 +7,6 @@ import { WrestlerDetails } from '@/components/wrestler-details';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { wrestlersData } from '@/lib/wrestlers-data';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { WWF_ALL_DATA } from '@/lib/events-data-all';
 
 export default function WrestlerPage() {
   const params = useParams();
@@ -18,39 +16,24 @@ export default function WrestlerPage() {
   
   const searchParams = useSearchParams();
   const fromEvent = searchParams.get('from');
-  const backUrl = fromEvent || '/superstars';
+  const backUrl = fromEvent || '/';
 
   return (
     <main className="min-h-screen bg-background">
-       <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-sm border-b">
-        <div className="container mx-auto px-4 h-20 flex items-center justify-between">
-          <div className="absolute top-1/2 -translate-y-1/2 left-4">
-            <Button asChild variant="outline" size="icon">
-              <Link href={backUrl}>
-                <ArrowLeft className="h-4 w-4" />
-                <span className="sr-only">Volver</span>
-              </Link>
-            </Button>
-          </div>
-          
-          <div className="flex-1 flex justify-center items-center gap-4">
-            <Avatar className="h-12 w-12">
-              <AvatarImage src={wrestler?.imageUrl} alt={wrestlerName} className="object-cover object-top" />
-              <AvatarFallback>{wrestlerName.substring(0, 2)}</AvatarFallback>
-            </Avatar>
-            <div>
-              <h1 className="font-headline text-2xl md:text-3xl font-bold">
-                {wrestlerName}
-              </h1>
-              <p className="text-muted-foreground text-sm">Historial de Combates</p>
-            </div>
-          </div>
+      <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-sm border-b">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <Button asChild variant="outline">
+            <Link href={backUrl}>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Volver
+            </Link>
+          </Button>
+          <h1 className="text-2xl font-bold font-headline">{wrestlerName}</h1>
         </div>
       </header>
 
       <div className="container mx-auto px-4 py-8">
-        <WrestlerDetails wrestlerName={wrestlerName} initialEvents={WWF_ALL_DATA} />
+        <WrestlerDetails wrestlerName={wrestlerName} />
       </div>
     </main>
   );
-}

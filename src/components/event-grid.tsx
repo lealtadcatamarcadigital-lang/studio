@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
+import Link from 'next/link';
 import {
   Download,
   CalendarDays,
@@ -170,13 +171,15 @@ export function EventGrid({ events }: EventGridProps) {
               <CollapsibleContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
                   {monthEvents.map((event) => (
-                    <Card key={event.id} className="flex flex-col animate-fade-in" style={{animationDelay: `${monthEvents.indexOf(event) * 50}ms`}}>
+                    <Card key={event.id} className="flex flex-col">
                       <CardContent className="p-4 flex-grow">
                         <div className="flex justify-between items-start mb-3">
                           <div>
-                            <h3 className="font-bold text-lg">
-                                {event.type === 'ppv' ? (event as PPVEvent).name : `WWF ${getEventTypeDisplay(event.type)}`}
-                            </h3>
+                            <Link href={`/event/${event.id}`}>
+                                <h3 className="font-bold text-lg hover:underline">
+                                    {event.type === 'ppv' ? (event as PPVEvent).name : `WWF ${getEventTypeDisplay(event.type)}`}
+                                </h3>
+                            </Link>
                             <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
                                 <CalendarDays className="h-4 w-4" />
                                 <span>{new Date(event.year, getMonthNumber(event.month), parseInt(event.date)).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric' })}</span>

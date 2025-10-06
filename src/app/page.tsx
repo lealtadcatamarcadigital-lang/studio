@@ -6,10 +6,6 @@ import { EventGrid, flattenEvents } from '@/components/event-grid';
 import { Header } from '@/components/header';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
 import type { EventType } from '@/components/event-grid';
-import { EventsCalendar } from "@/components/events-calendar";
-import { StatsDashboard } from "@/components/stats-dashboard";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Calendar, BarChart2 } from "lucide-react";
 
 export default function Home() {
   const [showFilter, setShowFilter] = useState<EventType | 'all'>('all');
@@ -41,22 +37,7 @@ export default function Home() {
         onYearFilterChange={setYearFilter}
         title="AttitudeRewind"
       />
-      
-      <Tabs defaultValue="calendar" className="w-full">
-        <div className="container mx-auto px-4 py-4">
-          <TabsList className="grid w-full grid-cols-2 md:w-96 md:mx-auto">
-            <TabsTrigger value="calendar"><Calendar className="mr-2" />Calendario</TabsTrigger>
-            <TabsTrigger value="stats"><BarChart2 className="mr-2" />Estadísticas</TabsTrigger>
-          </TabsList>
-        </div>
-
-        <TabsContent value="calendar">
-          <EventsCalendar initialEvents={WWF_ALL_DATA} />
-        </TabsContent>
-        <TabsContent value="stats" className="container mx-auto px-4">
-           <StatsDashboard initialEvents={WWF_ALL_DATA} />
-        </TabsContent>
-      </Tabs>
+      <EventGrid events={filteredEvents} />
     </main>
   );
 }
