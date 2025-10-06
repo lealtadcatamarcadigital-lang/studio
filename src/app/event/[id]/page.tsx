@@ -21,13 +21,17 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
     const title = parts.length > 1 ? `${parts[0]}: ` : '';
 
     const wrestlerNames = new Set([
-        "The Rock", "Big Show", "Triple H", "Mankind", "Cactus Jack", "Stone Cold Steve Austin", "The Undertaker", "Kane", "Kurt Angle", "Chris Jericho", 
-        "Chris Benoit", "Eddie Guerrero", "Dean Malenko", "Perry Saturn", "X-Pac", "Road Dogg", "Billy Gunn", "Edge", "Christian", "Jeff Hardy", "Matt Hardy", 
-        "The Dudley Boyz", "Bubba Ray Dudley", "D-Von Dudley", "Rikishi", "Tazz", "Al Snow", "Test", "Albert", "Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
-        "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grandmaster Sexay", "The Acolytes", "Faarooq", "Bradshaw", 
-        "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", 
-        "T & A", "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", "Los Conquistadores", "Right to Censor", "Drew Carey", 
-        "The Hardy Boyz", "The Radicalz", "D-Generation X", "DX", "The New Age Outlaws", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
+        "The Rock", "Stone Cold Steve Austin", "Triple H", "The Undertaker", "Mankind", "Cactus Jack", 
+        "The Dudley Boyz", "Bubba Ray Dudley", "D-Von Dudley", "The Hardy Boyz", "Matt Hardy", "Jeff Hardy", 
+        "Edge & Christian", "Edge", "Christian", "Kurt Angle", "Chris Jericho", "Chris Benoit", "Eddie Guerrero", 
+        "Dean Malenko", "Perry Saturn", "Big Show", "Kane", "Rikishi", "X-Pac", "Road Dogg", "Billy Gunn", "Tazz",
+        "Al Snow", "Test", "Albert", "Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
+        "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grandmaster Sexay", 
+        "The Acolytes", "Faarooq", "Bradshaw", "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", 
+        "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", "T & A", 
+        "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", 
+        "Los Conquistadores", "Right to Censor", "Drew Carey", "The Radicalz", "D-Generation X", "DX", 
+        "The New Age Outlaws", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
         "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", "Too Cool", "The Hollys"
     ]);
     
@@ -61,9 +65,9 @@ const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
     const parsedMatch = parseWrestlers(matchText);
 
     return (
-        <div className="bg-card border rounded-lg p-3">
-            <div className="flex justify-between items-start">
-                <p className="font-semibold text-card-foreground">
+        <div class="bg-card border rounded-lg p-3">
+            <div class="flex justify-between items-start">
+                <p class="font-semibold text-card-foreground">
                     {parsedMatch.map((part, index) => 
                         part.wrestler ? (
                             <Link key={index} href={`/wrestler/${part.text.replace(/ /g, '_')}?from=/event/${eventId}`} className="text-primary hover:underline">
@@ -75,14 +79,14 @@ const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
                     )}
                 </p>
                 {rating && (
-                    <div className="flex items-center gap-1 text-amber-500 flex-shrink-0 ml-2">
-                        <Star className="h-4 w-4 fill-current" />
-                        <span className="font-bold text-sm">{rating.toFixed(1)}</span>
+                    <div class="flex items-center gap-1 text-amber-500 flex-shrink-0 ml-2">
+                        <Star class="h-4 w-4 fill-current" />
+                        <span class="font-bold text-sm">{rating.toFixed(1)}</span>
                     </div>
                 )}
             </div>
              {typeof match !== 'string' && match.match.includes(":") && (
-                 <p className="text-red-600 dark:text-red-500 text-xs font-bold tracking-wider uppercase mt-1">{match.match.split(':').slice(0, 1).join(':').trim()}</p>
+                 <p class="text-red-600 dark:text-red-500 text-xs font-bold tracking-wider uppercase mt-1">{match.match.split(':').slice(0, 1).join(':').trim()}</p>
             )}
         </div>
     );

@@ -77,7 +77,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/l32o3uQKCBEpUu0nwbBqLWv4L42.jpg"
     },
     "Shane McMahon": {
-        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/83ILg3r8lG2FvAhCTpWbS2TO9s1.jpg"
+        imageUrl: "https://i.pinimg.com/736x/24/19/e8/2419e862d08738512856d3fadc74fdf9.jpg"
     },
     "Rikishi": {
         imageUrl: "https://i.pinimg.com/1200x/59/34/20/593420f9cab303fba59d8a4d138cdd93.jpg"
@@ -107,3 +107,5 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://i.pinimg.com/736x/17/55/aa/1755aa102cb51112d5ffbe68e2b32238.jpg"
     }
 };
+
+    
