@@ -36,17 +36,20 @@ export default function WrestlerPage() {
                 <ArrowLeft className="h-4 w-4" />
                 Volver
             </Button>
-            <div className="flex items-center gap-4">
-                <h1 className="text-xl font-bold text-white">{wrestlerName}</h1>
-            </div>
+            <Link href="/">
+                <h1 className="text-2xl font-bold font-headline cursor-pointer">
+                    <span className="text-white">Attitude</span>
+                    <span className="text-red-500">Rewind</span>
+                </h1>
+            </Link>
             <div className="w-24"></div>
         </div>
       </header>
 
       <div className="container mx-auto max-w-6xl px-4 py-8">
         <div className="flex flex-col md:flex-row gap-8 items-start">
-            {wrestler?.imageUrl && (
-              <div className="md:w-1/3 flex-shrink-0">
+            <div className="md:w-1/3 flex-shrink-0">
+                {wrestler?.imageUrl && (
                   <div className="rounded-lg overflow-hidden border shadow-lg">
                       <Image 
                           src={wrestler.imageUrl}
@@ -56,8 +59,9 @@ export default function WrestlerPage() {
                           className="w-full h-auto object-cover"
                       />
                   </div>
-              </div>
-            )}
+                )}
+                <h1 className="text-3xl font-bold text-center mt-4">{wrestlerName}</h1>
+            </div>
             <div className="flex-grow">
               <WrestlerDetails wrestlerName={wrestlerName} />
             </div>

@@ -2,7 +2,8 @@
 "use client";
 
 import React from 'react';
-import { Menu, Filter, Tv, Ticket, List } from 'lucide-react';
+import Link from 'next/link';
+import { Menu, Filter, Tv, Ticket, List, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -49,12 +50,11 @@ export function Header({
   onYearFilterChange,
 }: HeaderProps) {
 
-  const FilterMenu = ({ isMobile = false }: { isMobile?: boolean }) => (
-    <div className={cn("flex flex-col gap-4", isMobile ? "p-4" : "")}>
-        <h3 className="font-semibold">Filtrar por Show</h3>
+  const FilterMenu = () => (
+    <div className="flex items-center gap-2">
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="justify-start w-full">
+                <Button variant="outline" className="justify-start">
                     <Filter className="h-4 w-4 mr-2" />
                     {showOptions.find(s => s.value === showFilter)?.label}
                 </Button>
@@ -71,11 +71,10 @@ export function Header({
             </DropdownMenuContent>
         </DropdownMenu>
 
-        <h3 className="font-semibold mt-4">Filtrar por Año</h3>
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="justify-start w-full">
-                    <Filter className="h-4 w-4 mr-2" />
+                <Button variant="outline" className="justify-start">
+                    <Calendar className="h-4 w-4 mr-2" />
                     {yearOptions.find(y => y.value === yearFilter)?.label}
                 </Button>
             </DropdownMenuTrigger>
@@ -96,10 +95,16 @@ export function Header({
     <header className="sticky top-0 z-20 bg-card shadow-md" style={{ backgroundColor: '#2A3B57' }}>
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between gap-4">
-            <h1 className="text-2xl font-bold font-headline" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                <span className="text-white">Attitude</span>
-                <span className="text-red-500">Rewind</span>
-            </h1>
+            <Link href="/">
+                <h1 className="text-2xl font-bold font-headline cursor-pointer" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                    <span className="text-white">Attitude</span>
+                    <span className="text-red-500">Rewind</span>
+                </h1>
+            </Link>
+
+            <div className="hidden md:flex">
+                <FilterMenu />
+            </div>
 
             <Sheet>
                 <SheetTrigger asChild>
@@ -112,8 +117,47 @@ export function Header({
                     <SheetHeader>
                         <SheetTitle>Filtros</SheetTitle>
                     </SheetHeader>
-                    <div className="py-4">
-                       <FilterMenu isMobile={true} />
+                    <div className="py-4 space-y-4">
+                       <div className="flex flex-col gap-4 p-4">
+                            <h3 className="font-semibold">Filtrar por Show</h3>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline" className="justify-start w-full">
+                                        <Filter className="h-4 w-4 mr-2" />
+                                        {showOptions.find(s => s.value === showFilter)?.label}
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="w-56">
+                                    <DropdownMenuRadioGroup value={showFilter} onValueChange={(val) => onShowFilterChange(val as EventType | 'all')}>
+                                        {showOptions.map(show => (
+                                            <DropdownMenuRadioItem key={show.value} value={show.value}>
+                                                <show.icon className="mr-2 h-4 w-4" />
+                                                {show.label}
+                                            </DropdownMenuRadioItem>
+                                        ))}
+                                    </DropdownMenuRadioGroup>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
+                            <h3 className="font-semibold mt-4">Filtrar por Año</h3>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline" className="justify-start w-full">
+                                        <Calendar className="h-4 w-4 mr-2" />
+                                        {yearOptions.find(y => y.value === yearFilter)?.label}
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="w-56">
+                                    <DropdownMenuRadioGroup value={yearFilter} onValueChange={onYearFilterChange}>
+                                        {yearOptions.map(year => (
+                                            <DropdownMenuRadioItem key={year.value} value={year.value}>
+                                                {year.label}
+                                            </DropdownMenuRadioItem>
+                                        ))}
+                                    </DropdownMenuRadioGroup>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
                     </div>
                 </SheetContent>
             </Sheet>
