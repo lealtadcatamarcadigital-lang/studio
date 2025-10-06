@@ -67,4 +67,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
     "Rikishi": {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/hX66V51aP6Pysd11pbcS28tIuW.jpg"
     },
+    "X-Pac": {
+        imageUrl: "https://i.pinimg.com/1200x/d5/79/35/d5793533992e793daef55590b972ecbe.jpg"
+    }
 };
