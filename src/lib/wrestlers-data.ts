@@ -81,5 +81,8 @@ export const wrestlersData: Record<string, WrestlerData> = {
     },
     "Too Cool": {
         imageUrl: "https://i.pinimg.com/736x/e0/5a/1b/e05a1b74540d71c68e9cb4149c826577.jpg"
+    },
+    "The Dudley Boyz": {
+        imageUrl: "https://i.pinimg.com/1200x/f2/24/ab/f224abee2dce0349adde6e6122a73804.jpg"
     }
 };
