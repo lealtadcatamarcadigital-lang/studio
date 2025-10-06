@@ -45,51 +45,80 @@ export function WrestlerDetails({ wrestlerName }: WrestlerDetailsProps) {
       }));
   }, [allEvents, wrestlerName]);
 
+  const stats = useMemo(() => {
+    return wrestlerMatches.reduce((acc, match) => {
+      acc[match.type] = (acc[match.type] || 0) + 1;
+      return acc;
+    }, {} as Record<'raw' | 'smackdown' | 'ppv', number>);
+  }, [wrestlerMatches]);
+
   return (
-    <div className="space-y-4">
-        <Card>
-            <CardContent className="p-4">
-                <h3 className="font-semibold text-muted-foreground">Total de Luchas</h3>
-                <p className="text-4xl font-bold">{wrestlerMatches.length}</p>
-            </CardContent>
-        </Card>
+    <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Card>
+                <CardContent className="p-4">
+                    <h3 className="font-semibold text-muted-foreground">Total de Luchas</h3>
+                    <p className="text-4xl font-bold">{wrestlerMatches.length}</p>
+                </CardContent>
+            </Card>
+            <Card className="border-red-500/50">
+                <CardContent className="p-4">
+                    <h3 className="font-semibold text-red-500">Luchas en RAW</h3>
+                    <p className="text-4xl font-bold">{stats.raw || 0}</p>
+                </CardContent>
+            </Card>
+            <Card className="border-blue-500/50">
+                <CardContent className="p-4">
+                    <h3 className="font-semibold text-blue-500">Luchas en SmackDown</h3>
+                    <p className="text-4xl font-bold">{stats.smackdown || 0}</p>
+                </CardContent>
+            </Card>
+            <Card className="border-amber-500/50">
+                <CardContent className="p-4">
+                    <h3 className="font-semibold text-amber-500">Luchas en PPV</h3>
+                    <p className="text-4xl font-bold">{stats.ppv || 0}</p>
+                </CardContent>
+            </Card>
+        </div>
 
-        {wrestlerMatches.map((eventItem, index) => {
-            const matchData = eventItem.match;
-            const matchText = typeof matchData === 'string' ? matchData : matchData.match;
-            const rating = typeof matchData !== 'string' ? matchData.rating : undefined;
+        <div className="space-y-4">
+            {wrestlerMatches.map((eventItem, index) => {
+                const matchData = eventItem.match;
+                const matchText = typeof matchData === 'string' ? matchData : matchData.match;
+                const rating = typeof matchData !== 'string' ? matchData.rating : undefined;
 
-            return (
-                <Link href={`/event/${eventItem.id}`} key={`${eventItem.id}-${index}`}>
-                    <Card className="hover:bg-accent transition-colors">
-                        <CardContent className="p-4 space-y-2">
-                            <div className="flex justify-between items-start">
-                                <h3 className="font-bold text-lg pr-4">{matchText}</h3>
-                                <Badge className={cn("text-xs flex-shrink-0", getShowBadgeStyle(eventItem.type))}>
-                                    {getShowIcon(eventItem.type)}
-                                    <span>{getEventTypeDisplay(eventItem.type)}</span>
-                                </Badge>
-                            </div>
-                            <div className="flex items-center justify-between text-sm text-muted-foreground">
-                                <div className='flex items-center gap-2'>
-                                    <CalendarDays className="h-4 w-4" />
-                                    <span>{new Date(eventItem.year, new Date(Date.parse(eventItem.month +" 1, 2000")).getMonth(), parseInt(eventItem.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                return (
+                    <Link href={`/event/${eventItem.id}?from=/wrestler/${wrestlerName.replace(/ /g, '_')}`} key={`${eventItem.id}-${index}`}>
+                        <Card className="hover:bg-accent transition-colors">
+                            <CardContent className="p-4 space-y-2">
+                                <div className="flex justify-between items-start">
+                                    <h3 className="font-bold text-lg pr-4">{matchText}</h3>
+                                    <Badge className={cn("text-xs flex-shrink-0", getShowBadgeStyle(eventItem.type))}>
+                                        {getShowIcon(eventItem.type)}
+                                        <span>{getEventTypeDisplay(eventItem.type)}</span>
+                                    </Badge>
                                 </div>
-                                {rating && (
-                                    <div className="flex items-center gap-1 text-amber-500">
-                                        <Star className="h-4 w-4 fill-current" />
-                                        <span className="font-bold">{rating.toFixed(1)}</span>
+                                <div className="flex items-center justify-between text-sm text-muted-foreground">
+                                    <div className='flex items-center gap-2'>
+                                        <CalendarDays className="h-4 w-4" />
+                                        <span>{new Date(eventItem.year, new Date(Date.parse(eventItem.month +" 1, 2000")).getMonth(), parseInt(eventItem.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                                     </div>
-                                )}
-                            </div>
-                        </CardContent>
-                    </Card>
-                </Link>
-            );
-        })}
-        {wrestlerMatches.length === 0 && (
-            <p className="text-muted-foreground text-center py-8">No se encontraron combates para este luchador.</p>
-        )}
+                                    {rating && (
+                                        <div className="flex items-center gap-1 text-amber-500">
+                                            <Star className="h-4 w-4 fill-current" />
+                                            <span className="font-bold">{rating.toFixed(1)}</span>
+                                        </div>
+                                    )}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </Link>
+                );
+            })}
+            {wrestlerMatches.length === 0 && (
+                <p className="text-muted-foreground text-center py-8">No se encontraron combates para este luchador.</p>
+            )}
+        </div>
     </div>
   );
 }
