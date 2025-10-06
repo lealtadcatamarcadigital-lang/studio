@@ -35,7 +35,7 @@ export default function WrestlerPage() {
           
           <div className="flex-1 flex justify-center items-center gap-4">
             <Avatar className="h-12 w-12">
-              <AvatarImage src={wrestler?.imageUrl} alt={wrestlerName} />
+              <AvatarImage src={wrestler?.imageUrl} alt={wrestlerName} className="object-cover object-top" />
               <AvatarFallback>{wrestlerName.substring(0, 2)}</AvatarFallback>
             </Avatar>
             <div>
