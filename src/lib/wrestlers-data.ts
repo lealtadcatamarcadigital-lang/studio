@@ -69,5 +69,8 @@ export const wrestlersData: Record<string, WrestlerData> = {
     },
     "X-Pac": {
         imageUrl: "https://i.pinimg.com/1200x/d5/79/35/d5793533992e793daef55590b972ecbe.jpg"
+    },
+    "Al Snow": {
+        imageUrl: "https://i.pinimg.com/736x/3a/83/c4/3a83c444a376e171bf11d1433e4d758e.jpg"
     }
 };
