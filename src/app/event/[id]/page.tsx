@@ -30,13 +30,14 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
 
     const wrestlerNames = new Set([
         "The Rock", "Triple H", "The Big Show", "Big Show", "Mankind", "Cactus Jack", "Stone Cold Steve Austin", "The Undertaker", "Kane", "Kurt Angle", "Chris Jericho", 
-        "Chris Benoit", "Eddie Guerrero", "Dean Malenko", "Perry Saturn", "X-Pac", "Road Dogg", "Billy Gunn", "The New Age Outlaws", "Edge", "Christian", "Jeff Hardy", "Matt Hardy", "Matt",
-        "The Dudley Boyz", "Bubba Ray Dudley", "D-Von Dudley", "Bubba Ray", "Rikishi", "Tazz", "Al Snow", "Test", "Albert", "Prince Albert", "Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
+        "Chris Benoit", "Eddie Guerrero", "Dean Malenko", "Perry Saturn", "X-Pac", "Road Dogg", "Billy Gunn", "Edge", "Christian", "Jeff Hardy", "Matt Hardy", "Matt",
+        "The Dudley Boyz", "Bubba Ray Dudley", "D-Von Dudley", "Bubba Ray", "Rikishi", "Tazz", "Al Snow", "Test", "Albert", "Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
         "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grandmaster Sexay", "The Acolytes", "Faarooq", "Bradshaw", "John Layfield", "Ron Simmons",
         "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", 
         "T & A", "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", "Los Conquistadores", "Right to Censor", "Drew Carey", 
         "The Hardy Boyz", "The Radicalz", "D-Generation X", "DX", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
-        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", "Too Cool", "The Hollys", "Taka Michinoku", "Funaki"
+        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", "Too Cool", "The Hollys", "Taka Michinoku", "Funaki",
+        "Prince Albert", "The New Age Outlaws"
     ]);
     
     const regex = new RegExp(`(${[...wrestlerNames].sort((a,b) => b.length - a.length).map(name => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')}|vs\\.|&)`, 'g');
@@ -89,8 +90,8 @@ const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
                     </div>
                 )}
             </div>
-             {matchText.split(':').length > 1 && (
-                 <p className="text-red-600 dark:text-red-500 text-xs font-bold tracking-wider uppercase mt-1">{matchText.split(':').slice(1).join(':').trim()}</p>
+             {typeof match !== 'string' && match.match.includes(":") && (
+                 <p className="text-red-600 dark:text-red-500 text-xs font-bold tracking-wider uppercase mt-1">{match.match.split(':').slice(0, 1).join(':').trim()}</p>
             )}
         </div>
     );
@@ -143,6 +144,8 @@ export default function EventPage() {
         )
     }
 
+    const isPpvWithCover = event.type === 'ppv' && (event as any).coverUrl;
+
     return (
         <main className="min-h-screen bg-background">
              <header className="sticky top-0 z-20 bg-card shadow-md" style={{ backgroundColor: '#2A3B57' }}>
@@ -161,44 +164,50 @@ export default function EventPage() {
                 </div>
             </header>
 
-            <div className="container mx-auto max-w-4xl px-4 py-8">
+            <div className="container mx-auto max-w-6xl px-4 py-8">
                 <div className="space-y-6">
-                    {event.type === 'ppv' && (event as any).coverUrl && (
-                        <div className="rounded-lg overflow-hidden border shadow-lg">
-                            <Image 
-                                src={(event as any).coverUrl!}
-                                alt={`Portada de ${(event as any).name}`}
-                                width={700}
-                                height={400}
-                                className="w-full h-auto object-cover"
-                            />
-                        </div>
-                    )}
-                    
-                    <div className="flex flex-wrap items-center gap-4 text-sm">
-                      <Badge className={cn("text-sm", getShowBadgeStyle(event.type))}>{getEventTypeDisplay(event.type)}</Badge>
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <CalendarDays className="h-4 w-4" />
-                        <span>{new Date(event.year, getMonthNumber(event.month), parseInt(event.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <MapPin className="h-4 w-4" />
-                        <span>{event.location}</span>
-                      </div>
-                    </div>
+                    <div className={cn("flex flex-col md:flex-row gap-8", isPpvWithCover && "items-start")}>
+                        {isPpvWithCover && (
+                            <div className="md:w-1/3 flex-shrink-0">
+                                <div className="rounded-lg overflow-hidden border shadow-lg">
+                                    <Image 
+                                        src={(event as any).coverUrl!}
+                                        alt={`Portada de ${(event as any).name}`}
+                                        width={400}
+                                        height={600}
+                                        className="w-full h-auto object-cover"
+                                    />
+                                </div>
+                            </div>
+                        )}
+                        
+                        <div className="flex-grow space-y-6">
+                            <div className="flex flex-wrap items-center gap-4 text-sm">
+                                <Badge className={cn("text-sm", getShowBadgeStyle(event.type))}>{getEventTypeDisplay(event.type)}</Badge>
+                                <div className="flex items-center gap-2 text-muted-foreground">
+                                    <CalendarDays className="h-4 w-4" />
+                                    <span>{new Date(event.year, getMonthNumber(event.month), parseInt(event.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-muted-foreground">
+                                    <MapPin className="h-4 w-4" />
+                                    <span>{event.location}</span>
+                                </div>
+                            </div>
 
-                    <div>
-                      <h3 className="font-semibold text-lg flex items-center gap-2 mb-3">
-                        <ListChecks className="h-5 w-5 text-primary" />
-                        Cartelera de Luchas
-                      </h3>
-                      {event.matches && event.matches.length > 0 ? (
-                        <div className="space-y-2">
-                          {event.matches.map((match, i) => <MatchCard key={i} match={match} eventId={event.id} />)}
+                            <div>
+                                <h3 className="font-semibold text-lg flex items-center gap-2 mb-3">
+                                    <ListChecks className="h-5 w-5 text-primary" />
+                                    Cartelera de Luchas
+                                </h3>
+                                {event.matches && event.matches.length > 0 ? (
+                                    <div className="space-y-2">
+                                    {event.matches.map((match, i) => <MatchCard key={i} match={match} eventId={event.id} />)}
+                                    </div>
+                                ) : (
+                                    <p className="text-muted-foreground text-sm">No se ha anunciado la cartelera de combates.</p>
+                                )}
+                            </div>
                         </div>
-                      ) : (
-                        <p className="text-muted-foreground text-sm">No se ha anunciado la cartelera de combates.</p>
-                      )}
                     </div>
                     
                     {event.description && (
@@ -254,7 +263,7 @@ export default function EventPage() {
                                         <EyeOff className="h-4 w-4 text-red-500" />
                                         No Visto
                                     </div>
-                                </SelectItem>
+-                                </SelectItem>
                             </SelectContent>
                         </Select>
                      </div>
@@ -263,5 +272,3 @@ export default function EventPage() {
         </main>
     )
 }
-
-    
