@@ -2,7 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { WrestlerDetails } from '@/components/wrestler-details';
 import { Button } from '@/components/ui/button';
@@ -24,24 +24,34 @@ const getShowIcon = (type: 'raw' | 'smackdown' | 'ppv') => {
 export default function WrestlerPage() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const from = searchParams.get('from');
+
   const name = typeof params.name === 'string' ? params.name : '';
   const wrestlerName = decodeURIComponent(name.replace(/_/g, ' '));
   const wrestler = wrestlersData[wrestlerName];
   
   const handleBack = () => {
-    router.push('/');
+    if (from) {
+        router.push(from);
+    } else {
+        router.push('/');
+    }
   };
 
   const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
 
   const wrestlerMatches = useMemo(() => {
+    if (!wrestlerName) return [];
     return allEvents
       .flatMap(event => 
         (event.matches || []).map(match => ({ event, match }))
       )
       .filter(({ match }) => {
         const matchText = typeof match === 'string' ? match : match.match;
-        return matchText.includes(wrestlerName);
+        // A more robust check for wrestler name
+        const regex = new RegExp(`\\b${wrestlerName.replace(/[.*+?^${'()'}|\\[\\]\\\\]/g, '\\$&')}\\b`, 'i');
+        return regex.test(matchText);
       })
       .map(({ event, match }) => ({
         ...event,
@@ -97,7 +107,7 @@ export default function WrestlerPage() {
                     const rating = typeof matchData !== 'string' ? matchData.rating : undefined;
 
                     return (
-                        <Link href={`/event/${eventItem.id}?from=/wrestler/${wrestlerName.replace(/ /g, '_')}`} key={`${eventItem.id}-${index}`}>
+                        <Link href={`/event/${eventItem.id}?from=/wrestler/${name}`} key={`${eventItem.id}-${index}`}>
                             <Card className="hover:bg-accent transition-colors">
                                 <CardContent className="p-4 space-y-2">
                                     <div className="flex justify-between items-start">
