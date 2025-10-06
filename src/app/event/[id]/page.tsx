@@ -100,7 +100,6 @@ const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
 
 export default function EventPage() {
     const params = useParams();
-    const router = useRouter();
     const eventId = typeof params.id === 'string' ? params.id : '';
 
     const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
@@ -142,7 +141,7 @@ export default function EventPage() {
             <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-sm border-b">
                 <div className="container mx-auto px-4 h-20 flex items-center justify-between">
                     <div className="absolute top-1/2 -translate-y-1/2 left-4">
-                        <Button asChild variant="outline" size="icon" onClick={() => router.back()}>
+                        <Button asChild variant="outline" size="icon">
                             <Link href="/">
                                 <ArrowLeft className="h-4 w-4" />
                                 <span className="sr-only">Volver</span>
@@ -260,5 +259,3 @@ export default function EventPage() {
         </main>
     )
 }
-
-    
