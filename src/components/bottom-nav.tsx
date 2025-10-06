@@ -5,11 +5,11 @@ import Link from 'next/link';
 import { Newspaper, CalendarDays, Users } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { ChampionshipBeltIcon } from './icons/championship-belt-icon';
+import { WrestlingMaskIcon } from './icons/wrestling-mask-icon';
 
 const navItems = [
   { href: '/news', icon: Newspaper, label: 'Noticias' },
-  { href: '/superstars', icon: ChampionshipBeltIcon, label: 'Superstars' },
+  { href: '/superstars', icon: WrestlingMaskIcon, label: 'Superstars' },
   { href: '/', icon: CalendarDays, label: 'Eventos' },
 ];
 
@@ -19,7 +19,7 @@ export function BottomNav() {
   return (
     <footer className="fixed bottom-0 left-0 right-0 h-16 bg-card border-t border-border flex justify-around items-center z-50">
       {navItems.map((item) => {
-        const isActive = (item.href === '/' && pathname === '/') || (item.href !== '/' && pathname.startsWith(item.href));
+        const isActive = (item.href === '/' && pathname === '/') || (item.href !== '/' && pathname.startsWith(item.href) && item.href !== '/superstars') || (item.href === '/superstars' && pathname === '/superstars');
         return (
           <Link
             key={item.href}

@@ -18,10 +18,10 @@ export default function WrestlerPage() {
   
   const searchParams = useSearchParams();
   const fromEvent = searchParams.get('from');
-  const backUrl = fromEvent || '/';
+  const backUrl = fromEvent || '/superstars';
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <main className="min-h-screen bg-background">
        <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-sm border-b">
         <div className="container mx-auto px-4 h-20 flex items-center justify-between">
           <div className="absolute top-1/2 -translate-y-1/2 left-4">
@@ -39,7 +39,7 @@ export default function WrestlerPage() {
               <AvatarFallback>{wrestlerName.substring(0, 2)}</AvatarFallback>
             </Avatar>
             <div>
-              <h1 className="font-headline text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-100">
+              <h1 className="font-headline text-2xl md:text-3xl font-bold">
                 {wrestlerName}
               </h1>
               <p className="text-muted-foreground text-sm">Historial de Combates</p>
@@ -54,5 +54,3 @@ export default function WrestlerPage() {
     </main>
   );
 }
-
-    

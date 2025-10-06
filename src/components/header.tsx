@@ -4,7 +4,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, Tv, Ticket, List, Filter } from 'lucide-react';
+import { Menu, Tv, Ticket, List, Filter, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -22,23 +22,15 @@ import {
 } from '@/components/ui/sheet';
 import type { EventType } from './event-grid';
 import { cn } from "@/lib/utils";
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 interface HeaderProps {
   yearFilter: string;
   onYearFilterChange: (value: string) => void;
-  showFilter: EventType | 'all';
-  onShowFilterChange: (value: EventType) => void;
+  title: string;
 }
 
-const showOptions: { value: EventType; label: string; icon?: React.ElementType }[] = [
-    { value: 'raw', label: 'RAW', icon: Tv },
-    { value: 'smackdown', label: 'SmackDown', icon: Tv },
-    { value: 'ppv', label: 'PPV', icon: Ticket },
-];
-
 const yearOptions: { value: string; label: string }[] = [
-    { value: 'all', label: 'Todos' },
+    { value: 'all', label: 'Todos los Años' },
     { value: '2000', label: '2000' },
     { value: '2001', label: '2001' },
 ];
@@ -46,8 +38,7 @@ const yearOptions: { value: string; label: string }[] = [
 export function Header({
   yearFilter,
   onYearFilterChange,
-  showFilter,
-  onShowFilterChange,
+  title,
 }: HeaderProps) {
 
   const FilterMenu = ({ isMobile = false }: { isMobile?: boolean }) => (
@@ -69,28 +60,6 @@ export function Header({
                 </DropdownMenuRadioGroup>
             </DropdownMenuContent>
         </DropdownMenu>
-
-        <ToggleGroup 
-            type="single"
-            variant="outline"
-            value={showFilter}
-            onValueChange={(value) => {
-                if (value) onShowFilterChange(value as EventType);
-            }}
-            className={cn(isMobile ? "grid grid-cols-3" : "")}
-        >
-            {showOptions.map(show => (
-                <ToggleGroupItem 
-                    key={show.value} 
-                    value={show.value} 
-                    aria-label={`Filtrar por ${show.label}`}
-                    className="gap-2 text-white hover:text-white data-[state=on]:bg-white/20 data-[state=on]:text-white"
-                >
-                    {show.icon && <show.icon className="h-4 w-4" />}
-                    {isMobile && show.label}
-                </ToggleGroupItem>
-            ))}
-        </ToggleGroup>
     </div>
   );
 
@@ -98,12 +67,15 @@ export function Header({
     <header className="sticky top-0 z-20 bg-blue-950/90 backdrop-blur-sm border-b border-blue-900">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between gap-4">
-            <Link href="/" className="flex items-center gap-2 font-headline text-2xl font-bold text-white">
-                <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/WWF-Attitude-Era-Logo.png/2560px-WWF-Attitude-Era-Logo.png" alt="Attitude Era Logo" width={48} height={48} className="h-12 w-auto" />
-                <div>
-                    <span className="text-white">Attitude</span><span className="text-red-500">Rewind</span>
-                </div>
-            </Link>
+            <div className="flex items-center gap-2">
+              <Button asChild variant="outline" size="icon" className="h-8 w-8">
+                <Link href="/">
+                  <ArrowLeft className="h-4 w-4" />
+                  <span className="sr-only">Volver</span>
+                </Link>
+              </Button>
+              <h1 className="font-headline text-xl font-bold text-white">{title}</h1>
+            </div>
             
             <div className="hidden md:flex">
                 <FilterMenu />
