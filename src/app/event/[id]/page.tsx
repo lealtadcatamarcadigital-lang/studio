@@ -21,15 +21,14 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
     const title = parts.length > 1 ? `${parts[0]}: ` : '';
 
     const wrestlerNames = new Set([
-        "The Rock", "Triple H", "Big Show", "The Big Show", "Mankind", "Cactus Jack", "Stone Cold Steve Austin", "The Undertaker", "Kane", "Kurt Angle", "Chris Jericho", 
+        "The Rock", "Big Show", "Triple H", "Mankind", "Cactus Jack", "Stone Cold Steve Austin", "The Undertaker", "Kane", "Kurt Angle", "Chris Jericho", 
         "Chris Benoit", "Eddie Guerrero", "Dean Malenko", "Perry Saturn", "X-Pac", "Road Dogg", "Billy Gunn", "Edge", "Christian", "Jeff Hardy", "Matt Hardy", 
         "The Dudley Boyz", "Bubba Ray Dudley", "D-Von Dudley", "Rikishi", "Tazz", "Al Snow", "Test", "Albert", "Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
         "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grandmaster Sexay", "The Acolytes", "Faarooq", "Bradshaw", 
         "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", 
         "T & A", "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", "Los Conquistadores", "Right to Censor", "Drew Carey", 
         "The Hardy Boyz", "The Radicalz", "D-Generation X", "DX", "The New Age Outlaws", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
-        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", "Too Cool", "The Hollys",
-        "John Layfield", "Ron Simmons", "Bubba Ray", "Taka Michinoku", "Funaki", "Matt", "D-Generation X"
+        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", "Too Cool", "The Hollys"
     ]);
     
     const regex = new RegExp(`(${[...wrestlerNames].sort((a,b) => b.length - a.length).map(name => name.replace(/[.*+?^${'()'}|\\[\\]\\\\]/g, '\\$&')).join('|')}|vs\\.|&)`, 'g');
@@ -39,7 +38,7 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
 
     segments.forEach(segment => {
         const trimmedSegment = segment.trim();
-        if (wrestlerNames.has(trimmedSegment) || wrestlerNames.has(trimmedSegment.replace(/^The /, ''))) {
+        if (wrestlerNames.has(trimmedSegment)) {
             result.push({ text: trimmedSegment, wrestler: true });
         } else {
             const last = result[result.length - 1];
