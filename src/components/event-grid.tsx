@@ -60,6 +60,14 @@ const getShowStyles = (type: 'raw' | 'smackdown' | 'ppv') => {
     }
 };
 
+export const getShowBadgeStyle = (type: 'raw' | 'smackdown' | 'ppv') => {
+    switch (type) {
+        case 'raw': return 'bg-red-500 hover:bg-red-500/80 text-white';
+        case 'smackdown': return 'bg-blue-500 hover:bg-blue-500/80 text-white';
+        case 'ppv': return 'bg-amber-500 hover:bg-amber-500/80 text-white';
+    }
+};
+
 export const getMonthNumber = (monthName: string) => {
     const monthMap: { [key: string]: number } = { Enero: 0, Febrero: 1, Marzo: 2, Abril: 3, Mayo: 4, Junio: 5, Julio: 6, Agosto: 7, Septiembre: 8, Octubre: 9, Noviembre: 10, Diciembre: 11 };
     return monthMap[monthName];
