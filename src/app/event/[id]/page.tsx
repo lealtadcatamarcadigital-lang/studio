@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, CalendarDays, ChevronDown, CheckCircle, Circle, Eye, EyeOff, Info, ListChecks, MapPin, Star, Ticket, Tv } from 'lucide-react';
@@ -100,6 +100,9 @@ const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
 export default function EventPage() {
     const params = useParams();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const from = searchParams.get('from');
+
     const eventId = typeof params.id === 'string' ? params.id : '';
 
     const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
@@ -128,6 +131,14 @@ export default function EventPage() {
         }
     };
 
+    const handleBack = () => {
+        if (from) {
+            router.push(from);
+        } else {
+            router.push('/');
+        }
+    };
+
     if (!event) {
         return (
             <main className="min-h-screen flex items-center justify-center">
@@ -137,13 +148,12 @@ export default function EventPage() {
     }
 
     const isPpvWithCover = event.type === 'ppv' && (event as any).coverUrl;
-    const isRawWithCover = event.type === 'raw';
-
+    
     return (
         <main className="min-h-screen bg-background">
              <header className="sticky top-0 z-20 bg-card shadow-md" style={{ backgroundColor: '#2A3B57' }}>
                 <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-                    <Button variant="ghost" onClick={() => router.push('/')} className="flex items-center gap-2 text-white hover:bg-white/10">
+                    <Button variant="ghost" onClick={handleBack} className="flex items-center gap-2 text-white hover:bg-white/10">
                         <ArrowLeft className="h-4 w-4" />
                         Volver
                     </Button>
@@ -159,26 +169,13 @@ export default function EventPage() {
 
             <div className="container mx-auto max-w-6xl px-4 py-8">
                 <div className="space-y-6">
-                    <div className={cn("flex flex-col md:flex-row gap-8", (isPpvWithCover || isRawWithCover) && "items-start")}>
+                    <div className={cn("flex flex-col md:flex-row gap-8", isPpvWithCover && "items-start")}>
                         {isPpvWithCover && (
                             <div className="md:w-1/3 flex-shrink-0">
                                 <div className="rounded-lg overflow-hidden border shadow-lg">
                                     <Image 
                                         src={(event as any).coverUrl}
                                         alt={`Portada de ${(event as any).name}`}
-                                        width={400}
-                                        height={600}
-                                        className="w-full h-auto object-cover"
-                                    />
-                                </div>
-                            </div>
-                        )}
-                         {isRawWithCover && !isPpvWithCover && (
-                            <div className="md:w-1/3 flex-shrink-0">
-                                <div className="rounded-lg overflow-hidden border shadow-lg">
-                                    <Image 
-                                        src="https://i.pinimg.com/736x/11/bd/95/11bd95fe71b2e8c1fe48ebd4dc597646.jpg"
-                                        alt="WWF RAW is WAR"
                                         width={400}
                                         height={600}
                                         className="w-full h-auto object-cover"
@@ -280,3 +277,5 @@ export default function EventPage() {
 
     
 }
+
+    
