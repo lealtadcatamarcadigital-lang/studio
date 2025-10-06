@@ -29,14 +29,14 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
     const title = parts.length > 1 ? `${parts[0]}: ` : '';
 
     const wrestlerNames = new Set([
-        "The Rock", "Triple H", "The Big Show", "Mankind", "Cactus Jack", "Stone Cold Steve Austin", "The Undertaker", "Kane", "Kurt Angle", "Chris Jericho", 
+        "The Rock", "Triple H", "The Big Show", "Big Show", "Mankind", "Cactus Jack", "Stone Cold Steve Austin", "The Undertaker", "Kane", "Kurt Angle", "Chris Jericho", 
         "Chris Benoit", "Eddie Guerrero", "Dean Malenko", "Perry Saturn", "X-Pac", "Road Dogg", "Billy Gunn", "Edge", "Christian", "Jeff Hardy", "Matt Hardy", 
         "Bubba Ray Dudley", "D-Von Dudley", "Rikishi", "Tazz", "Al Snow", "Test", "Albert", "Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
-        "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grandmaster Sexay", "The Acolytes", "Faarooq", "Bradshaw", 
+        "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grandmaster Sexay", "The Acolytes", "Faarooq", "Bradshaw", "John Layfield", "Ron Simmons",
         "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", 
         "T & A", "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", "Los Conquistadores", "Right to Censor", "Drew Carey", 
         "The Dudley Boyz", "The Hardy Boyz", "The New Age Outlaws", "The Radicalz", "DX", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
-        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", "Too Cool", "Prince Albert", "Big Show"
+        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", "Too Cool", "Prince Albert", "The Hollys"
     ]);
     
     const regex = new RegExp(`(${[...wrestlerNames].sort((a,b) => b.length - a.length).map(name => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')}|vs\\.|&)`, 'g');
@@ -131,7 +131,7 @@ export default function EventPage() {
         try {
           localStorage.setItem('attitude-rewind-statuses', JSON.stringify(newStatuses));
         } catch (error) {
-          console.error("Could not save event statuses to localStorage:", error);
+          console-error("Could not save event statuses to localStorage:", error);
         }
     };
 
