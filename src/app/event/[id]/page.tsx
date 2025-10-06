@@ -35,8 +35,8 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
         "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grandmaster Sexay", "The Acolytes", "Faarooq", "Bradshaw", 
         "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", 
         "T & A", "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", "Los Conquistadores", "Right to Censor", "Drew Carey", 
-        "The Dudley Boyz", "The Hardy Boyz", "New Age Outlaws", "The Radicalz", "DX", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
-        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", "Too Cool", "Prince Albert", "The New Age Outlaws"
+        "The Dudley Boyz", "The Hardy Boyz", "The New Age Outlaws", "The Radicalz", "DX", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
+        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", "Too Cool", "Prince Albert", "Big Show"
     ]);
     
     const regex = new RegExp(`(${[...wrestlerNames].sort((a,b) => b.length - a.length).map(name => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')}|vs\\.|&)`, 'g');
@@ -263,3 +263,5 @@ export default function EventPage() {
         </main>
     )
 }
+
+    
