@@ -32,7 +32,7 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
         "The Rock", "Triple H", "The Big Show", "Mankind", "Cactus Jack", "Stone Cold Steve Austin", "The Undertaker", "Kane", "Kurt Angle", "Chris Jericho", 
         "Chris Benoit", "Eddie Guerrero", "Dean Malenko", "Perry Saturn", "X-Pac", "Road Dogg", "Billy Gunn", "Edge", "Christian", "Jeff Hardy", "Matt Hardy", 
         "Bubba Ray Dudley", "D-Von Dudley", "Rikishi", "Tazz", "Al Snow", "Test", "Albert", "The Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
-        "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grand Master Sexay", "Too Cool", "The Acolytes", "Faarooq", "Bradshaw", 
+        "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grand Master Sexay", "The Acolytes", "Faarooq", "Bradshaw", 
         "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", 
         "T & A", "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", "Los Conquistadores", "Right to Censor", "Drew Carey", 
         "The Dudley Boyz", "The Hardy Boyz", "New Age Outlaws", "The Radicalz", "DX", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
