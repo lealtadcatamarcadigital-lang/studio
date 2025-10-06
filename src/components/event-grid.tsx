@@ -29,6 +29,8 @@ export type DetailedEvent = (Event | PPVEvent) & { type: EventType, id: string, 
 export type EventStatus = "disponible" | "visto" | "no-visto";
 export type EventStatusMap = { [eventId: string]: EventStatus };
 
+const SCROLL_POSITION_KEY = 'attitude-rewind-scroll-position';
+
 export const flattenEvents = (data: MonthData[]): DetailedEvent[] => {
   const allEvents: DetailedEvent[] = [];
   data.forEach(month => {
@@ -97,6 +99,10 @@ export function EventGrid({ events }: EventGridProps) {
     }
   }, []);
 
+  const handleEventClick = () => {
+    sessionStorage.setItem(SCROLL_POSITION_KEY, window.scrollY.toString());
+  };
+
   const toggleStatus = (eventId: string) => {
     const currentStatus = eventStatuses[eventId];
     const newStatus = currentStatus === 'visto' ? 'disponible' : 'visto';
@@ -149,7 +155,7 @@ export function EventGrid({ events }: EventGridProps) {
                         const isWatched = eventStatuses[event.id] === 'visto';
 
                         return (
-                        <Link href={`/event/${event.id}`} key={event.id}>
+                        <Link href={`/event/${event.id}`} key={event.id} onClick={handleEventClick} scroll={false}>
                             <Card className={cn("border-2", styles.card, "hover:shadow-lg transition-shadow")}>
                             <CardContent className="p-4 flex items-center gap-4">
                                 <div className={cn("h-16 w-16 flex flex-col items-center justify-center rounded-lg", styles.dateBox)}>
