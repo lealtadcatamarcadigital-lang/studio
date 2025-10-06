@@ -14,7 +14,7 @@ import type { Match } from '@/lib/events-data';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { getShowBadgeStyle, getEventTypeDisplay, getMonthNumber } from '@/components/event-grid';
+import { getEventTypeDisplay, getMonthNumber, getShowBadgeStyle } from '@/components/event-grid';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
 
 const getShowIcon = (type: 'raw' | 'smackdown' | 'ppv') => {
@@ -69,26 +69,9 @@ export default function WrestlerPage() {
       </header>
 
       <div className="container mx-auto max-w-6xl px-4 py-8">
-        <div className="flex flex-col md:flex-row gap-8 items-start mb-8">
-            <div className="md:w-1/3 flex-shrink-0">
-                {wrestler?.imageUrl && (
-                  <div className="rounded-lg overflow-hidden border shadow-lg">
-                      <Image 
-                          src={wrestler.imageUrl}
-                          alt={wrestlerName}
-                          width={400}
-                          height={600}
-                          className="w-full h-auto object-cover"
-                      />
-                  </div>
-                )}
-            </div>
-            <div className="flex-grow">
-              <WrestlerDetails wrestlerName={wrestlerName} />
-            </div>
-        </div>
+        <WrestlerDetails wrestlerName={wrestlerName} />
 
-        <div className="space-y-6">
+        <div className="space-y-6 mt-8">
             <h2 className="text-2xl font-bold pt-4">Historial de Combates</h2>
             <div className="space-y-4">
                 {wrestlerMatches.map((eventItem, index) => {
