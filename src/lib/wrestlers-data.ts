@@ -11,7 +11,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/f8aR4yVaxbdb0Jb5wG2A5C9wH5N.jpg"
     },
     "Stone Cold Steve Austin": {
-        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/5v4p83y5v33dI83L6n2a1CNu3dM.jpg"
+        imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhxOY2_A9a_sB-hL2b_OrkY3atC-Iq2F0JTOkY-5qA8yVqBwS1h7gDAaxz2yX8a_f0DqRE2g3-T2o4_xXj8I8UdpbVv9J9F-DAZY2eTf1ssn7bAW72g8L7jgdV6QZ12DCEJpC-5lTf3g0k_BfJmQ41aKk9Y0j_kQ1e8Y9zT9jG2rC_wL4xSg/s1600/stone-cold-steve-austin.jpg"
     },
     "The Undertaker": {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/11PTBq0A4wJFK2N9fTjfx3b22bY.jpg"
