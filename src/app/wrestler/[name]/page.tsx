@@ -2,7 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useSearchParams, useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { WrestlerDetails } from '@/components/wrestler-details';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { getShowBadgeStyle, getEventTypeDisplay, getMonthNumber } from '@/components/event-grid';
+import { WWF_ALL_DATA } from '@/lib/events-data-all';
 
 const getShowIcon = (type: 'raw' | 'smackdown' | 'ppv') => {
     return type === 'ppv' ? <Ticket className="h-3 w-3" /> : <Tv className="h-3 w-3" />;
@@ -68,7 +69,6 @@ export default function WrestlerPage() {
       </header>
 
       <div className="container mx-auto max-w-6xl px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">{wrestlerName}</h1>
         <div className="flex flex-col md:flex-row gap-8 items-start mb-8">
             <div className="md:w-1/3 flex-shrink-0">
                 {wrestler?.imageUrl && (
