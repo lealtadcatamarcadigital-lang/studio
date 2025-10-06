@@ -125,51 +125,48 @@ export function EventGrid({ events }: EventGridProps) {
                 key={month}
                 open={openCollapsibles[month] ?? true}
                 onOpenChange={() => toggleCollapsible(month)}
-                asChild
             >
-                <section>
-                    <div className="sticky top-16 z-10 bg-background/90 backdrop-blur-sm -mx-4 px-4 py-3 mb-4 border-b">
-                        <CollapsibleTrigger asChild>
-                            <div className="flex items-center gap-4 cursor-pointer group">
-                                <h2 className="text-2xl font-bold">{month}</h2>
-                                <ChevronDown className={cn("h-5 w-5 transition-transform duration-200", openCollapsibles[month] ?? true ? '' : '-rotate-90')} />
-                            </div>
-                        </CollapsibleTrigger>
-                    </div>
-                    <CollapsibleContent>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {monthEvents.map((event) => {
-                            const styles = getShowStyles(event.type);
-                            const isWatched = eventStatuses[event.id] === 'visto';
-
-                            return (
-                            <Link href={`/event/${event.id}`} key={event.id}>
-                                <Card className={cn("border-2", styles.card, "hover:shadow-lg transition-shadow")}>
-                                <CardContent className="p-4 flex items-center gap-4">
-                                    <div className={cn("h-16 w-16 flex flex-col items-center justify-center rounded-lg", styles.dateBox)}>
-                                        <span className="text-3xl font-bold">{event.date}</span>
-                                    </div>
-                                    <div className="flex-grow">
-                                        <h3 className="font-bold text-lg">
-                                            {event.type === 'ppv' ? (event as PPVEvent).name : `WWF ${getEventTypeDisplay(event.type)}`}
-                                        </h3>
-                                        <p className="text-sm text-muted-foreground">{event.location}</p>
-                                        <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-                                            {event.type === 'ppv' ? <Ticket className="h-4 w-4" /> : <Tv className="h-4 w-4" />}
-                                            <span>{getEventTypeDisplay(event.type)}</span>
-                                        </div>
-                                    </div>
-                                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleStatus(event.id); }} className="p-2">
-                                       <Eye className={cn("h-6 w-6", isWatched ? 'text-green-500' : 'text-gray-400')} />
-                                    </button>
-                                </CardContent>
-                                </Card>
-                            </Link>
-                            );
-                        })}
+                <div className="sticky top-16 z-10 bg-background/90 backdrop-blur-sm -mx-4 px-4 py-3 mb-4 border-b">
+                    <CollapsibleTrigger asChild>
+                        <div className="flex items-center gap-4 cursor-pointer group">
+                            <h2 className="text-2xl font-bold">{month}</h2>
+                            <ChevronDown className={cn("h-5 w-5 transition-transform duration-200", (openCollapsibles[month] ?? true) ? '' : '-rotate-90')} />
                         </div>
-                    </CollapsibleContent>
-                </section>
+                    </CollapsibleTrigger>
+                </div>
+                <CollapsibleContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {monthEvents.map((event) => {
+                        const styles = getShowStyles(event.type);
+                        const isWatched = eventStatuses[event.id] === 'visto';
+
+                        return (
+                        <Link href={`/event/${event.id}`} key={event.id}>
+                            <Card className={cn("border-2", styles.card, "hover:shadow-lg transition-shadow")}>
+                            <CardContent className="p-4 flex items-center gap-4">
+                                <div className={cn("h-16 w-16 flex flex-col items-center justify-center rounded-lg", styles.dateBox)}>
+                                    <span className="text-3xl font-bold">{event.date}</span>
+                                </div>
+                                <div className="flex-grow">
+                                    <h3 className="font-bold text-lg">
+                                        {event.type === 'ppv' ? (event as PPVEvent).name : `WWF ${getEventTypeDisplay(event.type)}`}
+                                    </h3>
+                                    <p className="text-sm text-muted-foreground">{event.location}</p>
+                                    <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+                                        {event.type === 'ppv' ? <Ticket className="h-4 w-4" /> : <Tv className="h-4 w-4" />}
+                                        <span>{getEventTypeDisplay(event.type)}</span>
+                                    </div>
+                                </div>
+                                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleStatus(event.id); }} className="p-2">
+                                   <Eye className={cn("h-6 w-6", isWatched ? 'text-green-500' : 'text-gray-400')} />
+                                </button>
+                            </CardContent>
+                            </Card>
+                        </Link>
+                        );
+                    })}
+                    </div>
+                </CollapsibleContent>
             </Collapsible>
           ))
         ) : (
