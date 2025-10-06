@@ -3,6 +3,7 @@
 
 import Link from 'next/link';
 import { useSearchParams, useParams, useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { WrestlerDetails } from '@/components/wrestler-details';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
@@ -36,21 +37,31 @@ export default function WrestlerPage() {
                 Volver
             </Button>
             <div className="flex items-center gap-4">
-                <Avatar className="h-12 w-12 border-2 border-white">
-                    <AvatarImage src={wrestler?.imageUrl} alt={wrestlerName} />
-                    <AvatarFallback>{wrestlerName.substring(0, 2)}</AvatarFallback>
-                </Avatar>
-                <div>
-                    <h1 className="text-xl font-bold text-white">{wrestlerName}</h1>
-                    <p className="text-sm text-white/80">Historial de Combates</p>
-                </div>
+                <h1 className="text-xl font-bold text-white">{wrestlerName}</h1>
             </div>
             <div className="w-24"></div>
         </div>
       </header>
 
       <div className="container mx-auto max-w-6xl px-4 py-8">
-        <WrestlerDetails wrestlerName={wrestlerName} />
+        <div className="flex flex-col md:flex-row gap-8 items-start">
+            {wrestler?.imageUrl && (
+              <div className="md:w-1/3 flex-shrink-0">
+                  <div className="rounded-lg overflow-hidden border shadow-lg">
+                      <Image 
+                          src={wrestler.imageUrl}
+                          alt={wrestlerName}
+                          width={400}
+                          height={600}
+                          className="w-full h-auto object-cover"
+                      />
+                  </div>
+              </div>
+            )}
+            <div className="flex-grow">
+              <WrestlerDetails wrestlerName={wrestlerName} />
+            </div>
+        </div>
       </div>
     </main>
   );

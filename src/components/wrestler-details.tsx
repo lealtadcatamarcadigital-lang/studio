@@ -5,11 +5,11 @@ import React, { useMemo } from 'react';
 import Link from 'next/link';
 import type { Match } from '@/lib/events-data';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
-import { flattenEvents, getEventTypeDisplay } from './event-grid';
+import { flattenEvents, getEventTypeDisplay, getMonthNumber } from './event-grid';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { CalendarDays, Star, Tv, Ticket } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface WrestlerDetailsProps {
   wrestlerName: string;
@@ -56,31 +56,40 @@ export function WrestlerDetails({ wrestlerName }: WrestlerDetailsProps) {
     <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card>
-                <CardContent className="p-4">
-                    <h3 className="font-semibold text-muted-foreground">Total de Luchas</h3>
-                    <p className="text-4xl font-bold">{wrestlerMatches.length}</p>
+                <CardHeader className="p-4 pb-0">
+                    <CardTitle className="text-sm font-semibold text-muted-foreground">Total de Luchas</CardTitle>
+                </CardHeader>
+                <CardContent className="p-4 pt-0">
+                    <p className="text-3xl font-bold">{wrestlerMatches.length}</p>
                 </CardContent>
             </Card>
             <Card className="border-red-500/50">
-                <CardContent className="p-4">
-                    <h3 className="font-semibold text-red-500">Luchas en RAW</h3>
-                    <p className="text-4xl font-bold">{stats.raw || 0}</p>
+                <CardHeader className="p-4 pb-0">
+                    <CardTitle className="text-sm font-semibold text-red-500">Luchas en RAW</CardTitle>
+                </CardHeader>
+                <CardContent className="p-4 pt-0">
+                    <p className="text-3xl font-bold">{stats.raw || 0}</p>
                 </CardContent>
             </Card>
             <Card className="border-blue-500/50">
-                <CardContent className="p-4">
-                    <h3 className="font-semibold text-blue-500">Luchas en SmackDown</h3>
-                    <p className="text-4xl font-bold">{stats.smackdown || 0}</p>
+                <CardHeader className="p-4 pb-0">
+                    <CardTitle className="text-sm font-semibold text-blue-500">Luchas en SmackDown</CardTitle>
+                </CardHeader>
+                <CardContent className="p-4 pt-0">
+                    <p className="text-3xl font-bold">{stats.smackdown || 0}</p>
                 </CardContent>
             </Card>
             <Card className="border-amber-500/50">
-                <CardContent className="p-4">
-                    <h3 className="font-semibold text-amber-500">Luchas en PPV</h3>
-                    <p className="text-4xl font-bold">{stats.ppv || 0}</p>
+                <CardHeader className="p-4 pb-0">
+                    <CardTitle className="text-sm font-semibold text-amber-500">Luchas en PPV</CardTitle>
+                </CardHeader>
+                <CardContent className="p-4 pt-0">
+                    <p className="text-3xl font-bold">{stats.ppv || 0}</p>
                 </CardContent>
             </Card>
         </div>
-
+        
+        <h2 className="text-2xl font-bold pt-4">Historial de Combates</h2>
         <div className="space-y-4">
             {wrestlerMatches.map((eventItem, index) => {
                 const matchData = eventItem.match;
@@ -101,7 +110,7 @@ export function WrestlerDetails({ wrestlerName }: WrestlerDetailsProps) {
                                 <div className="flex items-center justify-between text-sm text-muted-foreground">
                                     <div className='flex items-center gap-2'>
                                         <CalendarDays className="h-4 w-4" />
-                                        <span>{new Date(eventItem.year, new Date(Date.parse(eventItem.month +" 1, 2000")).getMonth(), parseInt(eventItem.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                                        <span>{new Date(eventItem.year, getMonthNumber(eventItem.month), parseInt(eventItem.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                                     </div>
                                     {rating && (
                                         <div className="flex items-center gap-1 text-amber-500">
