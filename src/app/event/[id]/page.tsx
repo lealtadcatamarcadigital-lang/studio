@@ -24,7 +24,7 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
         "The Rock", "Stone Cold Steve Austin", "Triple H", "The Undertaker", "Mankind", "Cactus Jack", 
         "The Dudley Boyz", "Bubba Ray Dudley", "D-Von Dudley", "The Hardy Boyz", "Matt Hardy", "Jeff Hardy", 
         "Edge & Christian", "Edge", "Christian", "Kurt Angle", "Chris Jericho", "Chris Benoit", "Eddie Guerrero", 
-        "Dean Malenko", "Perry Saturn", "Big Show", "Kane", "Rikishi", "X-Pac", "Road Dogg", "Billy Gunn", "Tazz",
+        "Dean Malenko", "Perry Saturn", "Big Show", "The Big Show", "Kane", "Rikishi", "X-Pac", "Road Dogg", "Billy Gunn", "Tazz",
         "Al Snow", "Test", "Albert", "Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
         "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grandmaster Sexay", 
         "The Acolytes", "Faarooq", "Bradshaw", "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", 
@@ -65,9 +65,9 @@ const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
     const parsedMatch = parseWrestlers(matchText);
 
     return (
-        <div class="bg-card border rounded-lg p-3">
-            <div class="flex justify-between items-start">
-                <p class="font-semibold text-card-foreground">
+        <div className="bg-card border rounded-lg p-3">
+            <div className="flex justify-between items-start">
+                <p className="font-semibold text-card-foreground">
                     {parsedMatch.map((part, index) => 
                         part.wrestler ? (
                             <Link key={index} href={`/wrestler/${part.text.replace(/ /g, '_')}?from=/event/${eventId}`} className="text-primary hover:underline">
@@ -79,14 +79,14 @@ const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
                     )}
                 </p>
                 {rating && (
-                    <div class="flex items-center gap-1 text-amber-500 flex-shrink-0 ml-2">
-                        <Star class="h-4 w-4 fill-current" />
-                        <span class="font-bold text-sm">{rating.toFixed(1)}</span>
+                    <div className="flex items-center gap-1 text-amber-500 flex-shrink-0 ml-2">
+                        <Star className="h-4 w-4 fill-current" />
+                        <span className="font-bold text-sm">{rating.toFixed(1)}</span>
                     </div>
                 )}
             </div>
              {typeof match !== 'string' && match.match.includes(":") && (
-                 <p class="text-red-600 dark:text-red-500 text-xs font-bold tracking-wider uppercase mt-1">{match.match.split(':').slice(0, 1).join(':').trim()}</p>
+                 <p className="text-red-600 dark:text-red-500 text-xs font-bold tracking-wider uppercase mt-1">{match.match.split(':').slice(0, 1).join(':').trim()}</p>
             )}
         </div>
     );
