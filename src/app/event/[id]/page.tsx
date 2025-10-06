@@ -2,10 +2,10 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, CalendarDays, ChevronDown, CheckCircle, Circle, Eye, EyeOff, Info, ListChecks, MapPin, Star, Ticket, Tv } from 'lucide-react';
+import { ArrowLeft, CalendarDays, ChevronDown, CheckCircle, Circle, Eye, EyeOff, Info, ListChecks, MapPin, Star, Ticket } from 'lucide-react';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
 import { flattenEvents, getMonthNumber, getEventTypeDisplay, type DetailedEvent, type EventStatus, type EventStatusMap, getShowBadgeStyle } from '@/components/event-grid';
 import { Button } from '@/components/ui/button';
@@ -21,7 +21,7 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
     const title = parts.length > 1 ? `${parts[0]}: ` : '';
 
     const wrestlerNames = new Set([
-        "The Rock", "Triple H", "The Big Show", "Mankind", "Cactus Jack", "Stone Cold Steve Austin", "The Undertaker", "Kane", "Kurt Angle", "Chris Jericho", 
+        "The Rock", "Triple H", "Big Show", "The Big Show", "Mankind", "Cactus Jack", "Stone Cold Steve Austin", "The Undertaker", "Kane", "Kurt Angle", "Chris Jericho", 
         "Chris Benoit", "Eddie Guerrero", "Dean Malenko", "Perry Saturn", "X-Pac", "Road Dogg", "Billy Gunn", "Edge", "Christian", "Jeff Hardy", "Matt Hardy", 
         "The Dudley Boyz", "Bubba Ray Dudley", "D-Von Dudley", "Rikishi", "Tazz", "Al Snow", "Test", "Albert", "Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
         "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grandmaster Sexay", "The Acolytes", "Faarooq", "Bradshaw", 
@@ -50,14 +50,6 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
             }
         }
     });
-
-    // Post-processing for "Big Show"
-    for (let i = 0; i < result.length; i++) {
-        if (result[i].text.trim() === "Big Show" || result[i].text.trim() === "The Big Show") {
-            result[i].wrestler = true;
-        }
-    }
-
 
     return result;
 };
