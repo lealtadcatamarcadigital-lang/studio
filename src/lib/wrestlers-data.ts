@@ -52,6 +52,9 @@ export const wrestlersData: Record<string, WrestlerData> = {
     "Bubba Ray Dudley": {
         imageUrl: "https://i.pinimg.com/1200x/f2/24/ab/f224abee2dce0349adde6e6122a73804.jpg"
     },
+    "D-Von Dudley": {
+        imageUrl: "https://i.pinimg.com/1200x/f2/24/ab/f224abee2dce0349adde6e6122a73804.jpg"
+    },
     "Lita": {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/2i0Fp4yY9a53lJjP2D3eHnOHJ5A.jpg"
     },
@@ -69,5 +72,14 @@ export const wrestlersData: Record<string, WrestlerData> = {
     },
     "Rikishi": {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/hX66V51aP6Pysd11pbcS28tIuW.jpg"
+    },
+    "Scotty 2 Hotty": {
+        imageUrl: "https://i.pinimg.com/736x/e0/5a/1b/e05a1b74540d71c68e9cb4149c826577.jpg"
+    },
+    "Grandmaster Sexay": {
+        imageUrl: "https://i.pinimg.com/736x/e0/5a/1b/e05a1b74540d71c68e9cb4149c826577.jpg"
+    },
+    "Too Cool": {
+        imageUrl: "https://i.pinimg.com/736x/e0/5a/1b/e05a1b74540d71c68e9cb4149c826577.jpg"
     }
 };
