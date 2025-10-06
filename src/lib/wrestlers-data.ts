@@ -8,7 +8,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/kuqFzlYMc2IrsOyPznMd1FroeGq.jpg"
     },
     "Triple H": {
-        imageUrl: "https://static.wikia.nocookie.net/wwe/images/3/3d/Triple_H.jpg/revision/latest?cb=20110126154317&path-prefix=es"
+        imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhT0o-nX47EEFRb18ZMIR1cJ_AoQgn4NdLS8I3G0Vt3fHlKDmhOoisAZbSx7xBKnSbmRplqwYu3qAoWf08qrqyoFGFg8Vzb1pA1flYcFFbScMZHMlFyCHELFN7sahiWBfqNZp2IVXzDkRk/s1600/triple-h-1-sized.jpg"
     },
     "Stone Cold Steve Austin": {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/5v4p83y5v33dI83L6n2a1CNu3dM.jpg"
