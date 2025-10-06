@@ -74,6 +74,6 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://i.pinimg.com/736x/3a/83/c4/3a83c444a376e171bf11d1433e4d758e.jpg"
     },
     "Bubba Ray Dudley": {
-        imageUrl: "https://i.pinimg.com/736x/12/17/08/121708a7ed826e0aa8c76e1e201c8baf.jpg"
+        imageUrl: "https://i.pinimg.com/1200x/f2/24/ab/f224abee2dce0349adde6e6122a73804.jpg"
     }
 };
