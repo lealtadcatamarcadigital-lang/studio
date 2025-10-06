@@ -50,7 +50,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/g5w5wYtzzrF1aMYt23C1sXW3zF1.jpg"
     },
     "Bubba Ray Dudley": {
-        imageUrl: "https://i.pinimg.com/1200x/f2/24/ab/f224abee2dce0349adde6e6122a73804.jpg"
+        imageUrl: "https://i.pinimg.com/736x/a6/c0/27/a6c0279dd8fa0740840459bbf62c22f4.jpg"
     },
     "D-Von Dudley": {
         imageUrl: "https://i.pinimg.com/1200x/f2/24/ab/f224abee2dce0349adde6e6122a73804.jpg"
