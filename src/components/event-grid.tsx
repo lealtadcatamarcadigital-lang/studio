@@ -30,6 +30,7 @@ export type EventStatus = "disponible" | "visto" | "no-visto";
 export type EventStatusMap = { [eventId: string]: EventStatus };
 
 const SCROLL_POSITION_KEY = 'attitude-rewind-scroll-position';
+const OPEN_COLLAPSIBLES_KEY = 'attitude-rewind-open-collapsibles';
 
 export const flattenEvents = (data: MonthData[]): DetailedEvent[] => {
   const allEvents: DetailedEvent[] = [];
@@ -94,8 +95,12 @@ export function EventGrid({ events }: EventGridProps) {
       if (storedStatuses) {
         setEventStatuses(JSON.parse(storedStatuses));
       }
+      const storedCollapsibles = localStorage.getItem(OPEN_COLLAPSIBLES_KEY);
+      if (storedCollapsibles) {
+        setOpenCollapsibles(JSON.parse(storedCollapsibles));
+      }
     } catch (error) {
-      console.error("Could not parse event statuses from localStorage:", error);
+      console.error("Could not parse data from localStorage:", error);
     }
   }, []);
 
@@ -116,7 +121,15 @@ export function EventGrid({ events }: EventGridProps) {
   };
 
   const toggleCollapsible = (monthId: string) => {
-    setOpenCollapsibles(prev => ({ ...prev, [monthId]: !prev[monthId] }));
+    setOpenCollapsibles(prev => {
+      const newState = { ...prev, [monthId]: !prev[monthId] };
+      try {
+        localStorage.setItem(OPEN_COLLAPSIBLES_KEY, JSON.stringify(newState));
+      } catch (error) {
+        console.error("Could not save collapsible state to localStorage:", error);
+      }
+      return newState;
+    });
   };
 
   const groupedEvents = useMemo(() => {
