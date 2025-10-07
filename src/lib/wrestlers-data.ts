@@ -129,6 +129,9 @@ export const wrestlersData: Record<string, WrestlerData> = {
     },
     "Billy Gunn": {
         imageUrl: "https://i.pinimg.com/1200x/8f/ad/5f/8fad5f856aa3e371f28e6e25dfd0364a.jpg"
+    },
+    "The New Age Outlaws": {
+        imageUrl: "https://i.pinimg.com/736x/fe/74/44/fe74447222a8dd741517c6217257ac01.jpg"
     }
 };
 
