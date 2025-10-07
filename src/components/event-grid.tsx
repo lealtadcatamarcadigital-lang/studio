@@ -147,7 +147,7 @@ export function EventGrid({ events }: EventGridProps) {
                 open={openCollapsibles[month] ?? true}
                 onOpenChange={() => toggleCollapsible(month)}
             >
-                <div className="sticky top-[316px] md:top-[284px] z-10 bg-background/90 backdrop-blur-sm -mx-4 px-4 py-3 mb-4 border-b">
+                <div className="sticky top-[276px] md:top-[284px] z-10 bg-background/90 backdrop-blur-sm -mx-4 px-4 py-3 mb-4 border-b">
                     <CollapsibleTrigger asChild>
                         <div className="flex items-center gap-4 cursor-pointer group">
                             <h2 className="text-2xl font-bold">{month}</h2>
