@@ -16,7 +16,13 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const getShowIcon = (type: 'raw' | 'smackdown' | 'ppv') => {
-    return type === 'ppv' ? <Ticket className="h-4 w-4" /> : <Tv className="h-4 w-4" />;
+    if (type === 'raw') {
+        return <Image src="https://i.pinimg.com/736x/52/b7/9f/52b79f70e2da83f192ba455d42a0ef9f.jpg" alt="RAW" width={24} height={24} className="h-6 w-auto p-1 rounded-sm" />;
+    }
+    if (type === 'smackdown') {
+        return <Image src="https://i.pinimg.com/736x/e8/e4/9f/e8e49feb5765132c8583cb6e17f9f5f2.jpg" alt="SmackDown" width={24} height={24} className="h-6 w-auto p-1 rounded-sm" />;
+    }
+    return <Ticket className="h-4 w-4" />;
 };
 
 const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] => {
@@ -278,6 +284,8 @@ export default function EventPage() {
 
     
 }
+
+    
 
     
 
