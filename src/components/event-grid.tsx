@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import Link from 'next/link';
+import Image from "next/image";
 import {
   Tv,
   Ticket,
@@ -143,6 +144,17 @@ export function EventGrid({ events }: EventGridProps) {
     }, {});
   }, [events]);
 
+  const getShowImage = (type: EventType, event: DetailedEvent) => {
+    if (type === 'ppv') {
+      return (event as PPVEvent).coverUrl || 'https://i.imgur.com/S6Imh3m.png';
+    }
+    const images = {
+      raw: 'https://i.imgur.com/S6Imh3m.png',
+      smackdown: 'https://i.imgur.com/P4u2P12.png',
+    };
+    return images[type] || 'https://i.imgur.com/S6Imh3m.png';
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="space-y-8">
@@ -171,8 +183,18 @@ export function EventGrid({ events }: EventGridProps) {
                         <Link href={`/event/${event.id}`} key={event.id} onClick={handleEventClick} scroll={false}>
                             <Card className={cn("border-2", styles.card, "hover:shadow-lg transition-shadow")}>
                             <CardContent className="p-4 flex items-center gap-4">
-                                <div className={cn("h-16 w-16 flex flex-col items-center justify-center rounded-lg", styles.dateBox)}>
-                                    <span className="text-3xl font-bold">{event.date}</span>
+                                <div className="h-16 w-16 flex-shrink-0 relative">
+                                  <Image 
+                                    src={getShowImage(event.type, event)}
+                                    alt={getEventTypeDisplay(event.type)}
+                                    layout="fill"
+                                    objectFit="cover"
+                                    className="rounded-lg"
+                                  />
+                                  <div className="absolute inset-0 bg-black/20 rounded-lg"></div>
+                                  <div className="absolute bottom-1 left-1/2 -translate-x-1/2 bg-black/50 text-white text-xs font-bold px-1.5 py-0.5 rounded">
+                                    {event.date}
+                                  </div>
                                 </div>
                                 <div className="flex-grow">
                                     <h3 className="font-bold text-lg">
