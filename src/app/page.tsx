@@ -9,6 +9,8 @@ import type { EventType, DetailedEvent } from '@/components/event-grid';
 import { NextShowCarousel } from "@/components/next-show-carousel";
 
 const SCROLL_POSITION_KEY = 'attitude-rewind-scroll-position';
+const SHOW_FILTER_KEY = 'attitude-rewind-show-filter';
+const YEAR_FILTER_KEY = 'attitude-rewind-year-filter';
 
 export default function Home() {
   const [showFilter, setShowFilter] = useState<EventType | 'all'>('all');
@@ -23,10 +25,34 @@ export default function Home() {
       if (storedStatuses) {
         setEventStatuses(JSON.parse(storedStatuses));
       }
+      const storedShowFilter = localStorage.getItem(SHOW_FILTER_KEY);
+      if (storedShowFilter) {
+        setShowFilter(storedShowFilter as EventType | 'all');
+      }
+      const storedYearFilter = localStorage.getItem(YEAR_FILTER_KEY);
+      if (storedYearFilter) {
+        setYearFilter(storedYearFilter);
+      }
     } catch (error) {
-      console.error("Could not parse event statuses from localStorage:", error);
+      console.error("Could not parse data from localStorage:", error);
     }
   }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(SHOW_FILTER_KEY, showFilter);
+    } catch (error) {
+      console.error("Could not save show filter to localStorage:", error);
+    }
+  }, [showFilter]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(YEAR_FILTER_KEY, yearFilter);
+    } catch (error) {
+      console.error("Could not save year filter to localStorage:", error);
+    }
+  }, [yearFilter]);
 
   useEffect(() => {
     // Restore scroll position when component mounts

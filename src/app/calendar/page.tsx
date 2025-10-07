@@ -14,6 +14,8 @@ import { Badge } from '@/components/ui/badge';
 import { getShowBadgeStyle, getEventTypeDisplay } from '@/components/event-grid';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+const CALENDAR_DATE_KEY = 'attitude-rewind-calendar-date';
+
 export default function CalendarPage() {
   const router = useRouter();
   const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
@@ -26,10 +28,22 @@ export default function CalendarPage() {
       if (storedStatuses) {
         setEventStatuses(JSON.parse(storedStatuses));
       }
+      const storedDate = localStorage.getItem(CALENDAR_DATE_KEY);
+      if (storedDate) {
+        setCurrentMonth(new Date(storedDate));
+      }
     } catch (error) {
-      console.error("Could not parse event statuses from localStorage:", error);
+      console.error("Could not parse data from localStorage:", error);
     }
   }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(CALENDAR_DATE_KEY, currentMonth.toISOString());
+    } catch (error) {
+      console.error("Could not save calendar date to localStorage:", error);
+    }
+  }, [currentMonth]);
 
   const handleEventClick = (event: DetailedEvent) => {
     router.push(`/event/${event.id}`);
@@ -183,4 +197,3 @@ export default function CalendarPage() {
     </main>
   );
 }
-
