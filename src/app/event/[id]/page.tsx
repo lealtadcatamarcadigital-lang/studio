@@ -28,13 +28,13 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
         "Al Snow", "Test", "Albert", "Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
         "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grandmaster Sexay", 
         "The Acolytes", "The APA", "Faarooq", "Bradshaw", "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", 
-        "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", "T & A", 
+        "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", "T & A", "The Hollys",
         "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", 
         "Los Conquistadores", "Right to Censor", "Drew Carey", "The Radicalz", "D-Generation X", "DX", 
         "The New Age Outlaws", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
         "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", 
-        "Too Cool", "The Hollys", "Prince Albert", "Mark Henry", "Head Cheese", "Essa Rios", "Ivory", 
-        "Sgt. Slaughter", "Brian Christopher"
+        "Too Cool", "Head Cheese", "Essa Rios", "Ivory", "Mark Henry",
+        "Sgt. Slaughter", "Brian Christopher", "Tori", "Rhyno", "Molly Holly"
     ]);
     
     const sortedWrestlers = [...wrestlerNames].sort((a, b) => b.length - a.length);
@@ -73,7 +73,7 @@ const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
                 <p className="font-semibold text-card-foreground">
                     {parsedMatch.map((part, index) => 
                         part.wrestler ? (
-                            <Link key={index} href={`/wrestler/${part.text.replace(/ /g, '_')}?from=/event/${eventId}`} className="text-primary hover:underline">
+                            <Link key={index} href={`/wrestler/${part.text.trim().replace(/ /g, '_')}?from=/event/${eventId}`} className="text-primary hover:underline">
                                 {part.text}
                             </Link>
                         ) : (
