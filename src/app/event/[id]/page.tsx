@@ -32,7 +32,8 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
         "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", 
         "Los Conquistadores", "Right to Censor", "Drew Carey", "The Radicalz", "D-Generation X", "DX", 
         "The New Age Outlaws", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
-        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", "Too Cool", "The Hollys", "Prince Albert"
+        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", "Too Cool", "The Hollys", "Prince Albert",
+        "Mark Henry", "Head Cheese", "Essa Rios", "Ivory", "Sgt. Slaughter", "Brian Christopher"
     ]);
     
     const sortedWrestlers = [...wrestlerNames].sort((a, b) => b.length - a.length);
