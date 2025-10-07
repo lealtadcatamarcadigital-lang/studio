@@ -44,7 +44,7 @@ export function NextShowCarousel({ events }: NextShowCarouselProps) {
                             <Link href={`/event/${event.id}`}>
                                 <Card className="overflow-hidden group hover:border-primary">
                                     <CardContent className="p-0">
-                                        <div className="relative h-40 w-full">
+                                        <div className="relative h-48 w-full">
                                             <Image
                                                 src={getShowImage(event.type, event)}
                                                 alt={event.type === 'ppv' ? (event as PPVEvent).name : getEventTypeDisplay(event.type)}
