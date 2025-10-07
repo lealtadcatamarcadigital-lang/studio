@@ -20,7 +20,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/7lB22SADr3sC0a0a5yS2mX08fH.jpg"
     },
     "Kurt Angle": {
-        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/ld0zVv2tT04n5aQf1t4pC9aE2O.jpg"
+        imageUrl: "https://i.pinimg.com/736x/6c/47/d3/6c47d34f4324ce451d76eb0afa0ce5b9.jpg"
     },
     "Chris Jericho": {
         imageUrl: "https://i.pinimg.com/1200x/76/43/20/764320106150e83a4769085e675fb23f.jpg"
@@ -56,7 +56,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/g5w5wYtzzrFp4yY9a53lJjP2D3eHnOHJ5A.jpg"
     },
     "Bubba Ray Dudley": {
-        imageUrl: "https://i.pinimg.com/736x/a6/c0/27/a6c0279dd8fa0740840459bbf62c22f4.jpg"
+        imageUrl: "https://i.pinimg.com/736x/a6/c0/27/a6c0279dd8fa0740880459bbf62c22f4.jpg"
     },
     "D-Von Dudley": {
         imageUrl: "https://i.pinimg.com/736x/48/2d/57/482d57adbee357c6c9c7c83d537a0acb.jpg"
