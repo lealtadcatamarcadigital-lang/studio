@@ -53,7 +53,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/4c44E72d242hVqh33D60gbyd6lT.jpg"
     },
     "Jeff Hardy": {
-        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/g5w5wYtzzrF1aMYt23C1sXW3zF1.jpg"
+        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/g5w5wYtzzrFp4yY9a53lJjP2D3eHnOHJ5A.jpg"
     },
     "Bubba Ray Dudley": {
         imageUrl: "https://i.pinimg.com/736x/a6/c0/27/a6c0279dd8fa0740840459bbf62c22f4.jpg"
@@ -105,7 +105,12 @@ export const wrestlersData: Record<string, WrestlerData> = {
     },
     "Steve Blackman": {
         imageUrl: "https://i.pinimg.com/736x/17/55/aa/1755aa102cb51112d5ffbe68e2b32238.jpg"
+    },
+    "The Fabulous Moolah": {
+        imageUrl: "https://i.pinimg.com/736x/e8/97/7a/e8977abc69c710d32a09397a310e4184.jpg"
     }
 };
+
+    
 
     
