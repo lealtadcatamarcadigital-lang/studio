@@ -150,7 +150,7 @@ export function EventGrid({ events }: EventGridProps) {
     }
     const images = {
       raw: 'https://i.pinimg.com/736x/52/b7/9f/52b79f70e2da83f192ba455d42a0ef9f.jpg',
-      smackdown: 'https://i.imgur.com/P4u2P12.png',
+      smackdown: 'https://i.pinimg.com/736x/e8/e4/9f/e8e49feb5765132c8583cb6e17f9f5f2.jpg',
     };
     return images[type] || 'https://i.imgur.com/S6Imh3m.png';
   };
