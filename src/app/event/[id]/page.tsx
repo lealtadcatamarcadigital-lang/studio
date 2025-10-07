@@ -27,13 +27,14 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
         "Dean Malenko", "Perry Saturn", "The Big Show", "Big Show", "Kane", "Rikishi", "X-Pac", "Road Dogg", "Billy Gunn", "Tazz",
         "Al Snow", "Test", "Albert", "Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
         "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grandmaster Sexay", 
-        "The Acolytes", "Faarooq", "Bradshaw", "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", 
+        "The Acolytes", "The APA", "Faarooq", "Bradshaw", "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", 
         "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", "T & A", 
         "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", 
         "Los Conquistadores", "Right to Censor", "Drew Carey", "The Radicalz", "D-Generation X", "DX", 
         "The New Age Outlaws", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
-        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", "Too Cool", "The Hollys", "Prince Albert",
-        "Mark Henry", "Head Cheese", "Essa Rios", "Ivory", "Sgt. Slaughter", "Brian Christopher"
+        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", 
+        "Too Cool", "The Hollys", "Prince Albert", "Mark Henry", "Head Cheese", "Essa Rios", "Ivory", 
+        "Sgt. Slaughter", "Brian Christopher"
     ]);
     
     const sortedWrestlers = [...wrestlerNames].sort((a, b) => b.length - a.length);
