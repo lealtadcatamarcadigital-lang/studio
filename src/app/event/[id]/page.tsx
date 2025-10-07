@@ -34,7 +34,8 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
         "The New Age Outlaws", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
         "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", 
         "Too Cool", "Head Cheese", "Essa Rios", "The Brooklyn Brawler", "Chaz", "Tori", "Rhyno", "Molly Holly",
-        "Sgt. Slaughter", "Brian Christopher", "Steven Richards", "Jerry Lawler", "Raven"
+        "Sgt. Slaughter", "Brian Christopher", "Steven Richards", "Jerry Lawler", "Raven", "Haku", "Kaientai",
+        "Taka Michinoku", "Funaki"
     ]);
     
     const sortedWrestlers = [...wrestlerNames].sort((a, b) => b.length - a.length);
@@ -270,3 +271,5 @@ export default function EventPage() {
 
     
 }
+
+    
