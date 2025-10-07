@@ -108,9 +108,10 @@ export const wrestlersData: Record<string, WrestlerData> = {
     },
     "The Fabulous Moolah": {
         imageUrl: "https://i.pinimg.com/736x/e8/97/7a/e8977abc69c710d32a09397a310e4184.jpg"
+    },
+    "Hardcore Holly": {
+        imageUrl: "https://i.pinimg.com/736x/dd/49/bf/dd49bfee66cfc59eeb6d7a0cca7f5b40.jpg"
     }
 };
-
-    
 
     
