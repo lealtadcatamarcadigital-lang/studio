@@ -17,7 +17,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/11PTBq0A4wJFK2N9fTjfx3b22bY.jpg"
     },
     "Kane": {
-        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/7lB22SADr3sC0a0a5yS2mX08fH.jpg"
+        imageUrl: "https://i.pinimg.com/736x/64/ba/bf/64babffd74bd340435e0c260c973d792.jpg"
     },
     "Kurt Angle": {
         imageUrl: "https://i.pinimg.com/736x/6c/47/d3/6c47d34f4324ce451d76eb0afa0ce5b9.jpg"
