@@ -92,7 +92,7 @@ export function Header({
   );
 
   return (
-    <header className="sticky top-0 z-20 bg-card shadow-md" style={{ backgroundColor: '#2A3B57' }}>
+    <header className="sticky top-0 z-30 bg-card shadow-md" style={{ backgroundColor: '#2A3B57' }}>
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between gap-4">
             <Link href="/">
