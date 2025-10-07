@@ -5,7 +5,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, CalendarDays, ChevronDown, CheckCircle, Circle, Eye, EyeOff, Info, ListChecks, MapPin, Star, Ticket } from 'lucide-react';
+import { ArrowLeft, CalendarDays, ChevronDown, CheckCircle, Circle, Eye, EyeOff, Info, ListChecks, MapPin, Star } from 'lucide-react';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
 import { flattenEvents, getMonthNumber, getEventTypeDisplay, type DetailedEvent, type EventStatus, type EventStatusMap, getShowBadgeStyle } from '@/components/event-grid';
 import { Button } from '@/components/ui/button';
@@ -24,7 +24,7 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
         "The Rock", "Stone Cold Steve Austin", "Triple H", "The Undertaker", "Mankind", "Cactus Jack", 
         "The Dudley Boyz", "Bubba Ray Dudley", "D-Von Dudley", "The Hardy Boyz", "Matt Hardy", "Jeff Hardy", 
         "Edge & Christian", "Edge", "Christian", "Kurt Angle", "Chris Jericho", "Chris Benoit", "Eddie Guerrero", 
-        "Dean Malenko", "Perry Saturn", "Big Show", "The Big Show", "Kane", "Rikishi", "X-Pac", "Road Dogg", "Billy Gunn", "Tazz",
+        "Dean Malenko", "Perry Saturn", "The Big Show", "Big Show", "Kane", "Rikishi", "X-Pac", "Road Dogg", "Billy Gunn", "Tazz",
         "Al Snow", "Test", "Albert", "Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
         "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grandmaster Sexay", 
         "The Acolytes", "Faarooq", "Bradshaw", "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", 
@@ -32,10 +32,11 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
         "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", 
         "Los Conquistadores", "Right to Censor", "Drew Carey", "The Radicalz", "D-Generation X", "DX", 
         "The New Age Outlaws", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
-        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", "Too Cool", "The Hollys"
+        "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", "Too Cool", "The Hollys", "Prince Albert"
     ]);
     
-    const regex = new RegExp(`(${[...wrestlerNames].sort((a,b) => b.length - a.length).map(name => name.replace(/[.*+?^${'()'}|\\[\\]\\\\]/g, '\\$&')).join('|')}|vs\\.|&)`, 'g');
+    const sortedWrestlers = [...wrestlerNames].sort((a, b) => b.length - a.length);
+    const regex = new RegExp(`(${sortedWrestlers.map(name => name.replace(/[.*+?^${'()'}|\\[\\]\\\\]/g, '\\$&')).join('|')})`, 'g');
     const segments = mainMatch.split(regex).filter(Boolean);
 
     const result: { text: string; wrestler: boolean }[] = [{ text: title, wrestler: false }];
@@ -43,7 +44,7 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
     segments.forEach(segment => {
         const trimmedSegment = segment.trim();
         if (wrestlerNames.has(trimmedSegment)) {
-            result.push({ text: trimmedSegment, wrestler: true });
+            result.push({ text: segment, wrestler: true });
         } else {
             const last = result[result.length - 1];
             if (last && !last.wrestler) {

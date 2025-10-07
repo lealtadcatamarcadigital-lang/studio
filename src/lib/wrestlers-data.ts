@@ -8,7 +8,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://i.pinimg.com/1200x/59/21/da/5921da5ccc564e14d3a63bfb94636ab0.jpg"
     },
     "Triple H": {
-        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/f8aR4yVaxbdb0Jb5wG2A5C9wH5N.jpg"
+        imageUrl: "https://i.pinimg.com/1200x/bd/80/9a/bd809a6bf61a345a3f666d2f3472c084.jpg"
     },
     "Stone Cold Steve Austin": {
         imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhxOY2_A9a_sB-hL2b_OrkY3atC-Iq2F0JTOkY-5qA8yVqBwS1h7gDAaxz2yX8a_f0DqRE2g3-T2o4_xXj8I8UdpbVv9J9F-DAZY2eTf1ssn7bAW72g8L7jgdV6QZ12DCEJpC-5lTf3g0k_BfJmQ41aKk9Y0j_kQ1e8Y9zT9jG2rC_wL4xSg/s1600/stone-cold-steve-austin.jpg"
@@ -26,7 +26,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://i.pinimg.com/1200x/76/43/20/764320106150e83a4769085e675fb23f.jpg"
     },
     "Big Show": {
-        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/p2Y1sctn5i5bIHD9r1gJg8zRpl.jpg"
+        imageUrl: "https://i.pinimg.com/1200x/99/58/e9/9958e97e0c646757be5924e80a4a9ee2.jpg"
     },
     "Mick Foley": {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/Afb1T4zuH1aFm5M5W5hUotIrvB1.jpg"
@@ -53,7 +53,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/4c44E72d242hVqh33D60gbyd6lT.jpg"
     },
     "Jeff Hardy": {
-        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/g5w5wYtzzrFp4yY9a53lJjP2D3eHnOHJ5A.jpg"
+        imageUrl: "https://i.pinimg.com/736x/f2/b1/63/f2b163a50e103f68c40da844c36420e8.jpg"
     },
     "Bubba Ray Dudley": {
         imageUrl: "https://i.pinimg.com/736x/a6/c0/27/a6c0279dd8fa0740880459bbf62c22f4.jpg"
@@ -111,6 +111,24 @@ export const wrestlersData: Record<string, WrestlerData> = {
     },
     "Hardcore Holly": {
         imageUrl: "https://i.pinimg.com/736x/dd/49/bf/dd49bfee66cfc59eeb6d7a0cca7f5b40.jpg"
+    },
+    "Mae Young": {
+        imageUrl: "https://i.pinimg.com/736x/b9/fd/20/b9fd204fd3c71056f62d538382a4f3a1.jpg"
+    },
+    "Big Boss Man": {
+        imageUrl: "https://i.pinimg.com/736x/67/83/78/6783786ebab150982e2618dbe1c1d2d0.jpg"
+    },
+    "Prince Albert": {
+        imageUrl: "https://i.pinimg.com/736x/5d/a4/6d/5da46d7b63cbc93940882c31218b278e.jpg"
+    },
+    "The Acolytes": {
+        imageUrl: "https://i.pinimg.com/736x/60/a6/6e/60a66e86a09c18f098b1fa3758521553.jpg"
+    },
+    "Road Dogg": {
+        imageUrl: "https://i.pinimg.com/736x/58/2c/18/582c18559e09c7c4cada4fc300d5c3b2.jpg"
+    },
+    "Billy Gunn": {
+        imageUrl: "https://i.pinimg.com/1200x/8f/ad/5f/8fad5f856aa3e371f28e6e25dfd0364a.jpg"
     }
 };
 
