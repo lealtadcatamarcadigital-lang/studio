@@ -15,6 +15,7 @@ import { getShowBadgeStyle, getEventTypeDisplay } from '@/components/event-grid'
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const CALENDAR_DATE_KEY = 'attitude-rewind-calendar-date';
+const YEAR_FILTER_KEY = 'attitude-rewind-year-filter';
 
 export default function CalendarPage() {
   const router = useRouter();
@@ -28,12 +29,28 @@ export default function CalendarPage() {
       if (storedStatuses) {
         setEventStatuses(JSON.parse(storedStatuses));
       }
+      
+      let dateToSet = new Date();
       const storedDate = localStorage.getItem(CALENDAR_DATE_KEY);
       if (storedDate) {
-        setCurrentMonth(new Date(storedDate));
+        dateToSet = new Date(storedDate);
       }
+
+      const storedYearFilter = localStorage.getItem(YEAR_FILTER_KEY);
+      if (storedYearFilter && storedYearFilter !== 'all') {
+         dateToSet.setFullYear(parseInt(storedYearFilter));
+      } else if (!storedDate) {
+        // If no specific date is stored, and no year filter, default to 2000
+        dateToSet.setFullYear(2000);
+        dateToSet.setMonth(0);
+      }
+
+      setCurrentMonth(dateToSet);
+
     } catch (error) {
       console.error("Could not parse data from localStorage:", error);
+      // If parsing fails, set a sensible default
+      setCurrentMonth(new Date(2000, 0, 1));
     }
   }, []);
 
@@ -110,6 +127,12 @@ export default function CalendarPage() {
     const newDate = new Date(currentMonth);
     newDate.setFullYear(parseInt(year));
     setCurrentMonth(newDate);
+    // Also update the global year filter
+    try {
+      localStorage.setItem(YEAR_FILTER_KEY, year);
+    } catch (error) {
+       console.error("Could not save year filter to localStorage:", error);
+    }
   };
   
   const handleMonthChange = (month: string) => {
