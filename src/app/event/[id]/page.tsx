@@ -5,7 +5,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, CalendarDays, ChevronDown, CheckCircle, Circle, Eye, EyeOff, Info, ListChecks, MapPin, Star } from 'lucide-react';
+import { ArrowLeft, CalendarDays, ChevronDown, CheckCircle, Circle, Eye, EyeOff, Info, ListChecks, MapPin, Star, Ticket, Tv } from 'lucide-react';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
 import { flattenEvents, getMonthNumber, getEventTypeDisplay, type DetailedEvent, type EventStatus, type EventStatusMap, getShowBadgeStyle } from '@/components/event-grid';
 import { Button } from '@/components/ui/button';
@@ -14,6 +14,10 @@ import { cn } from '@/lib/utils';
 import type { Match } from '@/lib/events-data';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+const getShowIcon = (type: 'raw' | 'smackdown' | 'ppv') => {
+    return type === 'ppv' ? <Ticket className="h-4 w-4" /> : <Tv className="h-4 w-4" />;
+};
 
 const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] => {
     const parts = match.split(':');
@@ -179,7 +183,10 @@ export default function EventPage() {
                         
                         <div className="flex-grow space-y-6">
                             <div className="flex flex-wrap items-center gap-4 text-sm">
-                                <Badge className={cn("text-sm", getShowBadgeStyle(event.type))}>{getEventTypeDisplay(event.type)}</Badge>
+                                <Badge className={cn("text-sm gap-2", getShowBadgeStyle(event.type))}>
+                                    {getShowIcon(event.type)}
+                                    {getEventTypeDisplay(event.type)}
+                                </Badge>
                                 <div className="flex items-center gap-2 text-muted-foreground">
                                     <CalendarDays className="h-4 w-4" />
                                     <span>{new Date(event.year, getMonthNumber(event.month), parseInt(event.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
@@ -271,5 +278,7 @@ export default function EventPage() {
 
     
 }
+
+    
 
     
