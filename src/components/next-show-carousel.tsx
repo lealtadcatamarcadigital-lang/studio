@@ -27,7 +27,7 @@ export function NextShowCarousel({ events }: NextShowCarouselProps) {
   }
 
   return (
-    <div className="sticky top-16 z-20 bg-card/90 backdrop-blur-sm border-y">
+    <div className="sticky top-16 z-20 bg-card/90 backdrop-blur-sm border-y h-[272px]">
         <div className="container mx-auto px-4 py-8">
             <h2 className="text-2xl font-bold mb-4">Próximos Shows</h2>
             <Carousel
