@@ -33,7 +33,7 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
         "Los Conquistadores", "Right to Censor", "Drew Carey", "The Radicalz", "D-Generation X", "DX", 
         "The New Age Outlaws", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
         "The Kat", "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", 
-        "Too Cool", "Head Cheese", "Essa Rios", "Ivory", "Mark Henry",
+        "Too Cool", "Head Cheese", "Essa Rios", "Ivory", "Mark Henry", "The Brooklyn Brawler", "Chaz",
         "Sgt. Slaughter", "Brian Christopher", "Tori", "Rhyno", "Molly Holly"
     ]);
     
@@ -270,5 +270,3 @@ export default function EventPage() {
 
     
 }
-
-    
