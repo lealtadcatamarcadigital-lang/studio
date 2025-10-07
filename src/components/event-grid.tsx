@@ -149,7 +149,7 @@ export function EventGrid({ events }: EventGridProps) {
       return (event as PPVEvent).coverUrl || 'https://i.imgur.com/S6Imh3m.png';
     }
     const images = {
-      raw: 'https://i.imgur.com/S6Imh3m.png',
+      raw: 'https://i.pinimg.com/736x/52/b7/9f/52b79f70e2da83f192ba455d42a0ef9f.jpg',
       smackdown: 'https://i.imgur.com/P4u2P12.png',
     };
     return images[type] || 'https://i.imgur.com/S6Imh3m.png';
