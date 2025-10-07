@@ -28,18 +28,18 @@ export function NextShowCarousel({ events }: NextShowCarouselProps) {
 
   return (
     <div className="sticky top-16 z-20 bg-card/90 backdrop-blur-sm border-y h-[272px]">
-        <div className="container mx-auto px-4 py-8">
-            <h2 className="text-2xl font-bold mb-4">Próximos Shows</h2>
+        <div className="container mx-auto px-4 h-full flex flex-col justify-center">
+            <h2 className="text-2xl font-bold">Próximos Shows</h2>
             <Carousel
                 opts={{
                 align: 'start',
                 loop: false,
                 }}
-                className="w-full"
+                className="w-full mt-4"
             >
-                <CarouselContent>
+                <CarouselContent className="-ml-1">
                 {events.slice(0, 10).map((event, index) => (
-                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                    <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/3">
                         <div className="p-1">
                             <Link href={`/event/${event.id}`}>
                                 <Card className="overflow-hidden group hover:border-primary">
