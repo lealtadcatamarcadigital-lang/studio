@@ -3,7 +3,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Menu, Filter, Tv, Ticket, List, Calendar } from 'lucide-react';
+import { Menu, Filter, Tv, Ticket, List, Calendar, LayoutGrid } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -21,13 +21,15 @@ import {
 } from '@/components/ui/sheet';
 import { cn } from "@/lib/utils";
 import type { EventType } from '@/components/event-grid';
+import { usePathname } from 'next/navigation';
 
 interface HeaderProps {
-  showFilter: EventType | 'all';
-  onShowFilterChange: (value: EventType | 'all') => void;
-  yearFilter: string;
-  onYearFilterChange: (value: string) => void;
-  title: string;
+  showFilter?: EventType | 'all';
+  onShowFilterChange?: (value: EventType | 'all') => void;
+  yearFilter?: string;
+  onYearFilterChange?: (value: string) => void;
+  title?: string;
+  activePage?: 'grid' | 'calendar';
 }
 
 const showOptions: { value: EventType | 'all'; label: string; icon: React.ElementType }[] = [
@@ -49,6 +51,8 @@ export function Header({
   yearFilter,
   onYearFilterChange,
 }: HeaderProps) {
+  const pathname = usePathname();
+  const activePage = pathname === '/calendar' ? 'calendar' : 'grid';
 
   const FilterMenu = () => (
     <div className="flex items-center gap-2">
@@ -60,7 +64,7 @@ export function Header({
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-                <DropdownMenuRadioGroup value={showFilter} onValueChange={(val) => onShowFilterChange(val as EventType | 'all')}>
+                <DropdownMenuRadioGroup value={showFilter} onValueChange={(val) => onShowFilterChange?.(val as EventType | 'all')}>
                     {showOptions.map(show => (
                         <DropdownMenuRadioItem key={show.value} value={show.value}>
                             <show.icon className="mr-2 h-4 w-4" />
@@ -102,8 +106,20 @@ export function Header({
                 </h1>
             </Link>
 
-            <div className="hidden md:flex">
-                <FilterMenu />
+            <div className="hidden md:flex items-center gap-4">
+                {activePage === 'grid' && onShowFilterChange && <FilterMenu />}
+                <div className='flex items-center gap-2 ml-4'>
+                    <Link href="/">
+                        <Button variant={activePage === 'grid' ? 'secondary' : 'ghost'} size="icon">
+                            <LayoutGrid className="h-5 w-5" />
+                        </Button>
+                    </Link>
+                    <Link href="/calendar">
+                        <Button variant={activePage === 'calendar' ? 'secondary' : 'ghost'} size="icon">
+                            <Calendar className="h-5 w-5" />
+                        </Button>
+                    </Link>
+                </div>
             </div>
 
             <Sheet>
@@ -115,10 +131,26 @@ export function Header({
                 </SheetTrigger>
                 <SheetContent className="bg-card text-card-foreground">
                     <SheetHeader>
-                        <SheetTitle>Filtros</SheetTitle>
+                        <SheetTitle>Menú</SheetTitle>
                     </SheetHeader>
                     <div className="py-4 space-y-4">
-                       <div className="flex flex-col gap-4 p-4">
+                        <div className='flex flex-col gap-4 p-4'>
+                            <h3 className="font-semibold">Vistas</h3>
+                             <Link href="/">
+                                <Button variant={activePage === 'grid' ? 'secondary' : 'outline'} className="w-full justify-start">
+                                    <LayoutGrid className="mr-2 h-4 w-4" />
+                                    Grilla de Eventos
+                                </Button>
+                            </Link>
+                            <Link href="/calendar">
+                                <Button variant={activePage === 'calendar' ? 'secondary' : 'outline'} className="w-full justify-start">
+                                    <Calendar className="mr-2 h-4 w-4" />
+                                    Calendario
+                                </Button>
+                            </Link>
+                        </div>
+                        {activePage === 'grid' && onShowFilterChange && (
+                        <div className="flex flex-col gap-4 p-4">
                             <h3 className="font-semibold">Filtrar por Show</h3>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
@@ -158,6 +190,7 @@ export function Header({
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </div>
+                        )}
                     </div>
                 </SheetContent>
             </Sheet>

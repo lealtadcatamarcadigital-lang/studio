@@ -78,7 +78,7 @@ export default function Home() {
         onShowFilterChange={setShowFilter}
         yearFilter={yearFilter}
         onYearFilterChange={setYearFilter}
-        title="AttitudeRewind"
+        activePage="grid"
       />
       <NextShowCarousel events={upcomingEvents} />
       <EventGrid events={filteredEvents} />
