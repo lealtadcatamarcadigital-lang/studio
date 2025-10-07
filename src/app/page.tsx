@@ -2,18 +2,31 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from "react";
-import { EventGrid, flattenEvents } from '@/components/event-grid';
+import { EventGrid, flattenEvents, type EventStatusMap } from '@/components/event-grid';
 import { Header } from '@/components/header';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
-import type { EventType } from '@/components/event-grid';
+import type { EventType, DetailedEvent } from '@/components/event-grid';
+import { NextShowCarousel } from "@/components/next-show-carousel";
 
 const SCROLL_POSITION_KEY = 'attitude-rewind-scroll-position';
 
 export default function Home() {
   const [showFilter, setShowFilter] = useState<EventType | 'all'>('all');
   const [yearFilter, setYearFilter] = useState<string>('all');
+  const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
 
   const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
+
+  useEffect(() => {
+    try {
+      const storedStatuses = localStorage.getItem('attitude-rewind-statuses');
+      if (storedStatuses) {
+        setEventStatuses(JSON.parse(storedStatuses));
+      }
+    } catch (error) {
+      console.error("Could not parse event statuses from localStorage:", error);
+    }
+  }, []);
 
   useEffect(() => {
     // Restore scroll position when component mounts
@@ -34,6 +47,14 @@ export default function Home() {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, []);
+
+  const upcomingEvents = useMemo(() => {
+    const firstUnwatchedIndex = allEvents.findIndex(event => eventStatuses[event.id] !== 'visto');
+    if (firstUnwatchedIndex === -1) {
+      return []; // All events watched
+    }
+    return allEvents.slice(firstUnwatchedIndex);
+  }, [allEvents, eventStatuses]);
 
   const filteredEvents = useMemo(() => {
     let events = allEvents;
@@ -59,6 +80,7 @@ export default function Home() {
         onYearFilterChange={setYearFilter}
         title="AttitudeRewind"
       />
+      <NextShowCarousel events={upcomingEvents} />
       <EventGrid events={filteredEvents} />
     </main>
   );

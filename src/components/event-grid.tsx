@@ -44,26 +44,6 @@ export const flattenEvents = (data: MonthData[]): DetailedEvent[] => {
   return allEvents;
 };
 
-const getShowStyles = (type: 'raw' | 'smackdown' | 'ppv') => {
-    switch (type) {
-        case 'raw': return {
-            card: 'border-red-500',
-            dateBox: 'bg-red-500 text-white',
-            showName: 'text-red-500'
-        };
-        case 'smackdown': return {
-            card: 'border-blue-500',
-            dateBox: 'bg-blue-500 text-white',
-            showName: 'text-blue-500'
-        };
-        case 'ppv': return {
-            card: 'border-amber-500',
-            dateBox: 'bg-amber-500 text-white',
-            showName: 'text-amber-500'
-        };
-    }
-};
-
 export const getShowBadgeStyle = (type: 'raw' | 'smackdown' | 'ppv') => {
     switch (type) {
         case 'raw': return 'bg-red-500 hover:bg-red-500/80 text-white';
@@ -83,6 +63,17 @@ export const getEventTypeDisplay = (type: 'raw' | 'smackdown' | 'ppv') => {
         case 'smackdown': return 'SmackDown';
         case 'ppv': return 'PPV';
     }
+};
+
+export const getShowImage = (type: EventType, event: DetailedEvent) => {
+    if (type === 'ppv') {
+      return (event as PPVEvent).coverUrl || 'https://i.imgur.com/S6Imh3m.png';
+    }
+    const images = {
+      raw: 'https://i.pinimg.com/736x/52/b7/9f/52b79f70e2da83f192ba455d42a0ef9f.jpg',
+      smackdown: 'https://i.pinimg.com/736x/e8/e4/9f/e8e49feb5765132c8583cb6e17f9f5f2.jpg',
+    };
+    return images[type] || 'https://i.imgur.com/S6Imh3m.png';
 };
 
 
@@ -110,12 +101,14 @@ export function EventGrid({ events }: EventGridProps) {
   };
 
   const toggleStatus = (eventId: string) => {
-    const currentStatus = eventStatuses[eventId];
+    const currentStatus = eventStatuses[eventId] || 'disponible';
     const newStatus = currentStatus === 'visto' ? 'disponible' : 'visto';
     const newStatuses = { ...eventStatuses, [eventId]: newStatus };
     setEventStatuses(newStatuses);
     try {
         localStorage.setItem('attitude-rewind-statuses', JSON.stringify(newStatuses));
+        // Force a re-render to update carousel
+        window.location.reload(); 
     } catch (error) {
         console.error("Could not save event statuses to localStorage:", error);
     }
@@ -144,17 +137,6 @@ export function EventGrid({ events }: EventGridProps) {
     }, {});
   }, [events]);
 
-  const getShowImage = (type: EventType, event: DetailedEvent) => {
-    if (type === 'ppv') {
-      return (event as PPVEvent).coverUrl || 'https://i.imgur.com/S6Imh3m.png';
-    }
-    const images = {
-      raw: 'https://i.pinimg.com/736x/52/b7/9f/52b79f70e2da83f192ba455d42a0ef9f.jpg',
-      smackdown: 'https://i.pinimg.com/736x/e8/e4/9f/e8e49feb5765132c8583cb6e17f9f5f2.jpg',
-    };
-    return images[type] || 'https://i.imgur.com/S6Imh3m.png';
-  };
-
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="space-y-8">
@@ -176,12 +158,15 @@ export function EventGrid({ events }: EventGridProps) {
                 <CollapsibleContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {monthEvents.map((event) => {
-                        const styles = getShowStyles(event.type);
                         const isWatched = eventStatuses[event.id] === 'visto';
 
                         return (
                         <Link href={`/event/${event.id}`} key={event.id} onClick={handleEventClick} scroll={false}>
-                            <Card className={cn("border-2", styles.card, "hover:shadow-lg transition-shadow")}>
+                            <Card className={cn("border-2 border-transparent hover:shadow-lg transition-shadow", {
+                                'border-red-500/50': event.type === 'raw',
+                                'border-blue-500/50': event.type === 'smackdown',
+                                'border-amber-500/50': event.type === 'ppv',
+                            })}>
                             <CardContent className="p-4 flex items-center gap-4">
                                 <div className="h-16 w-16 flex-shrink-0 relative">
                                   <Image 
