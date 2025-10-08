@@ -41,7 +41,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://i.pinimg.com/736x/e6/73/c9/e673c960c5f92eb2f473f4f9835a1608.jpg"
     },
     "Eddie Guerrero": {
-        imageUrl: "https://i.pinimg.com/736x/cf/e7/b4/cfe7b47983af72cc81d8ded3865b7e31.jpg"
+        imageUrl: "https://i.pinimg.com/736x/94/3f/a1/943fa1b984db962aa681bc1d595c159f.jpg"
     },
     "Edge": {
         imageUrl: "https://i.pinimg.com/736x/2b/58/17/2b581716b87f9be6b37a64b329dc1d15.jpg"
@@ -71,7 +71,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/3JpYn5sBYdIBdMoXCU3MbuG0eS3.jpg"
     },
     "Stephanie McMahon": {
-        imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/xXJcM9xUyz1Wd1JXDv2HhWj3Ibi.jpg"
+        imageUrl: "https://i.pinimg.com/736x/6d/5c/77/6d5c77bf18fa3a42d338961bec6ef526.jpg"
     },
     "Vince McMahon": {
         imageUrl: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/l32o3uQKCBEpUu0nwbBqLWv4L42.jpg"
@@ -132,7 +132,50 @@ export const wrestlersData: Record<string, WrestlerData> = {
     },
     "The New Age Outlaws": {
         imageUrl: "https://i.pinimg.com/736x/fe/74/44/fe74447222a8dd741517c6217257ac01.jpg"
+    },
+    "The Godfather": {
+        imageUrl: "https://i.pinimg.com/736x/65/6f/14/656f147266a5bb0704e9cb9f40689df8.jpg"
+    },
+    "Gangrel": {
+        imageUrl: "https://i.pinimg.com/736x/f5/2e/ff/f52eff0164a7e945c07babead828f0ec.jpg"
+    },
+    "Edge & Christian": {
+        imageUrl: "https://i.pinimg.com/736x/28/7d/ef/287def50143664ddd14922361b30c92f.jpg"
+    },
+    "D'Lo Brown": {
+        imageUrl: "https://i.pinimg.com/736x/d2/f8/9f/d2f89fe806869acec514e2e10829f0f7.jpg"
+    },
+    "The Headbangers": {
+        imageUrl: "https://i.pinimg.com/1200x/ab/ad/5a/abad5a27f2b37050fb7ece638d82525a.jpg"
+    },
+    "Thrasher": {
+        imageUrl: "https://i.pinimg.com/736x/0d/3a/6a/0d3a6ab110abd8be46b2cd6949551057.jpg"
+    },
+    "Mosh": {
+        imageUrl: "https://i.pinimg.com/736x/88/b8/9c/88b89c020fdddc6f7c7f42c9944c7a66.jpg"
+    },
+    "The Radicalz": {
+        imageUrl: "https://i.pinimg.com/736x/8d/6c/2a/8d6c2a486e4234dbceddec3538c48f48.jpg"
+    },
+    "Dean Malenko": {
+        imageUrl: "https://i.pinimg.com/736x/89/b3/76/89b37604f23e96b9d4a3ed4296e9eeb4.jpg"
+    },
+    "Perry Saturn": {
+        imageUrl: "https://i.pinimg.com/736x/89/b3/76/89b37604f23e96b9d4a3ed4296e9eeb4.jpg"
+    },
+    "Viscera": {
+        imageUrl: "https://i.pinimg.com/1200x/aa/e4/68/aae468c533f7be04b82d5b4b9d6f266c.jpg"
+    },
+    "Sgt. Slaughter": {
+        imageUrl: "https://i.pinimg.com/1200x/a1/e1/78/a1e178b830dd03e61594f2fd3d185e19.jpg"
+    },
+    "Chyna": {
+        imageUrl: "https://i.pinimg.com/1200x/82/8f/af/828fafa4eb1e8527358a5954677b8b03.jpg"
+    },
+    "Val Venis": {
+        imageUrl: "https://i.pinimg.com/736x/40/c3/97/40c397216e82c036ace369e522d1726a.jpg"
     }
 };
 
     
+
