@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 import type { Match } from '@/lib/events-data';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { wrestlersData } from '@/lib/wrestlers-data';
 
 const getShowIcon = (type: 'raw' | 'smackdown' | 'ppv') => {
     if (type === 'raw') {
@@ -25,28 +26,12 @@ const getShowIcon = (type: 'raw' | 'smackdown' | 'ppv') => {
     return <Ticket className="h-4 w-4" />;
 };
 
+const wrestlerNames = new Set(Object.keys(wrestlersData));
+
 const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] => {
     const parts = match.split(':');
     const mainMatch = parts.length > 1 ? parts.slice(1).join(':') : parts[0];
     const title = parts.length > 1 ? `${parts[0]}: ` : '';
-
-    const wrestlerNames = new Set([
-        "The Rock", "Stone Cold Steve Austin", "Triple H", "The Undertaker", "Mankind", "Cactus Jack", 
-        "The Dudley Boyz", "Bubba Ray Dudley", "D-Von Dudley", "The Hardy Boyz", "Matt Hardy", "Jeff Hardy", 
-        "Edge & Christian", "Edge", "Christian", "Kurt Angle", "Chris Jericho", "Chris Benoit", "Eddie Guerrero", 
-        "Dean Malenko", "Perry Saturn", "The Big Show", "Big Show", "Kane", "Rikishi", "X-Pac", "Road Dogg", "Billy Gunn", "Tazz",
-        "Al Snow", "Test", "Albert", "Big Boss Man", "Hardcore Holly", "Crash Holly", "The Godfather", 
-        "D'Lo Brown", "Chyna", "Lita", "Trish Stratus", "Val Venis", "Scotty 2 Hotty", "Grandmaster Sexay", 
-        "The Acolytes", "The APA", "Faarooq", "Bradshaw", "Gangrel", "The British Bulldog", "Shane McMahon", "Vince McMahon", 
-        "Stephanie McMahon", "Linda McMahon", "Mick Foley", "Bob Backlund", "Bull Buchanan", "T & A", "The Hollys",
-        "Pat Patterson", "Gerald Brisco", "William Regal", "K-Kwik", "Jacqueline", "Lo Down", "The Kat", "Ivory",
-        "Los Conquistadores", "Right to Censor", "Drew Carey", "The Radicalz", "D-Generation X", "DX", "Mark Henry",
-        "The New Age Outlaws", "Steve Blackman", "The Headbangers", "Mosh", "Thrasher", "Viscera", "Hervina", 
-        "The Fabulous Moolah", "Mae Young", "The Mean Street Posse", "Joey Abs", "Pete Gas", "Rodney", 
-        "Too Cool", "Head Cheese", "Essa Rios", "The Brooklyn Brawler", "Chaz", "Tori", "Rhyno", "Molly Holly",
-        "Sgt. Slaughter", "Brian Christopher", "Steven Richards", "Jerry Lawler", "Raven", "Haku", "Kaientai",
-        "Taka Michinoku", "Funaki"
-    ]);
     
     const sortedWrestlers = [...wrestlerNames].sort((a, b) => b.length - a.length);
     const regex = new RegExp(`(${sortedWrestlers.map(name => name.replace(/[.*+?^${'()'}|\\[\\]\\\\]/g, '\\$&')).join('|')})`, 'g');
@@ -284,9 +269,5 @@ export default function EventPage() {
 
     
 }
-
-    
-
-    
 
     
