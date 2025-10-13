@@ -109,6 +109,9 @@ export function Header({
                   </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-[80vw] sm:w-[300px] bg-primary text-primary-foreground p-0">
+                  <SheetHeader>
+                    <SheetTitle className="sr-only">Menú Principal</SheetTitle>
+                  </SheetHeader>
                   <div className='flex flex-col h-full'>
                       <div className="p-6">
                         <Link href="/" className="flex items-center gap-2">
