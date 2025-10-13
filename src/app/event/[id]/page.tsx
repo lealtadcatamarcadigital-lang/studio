@@ -5,9 +5,9 @@ import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
-import { flattenEvents } from '@/components/event-grid';
-import { Header } from '@/components/header';
 import { EventDetails } from '@/components/event-details';
+import { flattenEvents } from '@/lib/utils';
+import { Header } from '@/components/header';
 
 export default function EventPage() {
     const params = useParams();
@@ -28,7 +28,7 @@ export default function EventPage() {
     
     return (
         <main className="min-h-screen bg-background">
-            <Header />
+            <Header showFilter='todos' yearFilter='todos' onShowFilterChange={() => {}} onYearFilterChange={() => {}} />
             <EventDetails event={event} onBack={() => router.back()} />
         </main>
     )

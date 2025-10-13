@@ -3,7 +3,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Menu, LayoutGrid } from 'lucide-react';
+import { Menu, LayoutGrid, Calendar, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -15,8 +15,18 @@ import {
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import type { ShowTypeFilter, YearFilter } from '@/app/page';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
 
-export function Header() {
+interface HeaderProps {
+    showFilter: ShowTypeFilter;
+    yearFilter: YearFilter;
+    onShowFilterChange: (value: ShowTypeFilter) => void;
+    onYearFilterChange: (value: YearFilter) => void;
+}
+
+export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilterChange }: HeaderProps) {
   const pathname = usePathname();
 
   return (
@@ -31,24 +41,57 @@ export function Header() {
                   </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-[80vw] sm:w-[300px] bg-primary text-primary-foreground p-0">
-                  <SheetHeader>
+                  <SheetHeader className='p-6'>
                      <SheetTitle className="sr-only">Menú Principal</SheetTitle>
+                     <Link href="/" className="flex items-center gap-2">
+                        <Image src="https://i.imgur.com/ITpm1XW.png" alt="Attitude Rewind Logo" width={32} height={32} className="h-8 w-8" />
+                        <h1 className="text-2xl font-bold">AR</h1>
+                    </Link>
                   </SheetHeader>
-                  <div className='flex flex-col h-full'>
-                      <div className="p-6">
-                        <Link href="/" className="flex items-center gap-2">
-                           <Image src="https://i.imgur.com/ITpm1XW.png" alt="Attitude Rewind Logo" width={32} height={32} className="h-8 w-8" />
-                            <h1 className="text-2xl font-bold">AR</h1>
-                        </Link>
+                  <nav className="flex-grow p-6 space-y-2">
+                      <Link href="/" className={cn('flex items-center gap-3 p-2 rounded-md hover:bg-black/10', { 'bg-black/20': pathname === '/' })}>
+                        <LayoutGrid className="h-5 w-5" /> Grilla de Eventos
+                      </Link>
+
+                      <Separator className='bg-primary-foreground/20 my-4' />
+
+                      <div className='space-y-4'>
+                        <h3 className='font-bold flex items-center gap-2 text-lg'>
+                            <Filter className="h-5 w-5" />
+                            Filtros
+                        </h3>
+                        <div className='space-y-2'>
+                            <label className='text-sm font-medium'>Año</label>
+                            <Select value={yearFilter} onValueChange={(value) => onYearFilterChange(value as YearFilter)}>
+                                <SelectTrigger className='text-black'>
+                                    <SelectValue placeholder="Seleccionar año" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="todos">Todos</SelectItem>
+                                    <SelectItem value="2000">2000</SelectItem>
+                                    <SelectItem value="2001">2001</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                         <div className='space-y-2'>
+                            <label className='text-sm font-medium'>Show</label>
+                             <Select value={showFilter} onValueChange={(value) => onShowFilterChange(value as ShowTypeFilter)}>
+                                <SelectTrigger className='text-black'>
+                                    <SelectValue placeholder="Seleccionar show" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="todos">Todos</SelectItem>
+                                    <SelectItem value="raw">RAW</SelectItem>
+                                    <SelectItem value="smackdown">SmackDown</SelectItem>
+                                    <SelectItem value="ppv">PPV</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
                       </div>
-                      <nav className="flex-grow p-6 space-y-2">
-                          <Link href="/" className={cn('flex items-center gap-3 p-2 rounded-md hover:bg-black/10', { 'bg-black/20': pathname === '/' })}>
-                            <LayoutGrid className="h-5 w-5" /> Próximos Shows
-                          </Link>
-                      </nav>
-                      <div className="p-6 border-t border-primary-foreground/20">
-                        <span className="text-xs text-primary-foreground/50">v2.7.613</span>
-                      </div>
+
+                  </nav>
+                  <div className="p-6 border-t border-primary-foreground/20">
+                    <span className="text-xs text-primary-foreground/50">v2.7.613</span>
                   </div>
               </SheetContent>
           </Sheet>
