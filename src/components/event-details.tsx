@@ -5,11 +5,11 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, CalendarDays, ChevronDown, CheckCircle, Circle, Eye, EyeOff, Info, ListChecks, MapPin, Ticket, Trophy } from 'lucide-react';
-import { getMonthNumber, getEventTypeDisplay, type DetailedEvent, type EventStatus, type EventStatusMap, getShowBadgeStyle } from '@/lib/utils';
+import { getMonthNumber, getEventTypeDisplay, type DetailedEvent, type EventStatus, type EventStatusMap, getShowBadgeStyle, getShowImage } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import type { Match } from '@/lib/events-data';
+import type { Match, PPVEvent } from '@/lib/events-data';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { wrestlersData } from '@/lib/wrestlers-data';
@@ -137,7 +137,7 @@ export function EventDetails({ event, onBack, isEmbedded = false }: EventDetails
         }
     };
     
-    const isPpvWithCover = event.type === 'ppv' && (event as any).coverUrl;
+    const showImage = event.type === 'ppv' || event.type === 'raw' || event.type === 'smackdown';
 
     return (
          <div className="container mx-auto max-w-6xl px-4 py-8">
@@ -149,12 +149,12 @@ export function EventDetails({ event, onBack, isEmbedded = false }: EventDetails
             )}
             <div className="space-y-6">
                 <div className={cn("flex flex-col md:flex-row gap-8 items-start")}>
-                    {isPpvWithCover && (
+                    {showImage && (
                         <div className="md:w-1/3 flex-shrink-0">
                             <div className="rounded-lg overflow-hidden border-2 border-primary/50 shadow-lg shadow-primary/20">
                                 <Image 
-                                    src={(event as any).coverUrl}
-                                    alt={`Portada de ${(event as any).name}`}
+                                    src={getShowImage(event.type, event)}
+                                    alt={`Portada de ${event.type === 'ppv' ? (event as PPVEvent).name : getEventTypeDisplay(event.type)}`}
                                     width={400}
                                     height={600}
                                     className="w-full h-auto object-cover"
@@ -167,7 +167,7 @@ export function EventDetails({ event, onBack, isEmbedded = false }: EventDetails
                         <div className="flex flex-wrap items-center gap-4 text-sm">
                             <Badge className={cn("text-sm gap-2", getShowBadgeStyle(event.type))}>
                                 {getShowIcon(event.type)}
-                                {getEventTypeDisplay(event.type)}
+                                {event.type === 'ppv' ? (event as PPVEvent).name : getEventTypeDisplay(event.type)}
                             </Badge>
                             <div className="flex items-center gap-2 text-muted-foreground">
                                 <CalendarDays className="h-4 w-4" />
