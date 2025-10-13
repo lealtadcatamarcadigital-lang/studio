@@ -3,7 +3,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Menu, LayoutGrid, Calendar, Filter } from 'lucide-react';
+import { Menu, LayoutGrid, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -20,14 +20,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 
 interface HeaderProps {
-    showFilter: ShowTypeFilter;
-    yearFilter: YearFilter;
-    onShowFilterChange: (value: ShowTypeFilter) => void;
-    onYearFilterChange: (value: YearFilter) => void;
+    showFilter?: ShowTypeFilter;
+    yearFilter?: YearFilter;
+    onShowFilterChange?: (value: ShowTypeFilter) => void;
+    onYearFilterChange?: (value: YearFilter) => void;
 }
 
 export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilterChange }: HeaderProps) {
   const pathname = usePathname();
+  const isHomePage = pathname === '/';
 
   return (
     <header className="sticky top-0 z-30 bg-card shadow-md">
@@ -53,41 +54,67 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                         <LayoutGrid className="h-5 w-5" /> Grilla de Eventos
                       </Link>
 
-                      <Separator className='bg-primary-foreground/20 my-4' />
-
-                      <div className='space-y-4'>
-                        <h3 className='font-bold flex items-center gap-2 text-lg'>
-                            <Filter className="h-5 w-5" />
-                            Filtros
-                        </h3>
-                        <div className='space-y-2'>
-                            <label className='text-sm font-medium'>Año</label>
-                            <Select value={yearFilter} onValueChange={(value) => onYearFilterChange(value as YearFilter)}>
-                                <SelectTrigger className='text-black'>
-                                    <SelectValue placeholder="Seleccionar año" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="todos">Todos</SelectItem>
-                                    <SelectItem value="2000">2000</SelectItem>
-                                    <SelectItem value="2001">2001</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                         <div className='space-y-2'>
-                            <label className='text-sm font-medium'>Show</label>
-                             <Select value={showFilter} onValueChange={(value) => onShowFilterChange(value as ShowTypeFilter)}>
-                                <SelectTrigger className='text-black'>
-                                    <SelectValue placeholder="Seleccionar show" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="todos">Todos</SelectItem>
-                                    <SelectItem value="raw">RAW</SelectItem>
-                                    <SelectItem value="smackdown">SmackDown</SelectItem>
-                                    <SelectItem value="ppv">PPV</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                      </div>
+                      {isHomePage && onYearFilterChange && onShowFilterChange && (
+                        <>
+                            <Separator className='bg-primary-foreground/20 my-4' />
+                            <div className='space-y-4'>
+                                <h3 className='font-bold flex items-center gap-2 text-lg'>
+                                    <Filter className="h-5 w-5" />
+                                    Filtros
+                                </h3>
+                                <div className='space-y-2'>
+                                    <label className='text-sm font-medium'>Año</label>
+                                    <Select value={yearFilter} onValueChange={(value) => onYearFilterChange(value as YearFilter)}>
+                                        <SelectTrigger className='text-black'>
+                                            <SelectValue placeholder="Seleccionar año" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="todos">Todos</SelectItem>
+                                            <SelectItem value="2000">2000</SelectItem>
+                                            <SelectItem value="2001">2001</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className='space-y-2'>
+                                    <label className='text-sm font-medium'>Show</label>
+                                    <div className='grid grid-cols-2 gap-2'>
+                                        <Button
+                                            variant={showFilter === 'todos' ? 'secondary' : 'outline'}
+                                            size="sm"
+                                            onClick={() => onShowFilterChange('todos')}
+                                            className="text-black"
+                                        >
+                                            Todos
+                                        </Button>
+                                         <Button
+                                            variant={showFilter === 'ppv' ? 'ppv' : 'outline'}
+                                            size="sm"
+                                            onClick={() => onShowFilterChange('ppv')}
+                                            className={cn(showFilter !== 'ppv' && 'text-black')}
+                                        >
+                                            PPV
+                                        </Button>
+                                        <Button
+                                            variant={showFilter === 'raw' ? 'raw' : 'outline'}
+                                            size="sm"
+                                            onClick={() => onShowFilterChange('raw')}
+                                            className={cn(showFilter !== 'raw' && 'text-black')}
+                                        >
+                                            RAW
+                                        </Button>
+                                        <Button
+                                            variant={showFilter === 'smackdown' ? 'smackdown' : 'outline'}
+                                            size="sm"
+                                            onClick={() => onShowFilterChange('smackdown')}
+                                            className={cn(showFilter !== 'smackdown' && 'text-black')}
+                                        >
+                                            SmackDown
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                      )}
 
                   </nav>
                   <div className="p-6 border-t border-primary-foreground/20">
@@ -99,7 +126,7 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
           <Link href="/">
               <h1 className="text-2xl font-bold font-headline cursor-pointer">
                   <span className="text-foreground">Attitude</span>
-                  <span className="text-red-500">Rewind</span>
+                  <span className="text-primary">Rewind</span>
               </h1>
           </Link>
 

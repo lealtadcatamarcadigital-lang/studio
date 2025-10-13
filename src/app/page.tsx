@@ -7,6 +7,7 @@ import { WWF_ALL_DATA } from '@/lib/events-data-all';
 import { flattenEvents, type DetailedEvent, type EventStatusMap } from '@/lib/utils';
 import { NextShowCarousel } from "@/components/next-show-carousel";
 import { EventGrid } from "@/components/event-grid";
+import { EventDetails } from "@/components/event-details";
 
 export type ShowTypeFilter = 'todos' | 'raw' | 'smackdown' | 'ppv';
 export type YearFilter = 'todos' | '2000' | '2001';
@@ -41,6 +42,7 @@ export default function Home() {
 
   const handleShowFilterChange = (value: ShowTypeFilter) => {
     setShowFilter(value);
+    setSelectedEventId(null);
     try {
       localStorage.setItem('attitude-rewind-show-filter', value);
     } catch (error) {
@@ -50,6 +52,7 @@ export default function Home() {
 
   const handleYearFilterChange = (value: YearFilter) => {
     setYearFilter(value);
+    setSelectedEventId(null);
     try {
       localStorage.setItem('attitude-rewind-year-filter', value);
     } catch (error) {
@@ -72,12 +75,25 @@ export default function Home() {
       return showMatch && yearMatch;
     });
   }, [allEvents, showFilter, yearFilter]);
+  
+  const selectedEvent = useMemo(() => {
+    if (!selectedEventId) return null;
+    return allEvents.find(e => e.id === selectedEventId);
+  }, [selectedEventId, allEvents]);
+
 
   useEffect(() => {
     if (upcomingEvents.length > 0 && !selectedEventId) {
-      setSelectedEventId(upcomingEvents[0].id);
+       const firstEventInFilter = filteredEvents.find(e => upcomingEvents.some(ue => ue.id === e.id));
+       if (firstEventInFilter) {
+           setSelectedEventId(firstEventInFilter.id);
+       } else if (filteredEvents.length > 0) {
+           setSelectedEventId(filteredEvents[0].id);
+       } else {
+           setSelectedEventId(upcomingEvents[0].id)
+       }
     }
-  }, [upcomingEvents, selectedEventId]);
+  }, [upcomingEvents, selectedEventId, filteredEvents]);
 
   return (
     <main className="min-h-screen">
@@ -89,7 +105,11 @@ export default function Home() {
       />
       <NextShowCarousel events={upcomingEvents} onEventSelect={setSelectedEventId} />
       
-      <EventGrid events={filteredEvents} />
+      {selectedEvent ? (
+        <EventDetails event={selectedEvent} onBack={() => setSelectedEventId(null)} isEmbedded={true}/>
+      ) : (
+        <EventGrid events={filteredEvents} onEventClick={setSelectedEventId} />
+      )}
 
     </main>
   );
