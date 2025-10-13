@@ -78,14 +78,6 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                                 <div className='space-y-2'>
                                     <label className='text-sm font-medium'>Show</label>
                                     <div className='grid grid-cols-2 gap-2'>
-                                        <Button
-                                            variant={showFilter === 'todos' ? 'secondary' : 'outline'}
-                                            size="sm"
-                                            onClick={() => onShowFilterChange('todos')}
-                                            className="text-black"
-                                        >
-                                            Todos
-                                        </Button>
                                          <Button
                                             variant={showFilter === 'ppv' ? 'ppv' : 'outline'}
                                             size="sm"
