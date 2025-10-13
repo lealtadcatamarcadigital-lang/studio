@@ -176,7 +176,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://i.pinimg.com/736x/89/b3/76/89b37604f23e96b9d4a3ed4296e9eeb4.jpg"
     },
     "Perry Saturn": {
-        imageUrl: "https://i.pinimg.com/736x/89/b3/76/89b37604f23e96b9d4a3ed4296e9eeb4.jpg"
+        imageUrl: "https://i.imgur.com/g9H0s0s.jpeg"
     },
     "Viscera": {
         imageUrl: "https://i.pinimg.com/1200x/aa/e4/68/aae468c533f7be04b82d5b4b9d6f266c.jpg"
@@ -189,6 +189,113 @@ export const wrestlersData: Record<string, WrestlerData> = {
     },
     "Val Venis": {
         imageUrl: "https://i.pinimg.com/736x/40/c3/97/40c397216e82c036ace369e522d1726a.jpg"
+    },
+    "Al Snow": {
+        imageUrl: "https://i.imgur.com/N52Z9zSb.jpg"
+    },
+    "Essa Rios": {
+        imageUrl: "https://i.imgur.com/M62V3fDh.jpg"
+    },
+    "Steven Richards": {
+        imageUrl: "https://i.imgur.com/MMu3Zf6h.jpg"
+    },
+    "Haku": {
+        imageUrl: "https://i.imgur.com/tHqg3tFh.jpg"
+    },
+    "Tori": {
+        imageUrl: "https://i.imgur.com/d5A8i9sh.jpg"
+    },
+    "Bull Buchanan": {
+        imageUrl: "https://i.imgur.com/dOoT3bSh.jpg"
+    },
+    "The British Bulldog": {
+        imageUrl: "https://i.imgur.com/Q2b4kgnh.jpg"
+    },
+    "Funaki": {
+        imageUrl: "https://i.imgur.com/G5dC6M3h.jpg"
+    },
+    "Taka Michinoku": {
+        imageUrl: "https://i.imgur.com/G5dC6M3h.jpg"
+    },
+    "Kaientai": {
+        imageUrl: "https://i.imgur.com/G5dC6M3h.jpg"
+    },
+    "Mark Henry": {
+        imageUrl: "https://i.imgur.com/yN6JtGwh.jpg"
+    },
+    "Luna Vachon": {
+        imageUrl: "https://i.imgur.com/8x05bCTh.jpg"
+    },
+    "The Kat": {
+        imageUrl: "https://i.imgur.com/s6n5mEwh.jpg"
+    },
+    "Jacqueline": {
+        imageUrl: "https://i.imgur.com/S5gsG1vh.jpg"
+    },
+    "Ivory": {
+        imageUrl: "https://i.imgur.com/3I3p9oTh.jpg"
+    },
+    "Chaz": {
+        imageUrl: "https://i.imgur.com/wP01sFAh.jpg"
+    },
+    "Lo Down": {
+        imageUrl: "https://i.imgur.com/wP01sFAh.jpg"
+    },
+    "The Mean Street Posse": {
+        imageUrl: "https://i.imgur.com/iHh13jWh.jpg"
+    },
+    "Joey Abs": {
+        imageUrl: "https://i.imgur.com/iHh13jWh.jpg"
+    },
+    "Pete Gas": {
+        imageUrl: "https://i.imgur.com/iHh13jWh.jpg"
+    },
+    "Rodney": {
+        imageUrl: "https://i.imgur.com/iHh13jWh.jpg"
+    },
+    "Bob Backlund": {
+        imageUrl: "https://i.imgur.com/Y4GN4p8h.jpg"
+    },
+    "The Brooklyn Brawler": {
+        imageUrl: "https://i.imgur.com/Q8x8J2Eh.jpg"
+    },
+    "Jerry Lawler": {
+        imageUrl: "https://i.imgur.com/xYd3bQ2h.jpg"
+    },
+    "K-Kwik": {
+        imageUrl: "https://i.imgur.com/BjoYUDSh.jpg"
+    },
+    "Molly Holly": {
+        imageUrl: "https://i.imgur.com/nJ4Z6Ewh.jpg"
+    },
+    "Raven": {
+        imageUrl: "https://i.imgur.com/yCbkpWsh.jpg"
+    },
+    "Right to Censor": {
+        imageUrl: "https://i.imgur.com/MMu3Zf6h.jpg"
+    },
+    "Teddy Long": {
+        imageUrl: "https://i.imgur.com/pB1tIHYh.jpg"
+    },
+    "Jack Doan": {
+        imageUrl: "https://i.imgur.com/pB1tIHYh.jpg"
+    },
+    "Terri": {
+        imageUrl: "https://i.imgur.com/xVd2Pyoh.jpg"
+    },
+    "Mandy": {
+        imageUrl: "https://i.imgur.com/s6n5mEwh.jpg"
+    },
+    "Victoria": {
+        imageUrl: "https://i.imgur.com/s6n5mEwh.jpg"
+    },
+    "The Hollys": {
+        imageUrl: "https://i.imgur.com/1d/1db8014f150f86a3b7d5edce98dd6f2c.jpg"
+    },
+    "Head Cheese": {
+        imageUrl: "https://i.imgur.com/N52Z9zSb.jpg"
+    },
+    "The Rock 'n' Sock Connection": {
+        imageUrl: "https://i.imgur.com/59/5921da5ccc564e14d3a63bfb94636ab0.jpg"
     }
 };
-
