@@ -64,31 +64,43 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                                 </h3>
                                 <div className='space-y-2'>
                                     <label className='text-sm font-medium'>Show</label>
-                                    <div className='grid grid-cols-2 gap-2'>
-                                         <Button
-                                            variant={showFilter === 'ppv' ? 'ppv' : 'outline'}
-                                            size="sm"
+                                    <div className="space-y-1 pl-2">
+                                        <div
                                             onClick={() => onShowFilterChange('ppv')}
-                                            className={cn(showFilter !== 'ppv' && 'text-black')}
+                                            className={cn(
+                                                'cursor-pointer p-1 rounded-md text-sm',
+                                                showFilter === 'ppv' ? 'font-bold text-amber-300' : 'hover:bg-black/10'
+                                            )}
                                         >
                                             PPV
-                                        </Button>
-                                        <Button
-                                            variant={showFilter === 'raw' ? 'raw' : 'outline'}
-                                            size="sm"
+                                        </div>
+                                        <div
                                             onClick={() => onShowFilterChange('raw')}
-                                            className={cn(showFilter !== 'raw' && 'text-black')}
+                                            className={cn(
+                                                'cursor-pointer p-1 rounded-md text-sm',
+                                                showFilter === 'raw' ? 'font-bold text-red-300' : 'hover:bg-black/10'
+                                            )}
                                         >
                                             RAW
-                                        </Button>
-                                        <Button
-                                            variant={showFilter === 'smackdown' ? 'smackdown' : 'outline'}
-                                            size="sm"
+                                        </div>
+                                        <div
                                             onClick={() => onShowFilterChange('smackdown')}
-                                            className={cn(showFilter !== 'smackdown' && 'text-black')}
+                                            className={cn(
+                                                'cursor-pointer p-1 rounded-md text-sm',
+                                                showFilter === 'smackdown' ? 'font-bold text-blue-300' : 'hover:bg-black/10'
+                                            )}
                                         >
                                             SmackDown
-                                        </Button>
+                                        </div>
+                                         <div
+                                            onClick={() => onShowFilterChange('todos')}
+                                            className={cn(
+                                                'cursor-pointer p-1 rounded-md text-sm',
+                                                showFilter === 'todos' ? 'font-bold' : 'hover:bg-black/10'
+                                            )}
+                                        >
+                                            Todos
+                                        </div>
                                     </div>
                                 </div>
                                 <div className='space-y-2'>
