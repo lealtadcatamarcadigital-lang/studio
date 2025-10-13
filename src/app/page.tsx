@@ -4,7 +4,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Header } from '@/components/header';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
-import { flattenEvents, type DetailedEvent, type EventStatusMap } from '@/lib/utils';
+import { flattenEvents, type DetailedEvent, type EventStatus, type EventStatusMap } from '@/lib/utils';
 import { NextShowCarousel } from "@/components/next-show-carousel";
 import { EventGrid } from "@/components/event-grid";
 import { EventDetails } from "@/components/event-details";
@@ -62,6 +62,17 @@ export default function Home() {
       localStorage.setItem('attitude-rewind-year-filter', value);
     } catch (error) {
       console.error("Could not save year filter to localStorage:", error);
+    }
+  };
+
+  const toggleEventStatus = (eventId: string, currentStatus: EventStatus) => {
+    const newStatus = currentStatus === 'visto' ? 'disponible' : 'visto';
+    const newStatuses = { ...eventStatuses, [eventId]: newStatus };
+    setEventStatuses(newStatuses);
+    try {
+        localStorage.setItem('attitude-rewind-statuses', JSON.stringify(newStatuses));
+    } catch (error) {
+        console.error("Could not save event statuses to localStorage:", error);
     }
   };
 
@@ -132,7 +143,12 @@ export default function Home() {
         onShowFilterChange={handleShowFilterChange}
         onYearFilterChange={handleYearFilterChange}
       />
-      <NextShowCarousel events={upcomingEvents} onEventSelect={setSelectedEventId} />
+      <NextShowCarousel 
+        events={upcomingEvents} 
+        onEventSelect={setSelectedEventId}
+        eventStatuses={eventStatuses}
+        onToggleStatus={toggleEventStatus}
+      />
       
       {selectedEvent ? (
         <div className="mt-8">
