@@ -22,6 +22,7 @@ export default {
         headline: ['Space Grotesk', 'sans-serif'],
       },
       colors: {
+        wrestler: '#FF2056',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
