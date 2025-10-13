@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, CalendarDays, ChevronDown, CheckCircle, Circle, Eye, EyeOff, Info, ListChecks, MapPin, Ticket, Trophy } from 'lucide-react';
+import { ArrowLeft, CalendarDays, ChevronDown, CheckCircle, Circle, Eye, EyeOff, Info, ListChecks, MapPin, Ticket, Trophy, Youtube } from 'lucide-react';
 import { getMonthNumber, getEventTypeDisplay, type DetailedEvent, type EventStatus, type EventStatusMap, getShowBadgeStyle, getShowImage } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -138,6 +138,8 @@ export function EventDetails({ event, onBack, isEmbedded = false }: EventDetails
     };
     
     const showImage = event.type === 'ppv' || event.type === 'raw' || event.type === 'smackdown';
+    const ppvEvent = event.type === 'ppv' ? (event as PPVEvent) : null;
+
 
     return (
          <div className="container mx-auto max-w-6xl px-4 py-8">
@@ -217,6 +219,37 @@ export function EventDetails({ event, onBack, isEmbedded = false }: EventDetails
                     </div>
                   </Collapsible>
                 )}
+
+                {ppvEvent && ppvEvent.trailerUrl && (
+                  <Collapsible>
+                      <div className="p-4 bg-card rounded-lg border">
+                          <CollapsibleTrigger asChild>
+                              <div className="flex w-full items-center justify-between group cursor-pointer">
+                                  <h3 className="font-headline font-bold text-xl flex items-center gap-2">
+                                      <Youtube className="h-5 w-5 text-red-600" />
+                                      Comercial del Evento
+                                  </h3>
+                                  <div className="p-1 rounded-md group-hover:bg-accent">
+                                      <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                                  </div>
+                              </div>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                              <div className="aspect-video mt-2 rounded-lg overflow-hidden">
+                                  <iframe
+                                      className="w-full h-full"
+                                      src={`https://www.youtube.com/embed/${ppvEvent.trailerUrl}`}
+                                      title="YouTube video player"
+                                      frameBorder="0"
+                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                      allowFullScreen
+                                  ></iframe>
+                              </div>
+                          </CollapsibleContent>
+                      </div>
+                  </Collapsible>
+                )}
+
 
                 <div className="p-4 bg-card rounded-lg space-y-3 border">
                     <h3 className="font-headline font-bold text-xl flex items-center gap-2">

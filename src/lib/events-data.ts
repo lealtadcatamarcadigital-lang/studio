@@ -10,6 +10,7 @@ export interface Event {
 export interface PPVEvent extends Event {
   name: string;
   coverUrl?: string;
+  trailerUrl?: string;
 }
 
 export interface MonthData {
