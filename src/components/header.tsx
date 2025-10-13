@@ -63,19 +63,6 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                                     Filtros
                                 </h3>
                                 <div className='space-y-2'>
-                                    <label className='text-sm font-medium'>Año</label>
-                                    <Select value={yearFilter} onValueChange={(value) => onYearFilterChange(value as YearFilter)}>
-                                        <SelectTrigger className='text-black'>
-                                            <SelectValue placeholder="Seleccionar año" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="todos">Todos</SelectItem>
-                                            <SelectItem value="2000">2000</SelectItem>
-                                            <SelectItem value="2001">2001</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className='space-y-2'>
                                     <label className='text-sm font-medium'>Show</label>
                                     <div className='grid grid-cols-2 gap-2'>
                                          <Button
@@ -103,6 +90,19 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                                             SmackDown
                                         </Button>
                                     </div>
+                                </div>
+                                <div className='space-y-2'>
+                                    <label className='text-sm font-medium'>Año</label>
+                                    <Select value={yearFilter} onValueChange={(value) => onYearFilterChange(value as YearFilter)}>
+                                        <SelectTrigger className='text-black'>
+                                            <SelectValue placeholder="Seleccionar año" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="todos">Todos</SelectItem>
+                                            <SelectItem value="2000">2000</SelectItem>
+                                            <SelectItem value="2001">2001</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                             </div>
                         </>
