@@ -135,7 +135,9 @@ export default function Home() {
       <NextShowCarousel events={upcomingEvents} onEventSelect={setSelectedEventId} />
       
       {selectedEvent ? (
-        <EventDetails event={selectedEvent} onBack={() => setSelectedEventId(null)} isEmbedded={true}/>
+        <div className="mt-8">
+          <EventDetails event={selectedEvent} onBack={() => setSelectedEventId(null)} isEmbedded={true}/>
+        </div>
       ) : (
         <EventGrid events={filteredEvents} onEventClick={setSelectedEventId} />
       )}
