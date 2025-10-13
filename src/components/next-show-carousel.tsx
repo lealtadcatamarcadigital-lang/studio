@@ -2,7 +2,6 @@
 'use client';
 
 import * as React from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -19,15 +18,22 @@ import { CalendarDays } from 'lucide-react';
 
 interface NextShowCarouselProps {
   events: DetailedEvent[];
+  onEventSelect: (eventId: string) => void;
 }
 
-export function NextShowCarousel({ events }: NextShowCarouselProps) {
+export function NextShowCarousel({ events, onEventSelect }: NextShowCarouselProps) {
   if (events.length === 0) {
     return null;
   }
+  
+  const handleEventClick = (event: React.MouseEvent, eventId: string) => {
+    event.preventDefault();
+    onEventSelect(eventId);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
-    <div className="sticky top-16 z-20 bg-card/90 backdrop-blur-sm border-y h-[272px]">
+    <div className="bg-card/90 backdrop-blur-sm border-y h-[272px]">
         <div className="container mx-auto px-4 h-full flex flex-col justify-center">
             <h2 className="text-2xl font-bold">Próximos Shows</h2>
             <Carousel
@@ -41,7 +47,7 @@ export function NextShowCarousel({ events }: NextShowCarouselProps) {
                 {events.slice(0, 10).map((event, index) => (
                     <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/3">
                         <div className="p-1">
-                            <Link href={`/event/${event.id}`}>
+                            <a href={`/event/${event.id}`} onClick={(e) => handleEventClick(e, event.id)}>
                                 <Card className="overflow-hidden group hover:border-primary">
                                     <CardContent className="p-0">
                                         <div className="relative h-48 w-full">
@@ -66,7 +72,7 @@ export function NextShowCarousel({ events }: NextShowCarouselProps) {
                                         </div>
                                     </CardContent>
                                 </Card>
-                            </Link>
+                            </a>
                         </div>
                     </CarouselItem>
                 ))}

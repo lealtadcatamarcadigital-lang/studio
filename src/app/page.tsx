@@ -7,9 +7,7 @@ import { Header } from '@/components/header';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
 import type { EventType, DetailedEvent } from '@/components/event-grid';
 import { NextShowCarousel } from "@/components/next-show-carousel";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Calendar } from "lucide-react";
+import { EventDetails } from "@/components/event-details";
 
 const SCROLL_POSITION_KEY = 'attitude-rewind-scroll-position';
 const SHOW_FILTER_KEY = 'attitude-rewind-show-filter';
@@ -19,6 +17,7 @@ export default function Home() {
   const [showFilter, setShowFilter] = useState<EventType | 'all'>('all');
   const [yearFilter, setYearFilter] = useState<string>('all');
   const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
   const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
 
@@ -58,7 +57,8 @@ export default function Home() {
   }, [yearFilter]);
 
   useEffect(() => {
-    // Restore scroll position when component mounts
+    if (selectedEventId) return;
+
     const savedPosition = sessionStorage.getItem(SCROLL_POSITION_KEY);
     if (savedPosition) {
       window.scrollTo(0, parseInt(savedPosition, 10));
@@ -69,13 +69,12 @@ export default function Home() {
       sessionStorage.setItem(SCROLL_POSITION_KEY, window.scrollY.toString());
     };
 
-    // Save scroll position when navigating away
     window.addEventListener('beforeunload', handleBeforeUnload);
 
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, []);
+  }, [selectedEventId]);
 
   const upcomingEvents = useMemo(() => {
     const firstUnwatchedIndex = allEvents.findIndex(event => eventStatuses[event.id] !== 'visto');
@@ -99,6 +98,12 @@ export default function Home() {
     
     return events;
   }, [allEvents, showFilter, yearFilter]);
+  
+  const selectedEvent = useMemo(() => {
+    if (!selectedEventId) return null;
+    return allEvents.find(e => e.id === selectedEventId);
+  }, [selectedEventId, allEvents]);
+
 
   return (
     <main className="min-h-screen">
@@ -109,17 +114,14 @@ export default function Home() {
         onYearFilterChange={setYearFilter}
         activePage="grid"
       />
-      <NextShowCarousel events={upcomingEvents} />
-      <EventGrid events={filteredEvents} />
+      <NextShowCarousel events={upcomingEvents} onEventSelect={setSelectedEventId} />
+      
+      {selectedEvent ? (
+        <EventDetails event={selectedEvent} onBack={() => setSelectedEventId(null)} />
+      ) : (
+        <EventGrid events={filteredEvents} />
+      )}
 
-      <Link href="/calendar">
-        <Button
-            className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg"
-            aria-label="Ver calendario"
-        >
-            <Calendar className="h-6 w-6" />
-        </Button>
-      </Link>
     </main>
   );
 }

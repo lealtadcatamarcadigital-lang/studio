@@ -18,7 +18,7 @@ body {
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
     
-    --primary: 68 76% 54%;
+    --primary: 74 65% 51%;
     --primary-foreground: 240 10% 3.9%;
 
     --secondary: 240 4.8% 95.9%;
@@ -35,7 +35,7 @@ body {
     
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 68 76% 54%;
+    --ring: 74 65% 51%;
     
     --radius: 0.5rem;
   }
@@ -47,7 +47,7 @@ body {
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 68 76% 54%;
+    --primary: 74 65% 51%;
     --primary-foreground: 240 10% 3.9%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
@@ -59,7 +59,7 @@ body {
     --destructive-foreground: 0 0% 98%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    --ring: 68 76% 54%;
+    --ring: 74 65% 51%;
   }
 }
 
@@ -69,29 +69,5 @@ body {
   }
   body {
     @apply bg-background text-foreground;
-  }
-}
-
-@layer utilities {
-  .day-raw {
-    @apply bg-red-500/50 text-white rounded-full;
-  }
-  .day-smackdown {
-    @apply bg-blue-500/50 text-white rounded-full;
-  }
-  .day-ppv {
-    @apply bg-amber-500/50 text-white rounded-full;
-  }
-   .day-watched::after {
-    content: '';
-    @apply absolute bottom-1 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-green-500;
-  }
-  .day-not-watched::after {
-    content: '';
-    @apply absolute bottom-1 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-red-500;
-  }
-  .day-available::after {
-    content: '';
-    @apply absolute bottom-1 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-gray-400;
   }
 }
