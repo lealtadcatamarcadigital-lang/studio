@@ -92,15 +92,6 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                                         >
                                             SmackDown
                                         </div>
-                                         <div
-                                            onClick={() => onShowFilterChange('todos')}
-                                            className={cn(
-                                                'cursor-pointer p-1 rounded-md text-sm',
-                                                showFilter === 'todos' ? 'font-bold' : 'hover:bg-black/10'
-                                            )}
-                                        >
-                                            Todos
-                                        </div>
                                     </div>
                                 </div>
                                 <div className='space-y-2'>
@@ -130,7 +121,7 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
           <Link href="/">
               <h1 className="text-2xl font-bold font-headline cursor-pointer">
                   <span className="text-foreground">Attitude</span>
-                  <span className="text-primary">Rewind</span>
+                  <span className="text-red-500">Rewind</span>
               </h1>
           </Link>
 
