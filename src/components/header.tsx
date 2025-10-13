@@ -3,7 +3,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Menu, LayoutGrid, Utensils } from 'lucide-react';
+import { Menu, LayoutGrid } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -12,8 +12,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
+import { Utensils } from 'lucide-react';
 
 export function Header() {
+  const pathname = usePathname();
 
   return (
     <header className="sticky top-0 z-30 bg-card shadow-md">
@@ -34,12 +38,12 @@ export function Header() {
                       <div className="p-6">
                         <Link href="/" className="flex items-center gap-2">
                            <Utensils className="h-8 w-8" />
-                            <h1 className="text-2xl font-bold">cheaf</h1>
+                            <h1 className="text-2xl font-bold">AR</h1>
                         </Link>
                         <p className='mt-4'>Sin nombre</p>
                       </div>
                       <nav className="flex-grow p-6 space-y-2">
-                          <Link href="/" className='flex items-center gap-3 p-2 rounded-md hover:bg-black/10'>
+                          <Link href="/" className={cn('flex items-center gap-3 p-2 rounded-md hover:bg-black/10', { 'bg-black/20': pathname === '/' })}>
                             <LayoutGrid className="h-5 w-5" /> Grilla de Eventos
                           </Link>
                       </nav>
