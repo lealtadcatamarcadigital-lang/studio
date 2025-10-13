@@ -55,6 +55,9 @@ export const wrestlersData: Record<string, WrestlerData> = {
     "Jeff Hardy": {
         imageUrl: "https://i.pinimg.com/736x/f2/b1/63/f2b163a50e103f68c40da844c36420e8.jpg"
     },
+    "The Hardy Boyz": {
+        imageUrl: "https://i.imgur.com/S6Imh3m.png"
+    },
     "Bubba Ray Dudley": {
         imageUrl: "https://i.pinimg.com/736x/a6/c0/27/a6c0279dd8fa0740880459bbf62c22f4.jpg"
     },
@@ -97,6 +100,9 @@ export const wrestlersData: Record<string, WrestlerData> = {
     "X-Pac": {
         imageUrl: "https://i.pinimg.com/1200x/d5/79/35/d5793533992e793daef55590b972ecbe.jpg"
     },
+    "D-Generation X": {
+        imageUrl: "https://i.imgur.com/S6Imh3m.png"
+    },
     "Tazz": {
         imageUrl: "https://i.pinimg.com/736x/14/d9/17/14d9178db9de647b04fbfc6fcdde853d.jpg"
     },
@@ -122,6 +128,15 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://i.pinimg.com/736x/5d/a4/6d/5da46d7b63cbc93940882c31218b278e.jpg"
     },
     "The Acolytes": {
+        imageUrl: "https://i.pinimg.com/736x/60/a6/6e/60a66e86a09c18f098b1fa3758521553.jpg"
+    },
+    "Bradshaw": {
+        imageUrl: "https://i.pinimg.com/736x/b1/7d/5a/b17d5a57457a873138c2057d341996d4.jpg"
+    },
+    "Faarooq": {
+        imageUrl: "https://i.pinimg.com/736x/e9/b5/02/e9b50201284a1f5927c3e50b28d09f7a.jpg"
+    },
+    "The APA": {
         imageUrl: "https://i.pinimg.com/736x/60/a6/6e/60a66e86a09c18f098b1fa3758521553.jpg"
     },
     "Road Dogg": {
@@ -176,6 +191,4 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://i.pinimg.com/736x/40/c3/97/40c397216e82c036ace369e522d1726a.jpg"
     }
 };
-
-    
 

@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, CalendarDays, ChevronDown, CheckCircle, Circle, Eye, EyeOff, Info, ListChecks, MapPin, Ticket } from 'lucide-react';
+import { ArrowLeft, CalendarDays, ChevronDown, CheckCircle, Circle, Eye, EyeOff, Info, ListChecks, MapPin, Ticket, Trophy } from 'lucide-react';
 import { getMonthNumber, getEventTypeDisplay, type DetailedEvent, type EventStatus, type EventStatusMap, getShowBadgeStyle } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -14,6 +14,8 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { wrestlersData } from '@/lib/wrestlers-data';
 import { Star } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
+
 
 const getShowIcon = (type: 'raw' | 'smackdown' | 'ppv') => {
     if (type === 'raw') {
@@ -29,7 +31,7 @@ const getShowIcon = (type: 'raw' | 'smackdown' | 'ppv') => {
 const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] => {
     const parts = match.split(':');
     const mainMatch = parts.length > 1 ? parts.slice(1).join(':') : parts[0];
-    const title = parts.length > 1 ? `${parts[0]}: ` : '';
+    const title = parts.length > 1 ? `${parts[0]}:` : '';
     
     const sortedWrestlers = [...Object.keys(wrestlersData)].sort((a, b) => b.length - a.length);
     const regex = new RegExp(`(${sortedWrestlers.map(name => name.replace(/[.*+?^${'()'}|\\[\\]\\\\]/g, '\\$&')).join('|')})`, 'g');
@@ -58,13 +60,15 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
 const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
     const matchText = typeof match === 'string' ? match : match.match;
     const rating = typeof match !== 'string' ? match.rating : undefined;
-    
+    const isTitleMatch = typeof match !== 'string' && match.match.includes(":");
+    const title = isTitleMatch ? match.match.split(':')[0].trim() : null;
+
     const parsedMatch = parseWrestlers(matchText);
 
     return (
-        <div className="bg-card border rounded-lg p-3">
+        <div className="bg-card border rounded-lg p-3 group hover:bg-accent/50 hover:shadow-md hover:shadow-primary/20 transition-all duration-200">
             <div className="flex justify-between items-start">
-                <p className="font-semibold text-card-foreground">
+                <p className="font-semibold text-card-foreground pr-4">
                     {parsedMatch.map((part, index) => 
                         part.wrestler ? (
                             <Link key={index} href={`/wrestler/${part.text.trim().replace(/ /g, '_')}?from=/event/${eventId}`} className="text-primary hover:underline">
@@ -75,15 +79,29 @@ const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
                         )
                     )}
                 </p>
-                {rating && (
-                    <div className="flex items-center gap-1 text-amber-500 flex-shrink-0 ml-2">
-                        <Star className="h-4 w-4 fill-current" />
-                        <span className="font-bold text-sm">{rating.toFixed(1)}</span>
-                    </div>
-                )}
+                <div className="flex items-center gap-3 flex-shrink-0 ml-2">
+                    {isTitleMatch && (
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                     <Trophy className="h-4 w-4 text-primary" />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>{title}</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    )}
+                    {rating && (
+                        <div className="flex items-center gap-1 text-amber-500">
+                            <Star className="h-4 w-4 fill-current" />
+                            <span className="font-bold text-sm">{rating.toFixed(1)}</span>
+                        </div>
+                    )}
+                </div>
             </div>
-             {typeof match !== 'string' && match.match.includes(":") && (
-                 <p className="text-red-600 dark:text-red-500 text-xs font-bold tracking-wider uppercase mt-1">{match.match.split(':').slice(0, 1).join(':').trim()}</p>
+             {isTitleMatch && (
+                 <p className="text-destructive text-xs font-bold tracking-wider uppercase mt-1">{title}</p>
             )}
         </div>
     );
@@ -133,7 +151,7 @@ export function EventDetails({ event, onBack, isEmbedded = false }: EventDetails
                 <div className={cn("flex flex-col md:flex-row gap-8 items-start")}>
                     {isPpvWithCover && (
                         <div className="md:w-1/3 flex-shrink-0">
-                            <div className="rounded-lg overflow-hidden border shadow-lg">
+                            <div className="rounded-lg overflow-hidden border-2 border-primary/50 shadow-lg shadow-primary/20">
                                 <Image 
                                     src={(event as any).coverUrl}
                                     alt={`Portada de ${(event as any).name}`}
@@ -162,9 +180,9 @@ export function EventDetails({ event, onBack, isEmbedded = false }: EventDetails
                         </div>
 
                         <div>
-                            <h3 className="font-semibold text-lg flex items-center gap-2 mb-3">
-                                <ListChecks className="h-5 w-5 text-primary" />
-                                Cartelera de Luchas
+                            <h3 className="font-headline font-bold text-2xl flex items-center gap-2 mb-3">
+                                <ListChecks className="h-6 w-6 text-primary" />
+                                Cartelera
                             </h3>
                             {event.matches && event.matches.length > 0 ? (
                                 <div className="space-y-2">
@@ -182,7 +200,7 @@ export function EventDetails({ event, onBack, isEmbedded = false }: EventDetails
                     <div className="p-4 bg-card rounded-lg border">
                       <CollapsibleTrigger asChild>
                         <div className="flex w-full items-center justify-between group cursor-pointer">
-                            <h3 className="font-semibold text-lg flex items-center gap-2">
+                            <h3 className="font-headline font-bold text-xl flex items-center gap-2">
                               <Info className="h-5 w-5 text-primary" />
                               Resumen del Evento
                             </h3>
@@ -201,7 +219,7 @@ export function EventDetails({ event, onBack, isEmbedded = false }: EventDetails
                 )}
 
                 <div className="p-4 bg-card rounded-lg space-y-3 border">
-                    <h3 className="font-semibold text-lg flex items-center gap-2">
+                    <h3 className="font-headline font-bold text-xl flex items-center gap-2">
                         <CheckCircle className="h-5 w-5 text-primary" />
                         Estado de Visualización
                     </h3>
