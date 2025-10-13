@@ -7,6 +7,9 @@ import { Header } from '@/components/header';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
 import type { EventType, DetailedEvent } from '@/components/event-grid';
 import { NextShowCarousel } from "@/components/next-show-carousel";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Calendar } from "lucide-react";
 
 const SCROLL_POSITION_KEY = 'attitude-rewind-scroll-position';
 const SHOW_FILTER_KEY = 'attitude-rewind-show-filter';
@@ -108,6 +111,15 @@ export default function Home() {
       />
       <NextShowCarousel events={upcomingEvents} />
       <EventGrid events={filteredEvents} />
+
+      <Link href="/calendar">
+        <Button
+            className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg"
+            aria-label="Ver calendario"
+        >
+            <Calendar className="h-6 w-6" />
+        </Button>
+      </Link>
     </main>
   );
 }

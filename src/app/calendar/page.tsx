@@ -13,6 +13,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { getShowBadgeStyle, getEventTypeDisplay } from '@/components/event-grid';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
 const CALENDAR_DATE_KEY = 'attitude-rewind-calendar-date';
 const YEAR_FILTER_KEY = 'attitude-rewind-year-filter';
@@ -217,6 +218,14 @@ export default function CalendarPage() {
                 </CardContent>
             </Card>
        </div>
+       <Link href="/">
+        <Button
+            className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg"
+            aria-label="Ver grilla"
+        >
+            <LayoutGrid className="h-6 w-6" />
+        </Button>
+      </Link>
     </main>
   );
 }

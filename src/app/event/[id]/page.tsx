@@ -5,7 +5,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, CalendarDays, ChevronDown, CheckCircle, Circle, Eye, EyeOff, Info, ListChecks, MapPin, Star, Ticket, Tv } from 'lucide-react';
+import { ArrowLeft, CalendarDays, ChevronDown, CheckCircle, Circle, Eye, EyeOff, Info, ListChecks, MapPin, ShoppingBag, Star, Ticket, Tv, Bell } from 'lucide-react';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
 import { flattenEvents, getMonthNumber, getEventTypeDisplay, type DetailedEvent, type EventStatus, type EventStatusMap, getShowBadgeStyle } from '@/components/event-grid';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,7 @@ import type { Match } from '@/lib/events-data';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { wrestlersData } from '@/lib/wrestlers-data';
+import { Header } from '@/components/header';
 
 const getShowIcon = (type: 'raw' | 'smackdown' | 'ppv') => {
     if (type === 'raw') {
@@ -26,14 +27,13 @@ const getShowIcon = (type: 'raw' | 'smackdown' | 'ppv') => {
     return <Ticket className="h-4 w-4" />;
 };
 
-const wrestlerNames = new Set(Object.keys(wrestlersData));
 
 const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] => {
     const parts = match.split(':');
     const mainMatch = parts.length > 1 ? parts.slice(1).join(':') : parts[0];
     const title = parts.length > 1 ? `${parts[0]}: ` : '';
     
-    const sortedWrestlers = [...wrestlerNames].sort((a, b) => b.length - a.length);
+    const sortedWrestlers = [...Object.keys(wrestlersData)].sort((a, b) => b.length - a.length);
     const regex = new RegExp(`(${sortedWrestlers.map(name => name.replace(/[.*+?^${'()'}|\\[\\]\\\\]/g, '\\$&')).join('|')})`, 'g');
     const segments = mainMatch.split(regex).filter(Boolean);
 
@@ -41,7 +41,7 @@ const parseWrestlers = (match: string): { text: string; wrestler: boolean }[] =>
 
     segments.forEach(segment => {
         const trimmedSegment = segment.trim();
-        if (wrestlerNames.has(trimmedSegment)) {
+        if (Object.keys(wrestlersData).includes(trimmedSegment)) {
             result.push({ text: segment, wrestler: true });
         } else {
             const last = result[result.length - 1];
@@ -124,7 +124,7 @@ export default function EventPage() {
     };
 
     const handleBack = () => {
-        router.push('/');
+        router.back();
     };
 
     if (!event) {
@@ -139,23 +139,13 @@ export default function EventPage() {
     
     return (
         <main className="min-h-screen bg-background">
-             <header className="sticky top-0 z-20 bg-card shadow-md" style={{ backgroundColor: '#2A3B57' }}>
-                <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-                    <Button variant="ghost" onClick={handleBack} className="flex items-center gap-2 text-white hover:bg-white/10">
-                        <ArrowLeft className="h-4 w-4" />
-                        Volver
-                    </Button>
-                    <Link href="/">
-                        <h1 className="text-2xl font-bold font-headline cursor-pointer">
-                            <span className="text-white">Attitude</span>
-                            <span className="text-red-500">Rewind</span>
-                        </h1>
-                    </Link>
-                    <div className="w-24"></div> {/* Spacer */}
-                </div>
-            </header>
+            <Header />
 
             <div className="container mx-auto max-w-6xl px-4 py-8">
+                <Button variant="ghost" onClick={handleBack} className="mb-4">
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Volver
+                </Button>
                 <div className="space-y-6">
                     <div className={cn("flex flex-col md:flex-row gap-8 items-start")}>
                         {isPpvWithCover && (
@@ -269,5 +259,3 @@ export default function EventPage() {
 
     
 }
-
-    

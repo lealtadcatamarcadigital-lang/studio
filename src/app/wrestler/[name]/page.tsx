@@ -15,6 +15,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
+import { Header } from '@/components/header';
+
 
 const getShowIcon = (type: 'raw' | 'smackdown' | 'ppv') => {
     return type === 'ppv' ? <Ticket className="h-3 w-3" /> : <Tv className="h-3 w-3" />;
@@ -35,7 +37,7 @@ export default function WrestlerPage() {
     if (from) {
       router.push(from);
     } else {
-      router.push('/');
+      router.back();
     }
   };
 
@@ -60,23 +62,13 @@ export default function WrestlerPage() {
 
   return (
     <main className="min-h-screen bg-background">
-       <header className="sticky top-0 z-20 bg-card shadow-md" style={{ backgroundColor: '#2A3B57' }}>
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-            <Button variant="ghost" onClick={handleBack} className="flex items-center gap-2 text-white hover:bg-white/10">
-                <ArrowLeft className="h-4 w-4" />
-                Volver
-            </Button>
-            <Link href="/">
-                <h1 className="text-2xl font-bold font-headline cursor-pointer">
-                    <span className="text-white">Attitude</span>
-                    <span className="text-red-500">Rewind</span>
-                </h1>
-            </Link>
-            <div className="w-24"></div>
-        </div>
-      </header>
+       <Header />
 
       <div className="container mx-auto max-w-6xl px-4 py-8">
+        <Button variant="ghost" onClick={handleBack} className="mb-4">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Volver
+        </Button>
         <h2 className="text-3xl font-bold font-headline mb-4">{wrestlerName}</h2>
         <div className="flex flex-col md:flex-row items-start gap-8">
             <div className="md:w-1/3 flex-shrink-0 space-y-4">
