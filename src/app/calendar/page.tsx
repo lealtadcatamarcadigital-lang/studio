@@ -12,7 +12,7 @@ import { flattenEvents, getMonthNumber, type DetailedEvent, type EventStatusMap 
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { getShowBadgeStyle, getEventTypeDisplay } from '@/components/event-grid';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LayoutGrid } from 'lucide-react';
 import Link from 'next/link';
 
 const CALENDAR_DATE_KEY = 'attitude-rewind-calendar-date';
