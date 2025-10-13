@@ -40,11 +40,10 @@ export function Header() {
                            <Image src="https://i.imgur.com/ITpm1XW.png" alt="Attitude Rewind Logo" width={32} height={32} className="h-8 w-8" />
                             <h1 className="text-2xl font-bold">AR</h1>
                         </Link>
-                        <p className='mt-4'>Sin nombre</p>
                       </div>
                       <nav className="flex-grow p-6 space-y-2">
                           <Link href="/" className={cn('flex items-center gap-3 p-2 rounded-md hover:bg-black/10', { 'bg-black/20': pathname === '/' })}>
-                            <LayoutGrid className="h-5 w-5" /> Grilla de Eventos
+                            <LayoutGrid className="h-5 w-5" /> Próximos Shows
                           </Link>
                       </nav>
                       <div className="p-6 border-t border-primary-foreground/20">
