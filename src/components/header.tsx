@@ -45,8 +45,8 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                   <SheetHeader className='p-6'>
                      <SheetTitle className="sr-only">Menú Principal</SheetTitle>
                      <Link href="/" className="flex items-center gap-2">
-                        <Image src="https://i.imgur.com/ITpm1XW.png" alt="Attitude Rewind Logo" width={32} height={32} className="h-8 w-8" />
-                        <h1 className="text-2xl font-bold">A<span className="text-red-500">R</span></h1>
+                        <Image src="https://i.imgur.com/ITpm1XW.png" alt="Attitude Rewind Logo" width={40} height={40} className="h-10 w-10" />
+                        <h1 className="text-3xl font-bold">A<span className="text-red-500">R</span></h1>
                     </Link>
                   </SheetHeader>
                   <nav className="flex-grow p-6 space-y-2">
@@ -66,16 +66,7 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                                     <label className='text-sm font-medium'>Show</label>
                                     <div className="space-y-1 pl-2">
                                         <div
-                                            onClick={() => onShowFilterChange('todos')}
-                                            className={cn(
-                                                'cursor-pointer p-1 rounded-md text-sm',
-                                                showFilter === 'todos' ? 'font-bold' : 'hover:bg-black/10'
-                                            )}
-                                        >
-                                            Todos
-                                        </div>
-                                        <div
-                                            onClick={() => onShowFilterChange('ppv')}
+                                            onClick={() => onShowFilterChange && onShowFilterChange('ppv')}
                                             className={cn(
                                                 'cursor-pointer p-1 rounded-md text-sm',
                                                 showFilter === 'ppv' ? 'font-bold text-amber-300' : 'hover:bg-black/10'
@@ -84,7 +75,7 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                                             PPV
                                         </div>
                                         <div
-                                            onClick={() => onShowFilterChange('raw')}
+                                            onClick={() => onShowFilterChange && onShowFilterChange('raw')}
                                             className={cn(
                                                 'cursor-pointer p-1 rounded-md text-sm',
                                                 showFilter === 'raw' ? 'font-bold text-red-300' : 'hover:bg-black/10'
@@ -93,7 +84,7 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                                             RAW
                                         </div>
                                         <div
-                                            onClick={() => onShowFilterChange('smackdown')}
+                                            onClick={() => onShowFilterChange && onShowFilterChange('smackdown')}
                                             className={cn(
                                                 'cursor-pointer p-1 rounded-md text-sm',
                                                 showFilter === 'smackdown' ? 'font-bold text-blue-300' : 'hover:bg-black/10'
