@@ -8,7 +8,9 @@ import {
   Tv,
   Ticket,
   Eye,
-  ChevronDown
+  ChevronDown,
+  CalendarDays,
+  MapPin
 } from "lucide-react";
 
 import type { MonthData, Event, PPVEvent } from "@/lib/events-data";
@@ -21,6 +23,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { getMonthNumber, getEventTypeDisplay, getShowImage, type DetailedEvent, type EventStatusMap } from "@/lib/utils";
+import { Badge } from "./ui/badge";
 
 
 interface EventGridProps {
@@ -114,42 +117,43 @@ export function EventGrid({ events, onEventClick }: EventGridProps) {
                         const isWatched = eventStatuses[event.id] === 'visto';
 
                         return (
-                        <div key={event.id} onClick={() => handleCardClick(event.id)} className="cursor-pointer">
-                            <Card className={cn("border-2 border-transparent hover:shadow-lg transition-shadow h-full", {
-                                'border-red-500/50': event.type === 'raw',
-                                'border-blue-500/50': event.type === 'smackdown',
-                                'border-amber-500/50': event.type === 'ppv',
-                            })}>
-                            <CardContent className="p-4 flex items-center gap-4 h-full">
-                                <div className="h-16 w-16 flex-shrink-0 relative">
+                          <div key={event.id} onClick={() => handleCardClick(event.id)} className="cursor-pointer group">
+                            <Card className="overflow-hidden h-full border-2 border-transparent hover:border-primary transition-all duration-300">
+                              <CardContent className="p-0 relative h-full">
+                                <div className="relative h-48 w-full">
                                   <Image 
                                     src={getShowImage(event.type, event)}
                                     alt={getEventTypeDisplay(event.type)}
                                     layout="fill"
                                     objectFit="cover"
-                                    className="rounded-lg"
+                                    className="group-hover:scale-105 transition-transform duration-300"
                                   />
-                                  <div className="absolute inset-0 bg-black/20 rounded-lg"></div>
-                                  <div className="absolute bottom-1 left-1/2 -translate-x-1/2 bg-black/50 text-white text-xs font-bold px-1.5 py-0.5 rounded">
-                                    {event.date}
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/20"></div>
+                                </div>
+                                <div className="absolute bottom-0 left-0 p-4 text-white w-full">
+                                  <Badge className="absolute top-2 right-2 text-xs" variant={isWatched ? 'default' : 'secondary'} onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleStatus(event.id); }}>
+                                    <Eye className={cn("h-4 w-4 mr-1", isWatched ? 'text-green-400' : 'text-gray-400')} />
+                                    {isWatched ? 'Visto' : 'Marcar'}
+                                  </Badge>
+
+                                  <h3 className="font-bold text-xl drop-shadow-lg">
+                                    {event.type === 'ppv' ? (event as PPVEvent).name : `WWF ${getEventTypeDisplay(event.type)}`}
+                                  </h3>
+
+                                  <div className="mt-2 space-y-1 text-sm text-white/80">
+                                    <div className="flex items-center gap-2">
+                                      <CalendarDays className="h-4 w-4"/>
+                                      <span>{new Date(event.year, getMonthNumber(event.month), parseInt(event.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <MapPin className="h-4 w-4"/>
+                                      <span>{event.location}</span>
+                                    </div>
                                   </div>
                                 </div>
-                                <div className="flex-grow flex flex-col">
-                                    <h3 className="font-bold text-lg">
-                                        {event.type === 'ppv' ? (event as PPVEvent).name : `WWF ${getEventTypeDisplay(event.type)}`}
-                                    </h3>
-                                    <p className="text-sm text-muted-foreground">{event.location}</p>
-                                    <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-                                        {event.type === 'ppv' ? <Ticket className="h-4 w-4" /> : <Tv className="h-4 w-4" />}
-                                        <span>{getEventTypeDisplay(event.type)}</span>
-                                    </div>
-                                </div>
-                                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleStatus(event.id); }} className="p-2 self-start">
-                                   <Eye className={cn("h-6 w-6", isWatched ? 'text-green-500' : 'text-gray-400')} />
-                                </button>
-                            </CardContent>
+                              </CardContent>
                             </Card>
-                        </div>
+                          </div>
                         );
                     })}
                     </div>
@@ -165,4 +169,3 @@ export function EventGrid({ events, onEventClick }: EventGridProps) {
     </div>
   );
 }
-
