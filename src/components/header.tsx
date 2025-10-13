@@ -1,5 +1,5 @@
 
-"use client";
+'use client';
 
 import React from 'react';
 import Link from 'next/link';
@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/sheet';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Utensils } from 'lucide-react';
+import Image from 'next/image';
 
 export function Header() {
   const pathname = usePathname();
@@ -37,7 +37,7 @@ export function Header() {
                   <div className='flex flex-col h-full'>
                       <div className="p-6">
                         <Link href="/" className="flex items-center gap-2">
-                           <Utensils className="h-8 w-8" />
+                           <Image src="https://i.imgur.com/ITpm1XW.png" alt="Attitude Rewind Logo" width={32} height={32} className="h-8 w-8" />
                             <h1 className="text-2xl font-bold">AR</h1>
                         </Link>
                         <p className='mt-4'>Sin nombre</p>
