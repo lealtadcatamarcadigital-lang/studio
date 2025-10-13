@@ -46,7 +46,7 @@ export function Footer() {
                         <h3 className="font-bold text-sm uppercase tracking-wider">Redes Sociales</h3>
                         <div className="space-y-3">
                             <SocialLink icon={<Facebook size={16} />} href="#" label="Facebook" />
-                            <SocialLink icon={<Twitter size={16} />} href="#" label="Twitter" />
+                            <SocialLink icon={<Twitter size={16} />} href="https://twitter.com/khabron2" label="@khabron2" />
                             <SocialLink icon={<Instagram size={16} />} href="#" label="Instagram" />
                         </div>
                     </div>
