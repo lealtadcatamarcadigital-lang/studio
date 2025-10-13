@@ -25,12 +25,13 @@ import { getMonthNumber, getEventTypeDisplay, getShowImage, type DetailedEvent, 
 
 interface EventGridProps {
   events: DetailedEvent[];
+  onEventClick: (eventId: string) => void;
 }
 
 const SCROLL_POSITION_KEY = 'attitude-rewind-scroll-position';
 const OPEN_COLLAPSIBLES_KEY = 'attitude-rewind-open-collapsibles';
 
-export function EventGrid({ events }: EventGridProps) {
+export function EventGrid({ events, onEventClick }: EventGridProps) {
   const [openCollapsibles, setOpenCollapsibles] = useState<Record<string, boolean>>({});
   const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
 
@@ -49,8 +50,9 @@ export function EventGrid({ events }: EventGridProps) {
     }
   }, []);
 
-  const handleEventClick = () => {
+  const handleCardClick = (eventId: string) => {
     sessionStorage.setItem(SCROLL_POSITION_KEY, window.scrollY.toString());
+    onEventClick(eventId);
   };
 
   const toggleStatus = (eventId: string) => {
@@ -60,8 +62,6 @@ export function EventGrid({ events }: EventGridProps) {
     setEventStatuses(newStatuses);
     try {
         localStorage.setItem('attitude-rewind-statuses', JSON.stringify(newStatuses));
-        // Force a re-render to update carousel
-        window.location.reload(); 
     } catch (error) {
         console.error("Could not save event statuses to localStorage:", error);
     }
@@ -114,13 +114,13 @@ export function EventGrid({ events }: EventGridProps) {
                         const isWatched = eventStatuses[event.id] === 'visto';
 
                         return (
-                        <Link href={`/event/${event.id}`} key={event.id} onClick={handleEventClick} scroll={false}>
-                            <Card className={cn("border-2 border-transparent hover:shadow-lg transition-shadow", {
+                        <div key={event.id} onClick={() => handleCardClick(event.id)} className="cursor-pointer">
+                            <Card className={cn("border-2 border-transparent hover:shadow-lg transition-shadow h-full", {
                                 'border-red-500/50': event.type === 'raw',
                                 'border-blue-500/50': event.type === 'smackdown',
                                 'border-amber-500/50': event.type === 'ppv',
                             })}>
-                            <CardContent className="p-4 flex items-center gap-4">
+                            <CardContent className="p-4 flex items-center gap-4 h-full">
                                 <div className="h-16 w-16 flex-shrink-0 relative">
                                   <Image 
                                     src={getShowImage(event.type, event)}
@@ -134,7 +134,7 @@ export function EventGrid({ events }: EventGridProps) {
                                     {event.date}
                                   </div>
                                 </div>
-                                <div className="flex-grow">
+                                <div className="flex-grow flex flex-col">
                                     <h3 className="font-bold text-lg">
                                         {event.type === 'ppv' ? (event as PPVEvent).name : `WWF ${getEventTypeDisplay(event.type)}`}
                                     </h3>
@@ -144,12 +144,12 @@ export function EventGrid({ events }: EventGridProps) {
                                         <span>{getEventTypeDisplay(event.type)}</span>
                                     </div>
                                 </div>
-                                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleStatus(event.id); }} className="p-2">
+                                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleStatus(event.id); }} className="p-2 self-start">
                                    <Eye className={cn("h-6 w-6", isWatched ? 'text-green-500' : 'text-gray-400')} />
                                 </button>
                             </CardContent>
                             </Card>
-                        </Link>
+                        </div>
                         );
                     })}
                     </div>
@@ -165,3 +165,4 @@ export function EventGrid({ events }: EventGridProps) {
     </div>
   );
 }
+

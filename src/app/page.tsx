@@ -8,6 +8,7 @@ import { flattenEvents, type DetailedEvent, type EventStatusMap } from '@/lib/ut
 import { NextShowCarousel } from "@/components/next-show-carousel";
 import { EventGrid } from "@/components/event-grid";
 import { EventDetails } from "@/components/event-details";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export type ShowTypeFilter = 'todos' | 'raw' | 'smackdown' | 'ppv';
 export type YearFilter = 'todos' | '2000' | '2001';
@@ -18,6 +19,8 @@ export default function Home() {
 
   const [showFilter, setShowFilter] = useState<ShowTypeFilter>('todos');
   const [yearFilter, setYearFilter] = useState<YearFilter>('todos');
+  const [isLoading, setIsLoading] = useState(true);
+
 
   const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
 
@@ -37,6 +40,8 @@ export default function Home() {
       }
     } catch (error) {
       console.error("Could not parse data from localStorage:", error);
+    } finally {
+        setIsLoading(false);
     }
   }, []);
 
@@ -83,7 +88,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    if (upcomingEvents.length > 0 && !selectedEventId) {
+    if (!isLoading && upcomingEvents.length > 0 && !selectedEventId) {
        const firstEventInFilter = filteredEvents.find(e => upcomingEvents.some(ue => ue.id === e.id));
        if (firstEventInFilter) {
            setSelectedEventId(firstEventInFilter.id);
@@ -93,7 +98,31 @@ export default function Home() {
            setSelectedEventId(upcomingEvents[0].id)
        }
     }
-  }, [upcomingEvents, selectedEventId, filteredEvents]);
+  }, [isLoading, upcomingEvents, selectedEventId, filteredEvents]);
+  
+  if (isLoading) {
+    return (
+        <main className="min-h-screen">
+          <Header
+            showFilter={showFilter}
+            yearFilter={yearFilter}
+            onShowFilterChange={handleShowFilterChange}
+            onYearFilterChange={handleYearFilterChange}
+          />
+           <div className="bg-card/90 backdrop-blur-sm border-y h-[272px] sticky top-16 z-20">
+                <div className="container mx-auto px-4 h-full flex flex-col justify-center">
+                    <h2 className="text-2xl font-bold">Próximos Shows</h2>
+                     <div className="w-full mt-4">
+                        <Skeleton className="h-48 w-full" />
+                    </div>
+                </div>
+            </div>
+             <div className="container mx-auto max-w-6xl px-4 py-8">
+                <Skeleton className="h-[400px] w-full" />
+            </div>
+        </main>
+    )
+  }
 
   return (
     <main className="min-h-screen">
