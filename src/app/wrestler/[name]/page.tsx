@@ -34,11 +34,7 @@ export default function WrestlerPage() {
   const wrestler = wrestlersData[wrestlerName];
   
   const handleBack = () => {
-    if (from) {
-      router.push(from);
-    } else {
-      router.back();
-    }
+    router.push('/');
   };
 
   const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
