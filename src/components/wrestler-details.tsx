@@ -3,7 +3,7 @@
 
 import React, { useMemo } from 'react';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
-import { flattenEvents } from './event-grid';
+import { flattenEvents } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface WrestlerDetailsProps {

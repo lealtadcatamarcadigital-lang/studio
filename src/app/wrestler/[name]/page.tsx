@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, CalendarDays, Star, Tv, Ticket } from 'lucide-react';
 import { wrestlersData } from '@/lib/wrestlers-data';
 import { useMemo } from 'react';
-import { flattenEvents, getMonthNumber, getEventTypeDisplay, getShowBadgeStyle } from '@/components/event-grid';
+import { flattenEvents, getMonthNumber, getEventTypeDisplay, getShowBadgeStyle } from '@/lib/utils';
 import type { Match } from '@/lib/events-data';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -118,6 +118,7 @@ export default function WrestlerPage() {
                                                 <Star className="h-4 w-4 fill-current" />
                                                 <span className="font-bold">{rating.toFixed(1)}</span>
                                             </div>
+
                                         )}
                                     </div>
                                 </CardContent>
@@ -134,5 +135,3 @@ export default function WrestlerPage() {
     </main>
   );
 }
-
-    

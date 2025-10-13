@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, CalendarDays, ChevronDown, CheckCircle, Circle, Eye, EyeOff, Info, ListChecks, MapPin, Ticket } from 'lucide-react';
-import { getMonthNumber, getEventTypeDisplay, type DetailedEvent, type EventStatus, type EventStatusMap, getShowBadgeStyle } from '@/components/event-grid';
+import { getMonthNumber, getEventTypeDisplay, type DetailedEvent, type EventStatus, type EventStatusMap, getShowBadgeStyle } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -92,9 +92,10 @@ const MatchCard = ({ match, eventId }: { match: Match; eventId: string }) => {
 interface EventDetailsProps {
     event: DetailedEvent;
     onBack: () => void;
+    isEmbedded?: boolean;
 }
 
-export function EventDetails({ event, onBack }: EventDetailsProps) {
+export function EventDetails({ event, onBack, isEmbedded = false }: EventDetailsProps) {
     const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
 
     useEffect(() => {
@@ -122,10 +123,12 @@ export function EventDetails({ event, onBack }: EventDetailsProps) {
 
     return (
          <div className="container mx-auto max-w-6xl px-4 py-8">
-            <Button variant="ghost" onClick={onBack} className="mb-4">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Volver
-            </Button>
+            {!isEmbedded && (
+              <Button variant="ghost" onClick={onBack} className="mb-4">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Volver
+              </Button>
+            )}
             <div className="space-y-6">
                 <div className={cn("flex flex-col md:flex-row gap-8 items-start")}>
                     {isPpvWithCover && (
@@ -236,4 +239,3 @@ export function EventDetails({ event, onBack }: EventDetailsProps) {
         </div>
     );
 }
-

@@ -2,20 +2,14 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from "react";
-import { EventGrid, flattenEvents, type EventStatusMap } from '@/components/event-grid';
 import { Header } from '@/components/header';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
-import type { EventType, DetailedEvent } from '@/components/event-grid';
+import { flattenEvents, type EventStatusMap } from '@/lib/utils';
+import type { DetailedEvent } from '@/lib/utils';
 import { NextShowCarousel } from "@/components/next-show-carousel";
 import { EventDetails } from "@/components/event-details";
 
-const SCROLL_POSITION_KEY = 'attitude-rewind-scroll-position';
-const SHOW_FILTER_KEY = 'attitude-rewind-show-filter';
-const YEAR_FILTER_KEY = 'attitude-rewind-year-filter';
-
 export default function Home() {
-  const [showFilter, setShowFilter] = useState<EventType | 'all'>('all');
-  const [yearFilter, setYearFilter] = useState<string>('all');
   const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
@@ -27,54 +21,10 @@ export default function Home() {
       if (storedStatuses) {
         setEventStatuses(JSON.parse(storedStatuses));
       }
-      const storedShowFilter = localStorage.getItem(SHOW_FILTER_KEY);
-      if (storedShowFilter) {
-        setShowFilter(storedShowFilter as EventType | 'all');
-      }
-      const storedYearFilter = localStorage.getItem(YEAR_FILTER_KEY);
-      if (storedYearFilter) {
-        setYearFilter(storedYearFilter);
-      }
     } catch (error) {
       console.error("Could not parse data from localStorage:", error);
     }
   }, []);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(SHOW_FILTER_KEY, showFilter);
-    } catch (error) {
-      console.error("Could not save show filter to localStorage:", error);
-    }
-  }, [showFilter]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(YEAR_FILTER_KEY, yearFilter);
-    } catch (error) {
-      console.error("Could not save year filter to localStorage:", error);
-    }
-  }, [yearFilter]);
-
-  useEffect(() => {
-    if (selectedEventId) return;
-
-    const savedPosition = sessionStorage.getItem(SCROLL_POSITION_KEY);
-    if (savedPosition) {
-      window.scrollTo(0, parseInt(savedPosition, 10));
-      sessionStorage.removeItem(SCROLL_POSITION_KEY);
-    }
-
-    const handleBeforeUnload = () => {
-      sessionStorage.setItem(SCROLL_POSITION_KEY, window.scrollY.toString());
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [selectedEventId]);
 
   const upcomingEvents = useMemo(() => {
     const firstUnwatchedIndex = allEvents.findIndex(event => eventStatuses[event.id] !== 'visto');
@@ -84,20 +34,11 @@ export default function Home() {
     return allEvents.slice(firstUnwatchedIndex);
   }, [allEvents, eventStatuses]);
 
-  const filteredEvents = useMemo(() => {
-    let events = allEvents;
-
-    if (showFilter !== 'all') {
-      events = events.filter(event => event.type === showFilter);
+  useEffect(() => {
+    if (upcomingEvents.length > 0 && !selectedEventId) {
+      setSelectedEventId(upcomingEvents[0].id);
     }
-    
-    if (yearFilter !== 'all') {
-      const year = parseInt(yearFilter);
-      events = events.filter(event => event.year === year);
-    }
-    
-    return events;
-  }, [allEvents, showFilter, yearFilter]);
+  }, [upcomingEvents, selectedEventId]);
   
   const selectedEvent = useMemo(() => {
     if (!selectedEventId) return null;
@@ -107,19 +48,13 @@ export default function Home() {
 
   return (
     <main className="min-h-screen">
-      <Header
-        showFilter={showFilter}
-        onShowFilterChange={setShowFilter}
-        yearFilter={yearFilter}
-        onYearFilterChange={setYearFilter}
-        activePage="grid"
-      />
+      <Header />
       <NextShowCarousel events={upcomingEvents} onEventSelect={setSelectedEventId} />
       
-      {selectedEvent ? (
-        <EventDetails event={selectedEvent} onBack={() => setSelectedEventId(null)} />
-      ) : (
-        <EventGrid events={filteredEvents} />
+      {selectedEvent && (
+        <div className="mt-4">
+          <EventDetails event={selectedEvent} onBack={() => {}} isEmbedded={true} />
+        </div>
       )}
 
     </main>

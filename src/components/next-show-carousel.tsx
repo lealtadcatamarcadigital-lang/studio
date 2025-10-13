@@ -11,8 +11,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import type { DetailedEvent, PPVEvent } from './event-grid';
-import { getEventTypeDisplay, getMonthNumber, getShowImage } from './event-grid';
+import type { DetailedEvent, PPVEvent } from '@/lib/utils';
+import { getEventTypeDisplay, getMonthNumber, getShowImage } from '@/lib/utils';
 import { Badge } from './ui/badge';
 import { CalendarDays } from 'lucide-react';
 
@@ -33,7 +33,7 @@ export function NextShowCarousel({ events, onEventSelect }: NextShowCarouselProp
   };
 
   return (
-    <div className="bg-card/90 backdrop-blur-sm border-y h-[272px]">
+    <div className="bg-card/90 backdrop-blur-sm border-y h-[272px] sticky top-16 z-20">
         <div className="container mx-auto px-4 h-full flex flex-col justify-center">
             <h2 className="text-2xl font-bold">Próximos Shows</h2>
             <Carousel
