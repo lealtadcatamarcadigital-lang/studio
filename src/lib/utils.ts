@@ -38,8 +38,8 @@ export const getMonthNumber = (monthName: string) => {
 
 export const getEventTypeDisplay = (type: 'raw' | 'smackdown' | 'ppv') => {
     switch(type) {
-        case 'raw': return 'RAW';
-        case 'smackdown': return 'SmackDown';
+        case 'raw': return 'RAW is WAR';
+        case 'smackdown': return 'SmackDown!';
         case 'ppv': return 'PPV';
     }
 };
@@ -54,3 +54,5 @@ export const getShowImage = (type: EventType, event: DetailedEvent) => {
     };
     return images[type] || 'https://i.imgur.com/S6Imh3m.png';
 };
+
+    

@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/collapsible";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { getMonthNumber, getEventTypeDisplay, getShowImage, type DetailedEvent, type EventStatusMap } from "@/lib/utils";
+import { getMonthNumber, getEventTypeDisplay, getShowImage, type DetailedEvent, type EventStatusMap, getShowBadgeStyle } from "@/lib/utils";
 import { Badge } from "./ui/badge";
 
 
@@ -93,6 +93,12 @@ export function EventGrid({ events, onEventClick }: EventGridProps) {
     }, {});
   }, [events]);
 
+  const getShowIcon = (type: 'raw' | 'smackdown' | 'ppv') => {
+    if (type === 'raw') return <Image src="https://i.imgur.com/jyfFEUh.png" alt="RAW is WAR" width={20} height={20} className="h-5 w-auto" />;
+    if (type === 'smackdown') return <Image src="https://i.imgur.com/6TIM8Lj.png" alt="SmackDown!" width={20} height={20} className="h-5 w-auto" />;
+    return <Ticket className="h-4 w-4" />;
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="space-y-8">
@@ -118,17 +124,25 @@ export function EventGrid({ events, onEventClick }: EventGridProps) {
 
                         return (
                           <div key={event.id} onClick={() => handleCardClick(event.id)} className="cursor-pointer group">
+<<<<<<< HEAD
                             <Card className={cn("overflow-hidden h-full border-2 border-transparent hover:border-primary transition-all duration-300", event.type !== 'ppv' && 'flex flex-col')}>
                               <CardContent className="p-0 relative h-full">
                                 {event.type === 'ppv' ? (
                                   <>
                                     <div className="relative h-48 w-full">
                                       <Image 
+=======
+                            <Card className="overflow-hidden h-full border-2 border-transparent hover:border-primary transition-all duration-300 flex flex-col">
+                              {event.type === 'ppv' && (
+                                <div className="relative h-48 w-full">
+                                    <Image 
+>>>>>>> 17996cc50efee86ad22547c81597063d5dc5d36a
                                         src={getShowImage(event.type, event)}
                                         alt={getEventTypeDisplay(event.type)}
                                         layout="fill"
                                         objectFit="cover"
                                         className="group-hover:scale-105 transition-transform duration-300"
+<<<<<<< HEAD
                                       />
                                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/20"></div>
                                     </div>
@@ -178,6 +192,60 @@ export function EventGrid({ events, onEventClick }: EventGridProps) {
                                         </Badge>
                                     </div>
                                   </div>
+=======
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/20"></div>
+                                </div>
+                              )}
+                              <CardContent className={cn("p-4 relative w-full flex-grow flex flex-col", event.type !== 'ppv' ? 'justify-between' : '')}>
+                                {event.type === 'ppv' ? (
+                                    <div className="absolute bottom-0 left-0 p-4 text-white w-full">
+                                      <Badge className="absolute top-2 right-2 text-xs" variant={isWatched ? 'default' : 'secondary'} onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleStatus(event.id); }}>
+                                        <Eye className={cn("h-4 w-4 mr-1", isWatched ? 'text-green-400' : 'text-gray-400')} />
+                                        {isWatched ? 'Visto' : 'Marcar'}
+                                      </Badge>
+
+                                      <h3 className="font-bold text-xl drop-shadow-lg">
+                                        {event.type === 'ppv' ? (event as PPVEvent).name : `WWF ${getEventTypeDisplay(event.type)}`}
+                                      </h3>
+
+                                      <div className="mt-2 space-y-1 text-sm text-white/80">
+                                        <div className="flex items-center gap-2">
+                                          <CalendarDays className="h-4 w-4"/>
+                                          <span>{new Date(event.year, getMonthNumber(event.month), parseInt(event.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                          <MapPin className="h-4 w-4"/>
+                                          <span>{event.location}</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                ) : (
+                                  <>
+                                    <div>
+                                      <div className="flex justify-between items-start">
+                                        <h3 className="font-bold text-lg mb-2 flex items-center gap-2 pr-4">
+                                            {getShowIcon(event.type)}
+                                            {`WWF ${getEventTypeDisplay(event.type)}`}
+                                        </h3>
+                                        <Badge className="text-xs flex-shrink-0" variant={isWatched ? 'default' : 'secondary'} onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleStatus(event.id); }}>
+                                          <Eye className={cn("h-4 w-4 mr-1", isWatched ? 'text-green-400' : 'text-gray-400')} />
+                                          {isWatched ? 'Visto' : 'Marcar'}
+                                        </Badge>
+                                      </div>
+                                      <div className="space-y-1 text-sm text-muted-foreground">
+                                          <div className="flex items-center gap-2">
+                                              <CalendarDays className="h-4 w-4"/>
+                                              <span>{new Date(event.year, getMonthNumber(event.month), parseInt(event.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                                          </div>
+                                          <div className="flex items-center gap-2">
+                                              <MapPin className="h-4 w-4"/>
+                                              <span>{event.location}</span>
+                                          </div>
+                                      </div>
+                                    </div>
+                                  </>
+>>>>>>> 17996cc50efee86ad22547c81597063d5dc5d36a
                                 )}
                               </CardContent>
                             </Card>
@@ -197,3 +265,5 @@ export function EventGrid({ events, onEventClick }: EventGridProps) {
     </div>
   );
 }
+
+    

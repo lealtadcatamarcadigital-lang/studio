@@ -1,4 +1,3 @@
-
 export interface WrestlerData {
   imageUrl?: string;
 }
@@ -95,7 +94,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://i.pinimg.com/736x/e0/5a/1b/e05a1b74540d71c68e9cb4149c826577.jpg"
     },
     "Test": {
-        imageUrl: "https://i.pinimg.com/736x/b8/af/b2/b8afb2664a32f3f9f5da44e3ecd295a2.jpg"
+        imageUrl: "https://i.imgur.com/b8afb2.jpeg"
     },
     "X-Pac": {
         imageUrl: "https://i.pinimg.com/1200x/d5/79/35/d5793533992e793daef55590b972ecbe.jpg"
@@ -107,10 +106,10 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://i.pinimg.com/736x/14/d9/17/14d9178db9de647b04fbfc6fcdde853d.jpg"
     },
     "Crash Holly": {
-        imageUrl: "https://i.pinimg.com/736x/1d/b8/01/1db8014f150f86a3b7d5edce98dd6f2c.jpg"
+        imageUrl: "https://i.imgur.com/1db801.jpeg"
     },
     "Steve Blackman": {
-        imageUrl: "https://i.pinimg.com/736x/17/55/aa/1755aa102cb51112d5ffbe68e2b32238.jpg"
+        imageUrl: "https://i.imgur.com/1755aa.jpeg"
     },
     "The Fabulous Moolah": {
         imageUrl: "https://i.pinimg.com/736x/e8/97/7a/e8977abc69c710d32a09397a310e4184.jpg"
@@ -125,7 +124,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://i.pinimg.com/736x/67/83/78/6783786ebab150982e2618dbe1c1d2d0.jpg"
     },
     "Prince Albert": {
-        imageUrl: "https://i.pinimg.com/736x/5d/a4/6d/5da46d7b63cbc93940882c31218b278e.jpg"
+        imageUrl: "https://i.imgur.com/5da46d.jpeg"
     },
     "The Acolytes": {
         imageUrl: "https://i.pinimg.com/736x/60/a6/6e/60a66e86a09c18f098b1fa3758521553.jpg"
@@ -152,7 +151,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://i.pinimg.com/736x/65/6f/14/656f147266a5bb0704e9cb9f40689df8.jpg"
     },
     "Gangrel": {
-        imageUrl: "https://i.pinimg.com/736x/f5/2e/ff/f52eff0164a7e945c07babead828f0ec.jpg"
+        imageUrl: "https://i.imgur.com/f52eff.jpeg"
     },
     "Edge & Christian": {
         imageUrl: "https://i.pinimg.com/736x/28/7d/ef/287def50143664ddd14922361b30c92f.jpg"
@@ -191,111 +190,111 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://i.pinimg.com/736x/40/c3/97/40c397216e82c036ace369e522d1726a.jpg"
     },
     "Al Snow": {
-        imageUrl: "https://i.imgur.com/N52Z9zSb.jpg"
+        imageUrl: "https://i.imgur.com/N52Z9zS.jpeg"
     },
     "Essa Rios": {
-        imageUrl: "https://i.imgur.com/M62V3fDh.jpg"
+        imageUrl: "https://i.imgur.com/M62V3fD.jpeg"
     },
     "Steven Richards": {
-        imageUrl: "https://i.imgur.com/MMu3Zf6h.jpg"
+        imageUrl: "https://i.imgur.com/MMu3Zf6.jpeg"
     },
     "Haku": {
-        imageUrl: "https://i.imgur.com/tHqg3tFh.jpg"
+        imageUrl: "https://i.imgur.com/tHqg3tF.jpeg"
     },
     "Tori": {
-        imageUrl: "https://i.imgur.com/d5A8i9sh.jpg"
+        imageUrl: "https://i.imgur.com/d5A8i9s.jpeg"
     },
     "Bull Buchanan": {
-        imageUrl: "https://i.imgur.com/dOoT3bSh.jpg"
+        imageUrl: "https://i.imgur.com/dOoT3bS.jpeg"
     },
     "The British Bulldog": {
-        imageUrl: "https://i.imgur.com/Q2b4kgnh.jpg"
+        imageUrl: "https://i.imgur.com/Q2b4kgn.jpeg"
     },
     "Funaki": {
-        imageUrl: "https://i.imgur.com/G5dC6M3h.jpg"
+        imageUrl: "https://i.imgur.com/G5dC6M3.jpeg"
     },
     "Taka Michinoku": {
-        imageUrl: "https://i.imgur.com/G5dC6M3h.jpg"
+        imageUrl: "https://i.imgur.com/G5dC6M3.jpeg"
     },
     "Kaientai": {
-        imageUrl: "https://i.imgur.com/G5dC6M3h.jpg"
+        imageUrl: "https://i.imgur.com/G5dC6M3.jpeg"
     },
     "Mark Henry": {
-        imageUrl: "https://i.imgur.com/yN6JtGwh.jpg"
+        imageUrl: "https://i.imgur.com/yN6JtGw.jpeg"
     },
     "Luna Vachon": {
-        imageUrl: "https://i.imgur.com/8x05bCTh.jpg"
+        imageUrl: "https://i.imgur.com/8x05bCT.jpeg"
     },
     "The Kat": {
-        imageUrl: "https://i.imgur.com/s6n5mEwh.jpg"
+        imageUrl: "https://i.imgur.com/s6n5mEw.jpeg"
     },
     "Jacqueline": {
-        imageUrl: "https://i.imgur.com/S5gsG1vh.jpg"
+        imageUrl: "https://i.imgur.com/S5gsG1v.jpeg"
     },
     "Ivory": {
-        imageUrl: "https://i.imgur.com/3I3p9oTh.jpg"
+        imageUrl: "https://i.imgur.com/3I3p9oT.jpeg"
     },
     "Chaz": {
-        imageUrl: "https://i.imgur.com/wP01sFAh.jpg"
+        imageUrl: "https://i.imgur.com/wP01sFA.jpeg"
     },
     "Lo Down": {
-        imageUrl: "https://i.imgur.com/wP01sFAh.jpg"
+        imageUrl: "https://i.imgur.com/wP01sFA.jpeg"
     },
     "The Mean Street Posse": {
-        imageUrl: "https://i.imgur.com/iHh13jWh.jpg"
+        imageUrl: "https://i.imgur.com/iHh13jW.jpeg"
     },
     "Joey Abs": {
-        imageUrl: "https://i.imgur.com/iHh13jWh.jpg"
+        imageUrl: "https://i.imgur.com/iHh13jW.jpeg"
     },
     "Pete Gas": {
-        imageUrl: "https://i.imgur.com/iHh13jWh.jpg"
+        imageUrl: "https://i.imgur.com/iHh13jW.jpeg"
     },
     "Rodney": {
-        imageUrl: "https://i.imgur.com/iHh13jWh.jpg"
+        imageUrl: "https://i.imgur.com/iHh13jW.jpeg"
     },
     "Bob Backlund": {
-        imageUrl: "https://i.imgur.com/Y4GN4p8h.jpg"
+        imageUrl: "https://i.imgur.com/Y4GN4p8.jpeg"
     },
     "The Brooklyn Brawler": {
-        imageUrl: "https://i.imgur.com/Q8x8J2Eh.jpg"
+        imageUrl: "https://i.imgur.com/Q8x8J2E.jpeg"
     },
     "Jerry Lawler": {
-        imageUrl: "https://i.imgur.com/xYd3bQ2h.jpg"
+        imageUrl: "https://i.imgur.com/xYd3bQ2.jpeg"
     },
     "K-Kwik": {
-        imageUrl: "https://i.imgur.com/BjoYUDSh.jpg"
+        imageUrl: "https://i.imgur.com/BjoYUDs.jpeg"
     },
     "Molly Holly": {
-        imageUrl: "https://i.imgur.com/nJ4Z6Ewh.jpg"
+        imageUrl: "https://i.imgur.com/nJ4Z6Ew.jpeg"
     },
     "Raven": {
-        imageUrl: "https://i.imgur.com/yCbkpWsh.jpg"
+        imageUrl: "https://i.imgur.com/yCbkpWs.jpeg"
     },
     "Right to Censor": {
-        imageUrl: "https://i.imgur.com/MMu3Zf6h.jpg"
+        imageUrl: "https://i.imgur.com/MMu3Zf6.jpeg"
     },
     "Teddy Long": {
-        imageUrl: "https://i.imgur.com/pB1tIHYh.jpg"
+        imageUrl: "https://i.imgur.com/pB1tIHY.jpeg"
     },
     "Jack Doan": {
-        imageUrl: "https://i.imgur.com/pB1tIHYh.jpg"
+        imageUrl: "https://i.imgur.com/pB1tIHY.jpeg"
     },
     "Terri": {
-        imageUrl: "https://i.imgur.com/xVd2Pyoh.jpg"
+        imageUrl: "https://i.imgur.com/xVd2Pyo.jpeg"
     },
     "Mandy": {
-        imageUrl: "https://i.imgur.com/s6n5mEwh.jpg"
+        imageUrl: "https://i.imgur.com/s6n5mEw.jpeg"
     },
     "Victoria": {
-        imageUrl: "https://i.imgur.com/s6n5mEwh.jpg"
+        imageUrl: "https://i.imgur.com/s6n5mEw.jpeg"
     },
     "The Hollys": {
-        imageUrl: "https://i.imgur.com/1d/1db8014f150f86a3b7d5edce98dd6f2c.jpg"
+        imageUrl: "https://i.imgur.com/1db801.jpeg"
     },
     "Head Cheese": {
-        imageUrl: "https://i.imgur.com/N52Z9zSb.jpg"
+        imageUrl: "https://i.imgur.com/N52Z9zS.jpeg"
     },
     "The Rock 'n' Sock Connection": {
-        imageUrl: "https://i.imgur.com/59/5921da5ccc564e14d3a63bfb94636ab0.jpg"
+        imageUrl: "https://i.imgur.com/5921da.jpeg"
     }
 };

@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -44,7 +43,7 @@ export function Header() {
                       </Link>
                   </nav>
                   <div className="p-6 border-t border-zinc-800">
-                    <span className="text-xs text-zinc-500">v2.7.613</span>
+                    <span className="text-xs text-zinc-500">V1.9</span>
                   </div>
               </SheetContent>
           </Sheet>
