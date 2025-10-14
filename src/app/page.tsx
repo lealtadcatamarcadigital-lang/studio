@@ -2,12 +2,12 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from "react";
+import { useRouter } from 'next/navigation';
 import { Header } from '@/components/header';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
 import { flattenEvents, type DetailedEvent, type EventStatus, type EventStatusMap } from '@/lib/utils';
 import { NextShowCarousel } from "@/components/next-show-carousel";
 import { EventGrid } from "@/components/event-grid";
-import { EventDetails } from "@/components/event-details";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export type ShowTypeFilter = 'todos' | 'raw' | 'smackdown' | 'ppv';
@@ -15,12 +15,11 @@ export type YearFilter = 'todos' | '2000' | '2001';
 
 export default function Home() {
   const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
-  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const router = useRouter();
 
   const [showFilter, setShowFilter] = useState<ShowTypeFilter>('todos');
   const [yearFilter, setYearFilter] = useState<YearFilter>('todos');
   const [isLoading, setIsLoading] = useState(true);
-
 
   const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
 
@@ -45,9 +44,12 @@ export default function Home() {
     }
   }, []);
 
+  const handleEventSelect = (eventId: string) => {
+    router.push(`/event/${eventId}`);
+  };
+
   const handleShowFilterChange = (value: ShowTypeFilter) => {
     setShowFilter(value);
-    setSelectedEventId(null);
     try {
       localStorage.setItem('attitude-rewind-show-filter', value);
     } catch (error) {
@@ -57,7 +59,6 @@ export default function Home() {
 
   const handleYearFilterChange = (value: YearFilter) => {
     setYearFilter(value);
-    setSelectedEventId(null);
     try {
       localStorage.setItem('attitude-rewind-year-filter', value);
     } catch (error) {
@@ -90,36 +91,14 @@ export default function Home() {
       return []; // All events watched
     }
     
-    // Get all events from the first unwatched one
     const allUpcoming = allEvents.slice(firstUnwatchedIndex);
 
-    // Now, filter those upcoming events based on the current filters
     return allUpcoming.filter(event => {
       const showMatch = showFilter === 'todos' || event.type === showFilter;
       const yearMatch = yearFilter === 'todos' || event.year.toString() === yearFilter;
       return showMatch && yearMatch;
     });
   }, [allEvents, eventStatuses, showFilter, yearFilter]);
-  
-  const selectedEvent = useMemo(() => {
-    if (!selectedEventId) return null;
-    return allEvents.find(e => e.id === selectedEventId);
-  }, [selectedEventId, allEvents]);
-
-
-  useEffect(() => {
-    if (!isLoading && !selectedEventId) {
-       const firstUpcomingEventInFilter = upcomingEvents.find(event => filteredEvents.some(fe => fe.id === event.id));
-
-       if (firstUpcomingEventInFilter) {
-          setSelectedEventId(firstUpcomingEventInFilter.id);
-       } else if (filteredEvents.length > 0) {
-          setSelectedEventId(filteredEvents[0].id);
-       } else if (upcomingEvents.length > 0) {
-          setSelectedEventId(upcomingEvents[0].id)
-       }
-    }
-  }, [isLoading, upcomingEvents, filteredEvents, selectedEventId]);
   
   if (isLoading) {
     return (
@@ -155,18 +134,12 @@ export default function Home() {
       />
       <NextShowCarousel 
         events={upcomingEvents} 
-        onEventSelect={setSelectedEventId}
+        onEventSelect={handleEventSelect}
         eventStatuses={eventStatuses}
         onToggleStatus={toggleEventStatus}
       />
       
-      {selectedEvent ? (
-        <div className="mt-8">
-          <EventDetails event={selectedEvent} onBack={() => setSelectedEventId(null)} isEmbedded={true}/>
-        </div>
-      ) : (
-        <EventGrid events={filteredEvents} onEventClick={setSelectedEventId} />
-      )}
+      <EventGrid events={filteredEvents} onEventClick={handleEventSelect} />
 
     </main>
   );
