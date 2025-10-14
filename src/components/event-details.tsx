@@ -137,7 +137,7 @@ export function EventDetails({ event, onBack, isEmbedded = false }: EventDetails
         }
     };
     
-    const showImage = event.type === 'ppv' || event.type === 'raw' || event.type === 'smackdown';
+    const showImage = event.type === 'ppv';
     const ppvEvent = event.type === 'ppv' ? (event as PPVEvent) : null;
 
 
