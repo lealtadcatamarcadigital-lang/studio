@@ -84,4 +84,8 @@ body {
   }
 }
 
-
+@layer components {
+    .progress-red > div {
+        @apply bg-red-500;
+    }
+}
