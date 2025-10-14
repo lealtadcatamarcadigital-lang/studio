@@ -76,14 +76,6 @@ export default function Home() {
     }
   };
 
-  const upcomingEvents = useMemo(() => {
-    const firstUnwatchedIndex = allEvents.findIndex(event => eventStatuses[event.id] !== 'visto');
-    if (firstUnwatchedIndex === -1) {
-      return []; // All events watched
-    }
-    return allEvents.slice(firstUnwatchedIndex);
-  }, [allEvents, eventStatuses]);
-
   const filteredEvents = useMemo(() => {
     return allEvents.filter(event => {
       const showMatch = showFilter === 'todos' || event.type === showFilter;
@@ -91,6 +83,23 @@ export default function Home() {
       return showMatch && yearMatch;
     });
   }, [allEvents, showFilter, yearFilter]);
+
+  const upcomingEvents = useMemo(() => {
+    const firstUnwatchedIndex = allEvents.findIndex(event => eventStatuses[event.id] !== 'visto');
+    if (firstUnwatchedIndex === -1) {
+      return []; // All events watched
+    }
+    
+    // Get all events from the first unwatched one
+    const allUpcoming = allEvents.slice(firstUnwatchedIndex);
+
+    // Now, filter those upcoming events based on the current filters
+    return allUpcoming.filter(event => {
+      const showMatch = showFilter === 'todos' || event.type === showFilter;
+      const yearMatch = yearFilter === 'todos' || event.year.toString() === yearFilter;
+      return showMatch && yearMatch;
+    });
+  }, [allEvents, eventStatuses, showFilter, yearFilter]);
   
   const selectedEvent = useMemo(() => {
     if (!selectedEventId) return null;
