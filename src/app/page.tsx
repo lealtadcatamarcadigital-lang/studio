@@ -6,10 +6,12 @@ import { WWF_ALL_DATA } from '@/lib/events-data-all';
 import { flattenEvents, type DetailedEvent, type EventStatus, type EventStatusMap } from '@/lib/utils';
 import { NextShowCarousel } from "@/components/next-show-carousel";
 import { EventDetails } from "@/components/event-details";
+import { LoadingSpinner } from "@/components/loading-spinner";
 
 export default function Home() {
   const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
 
@@ -25,13 +27,18 @@ export default function Home() {
   }, []);
   
   useEffect(() => {
-    if (allEvents.length > 0 && !selectedEventId) {
-        const firstUnwatchedIndex = allEvents.findIndex(event => eventStatuses[event.id] !== 'visto');
-        if (firstUnwatchedIndex !== -1) {
-            setSelectedEventId(allEvents[firstUnwatchedIndex].id);
-        } else if (allEvents.length > 0) {
-            setSelectedEventId(allEvents[0].id);
-        }
+    if (allEvents.length > 0) {
+      if (!selectedEventId) {
+          const firstUnwatchedIndex = allEvents.findIndex(event => eventStatuses[event.id] !== 'visto');
+          if (firstUnwatchedIndex !== -1) {
+              setSelectedEventId(allEvents[firstUnwatchedIndex].id);
+          } else if (allEvents.length > 0) {
+              setSelectedEventId(allEvents[0].id);
+          }
+      }
+      // Add a small delay to prevent flickering on fast loads
+      const timer = setTimeout(() => setIsLoading(false), 500);
+      return () => clearTimeout(timer);
     }
   }, [allEvents, eventStatuses, selectedEventId]);
 
@@ -55,11 +62,13 @@ export default function Home() {
   };
 
   const upcomingEvents = useMemo(() => {
+    if (!allEvents.length) return [];
     const firstUnwatchedIndex = allEvents.findIndex(event => eventStatuses[event.id] !== 'visto');
     if (firstUnwatchedIndex === -1) {
-      return allEvents;
+      // If all are watched, show from the beginning
+      return allEvents.slice(0, 10);
     }
-    return allEvents.slice(firstUnwatchedIndex);
+    return allEvents.slice(firstUnwatchedIndex, firstUnwatchedIndex + 10);
   }, [allEvents, eventStatuses]);
 
   const selectedEvent = useMemo(() => {
@@ -67,6 +76,9 @@ export default function Home() {
     return allEvents.find(event => event.id === selectedEventId) || null;
   }, [allEvents, selectedEventId]);
 
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <main className="min-h-screen">
