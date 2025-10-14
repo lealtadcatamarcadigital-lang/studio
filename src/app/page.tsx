@@ -108,17 +108,18 @@ export default function Home() {
 
 
   useEffect(() => {
-    if (!isLoading && upcomingEvents.length > 0 && !selectedEventId) {
-       const firstEventInFilter = filteredEvents.find(e => upcomingEvents.some(ue => ue.id === e.id));
-       if (firstEventInFilter) {
-           setSelectedEventId(firstEventInFilter.id);
+    if (!isLoading && !selectedEventId) {
+       const firstUpcomingEventInFilter = upcomingEvents.find(event => filteredEvents.some(fe => fe.id === event.id));
+
+       if (firstUpcomingEventInFilter) {
+          setSelectedEventId(firstUpcomingEventInFilter.id);
        } else if (filteredEvents.length > 0) {
-           setSelectedEventId(filteredEvents[0].id);
-       } else {
-           setSelectedEventId(upcomingEvents[0].id)
+          setSelectedEventId(filteredEvents[0].id);
+       } else if (upcomingEvents.length > 0) {
+          setSelectedEventId(upcomingEvents[0].id)
        }
     }
-  }, [isLoading, upcomingEvents, selectedEventId, filteredEvents]);
+  }, [isLoading, upcomingEvents, filteredEvents, selectedEventId]);
   
   if (isLoading) {
     return (
