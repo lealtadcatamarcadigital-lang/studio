@@ -41,7 +41,7 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                       <span className="sr-only">Abrir Menú</span>
                   </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-[80vw] sm:w-[300px] bg-primary text-primary-foreground p-0">
+              <SheetContent side="left" className="w-[80vw] sm:w-[300px] bg-black text-white p-0">
                   <SheetHeader className='p-6'>
                      <SheetTitle className="sr-only">Menú Principal</SheetTitle>
                      <Link href="/" className="flex items-center gap-2">
@@ -50,13 +50,13 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                     </Link>
                   </SheetHeader>
                   <nav className="flex-grow p-6 space-y-2">
-                      <Link href="/" className={cn('flex items-center gap-3 p-2 rounded-md hover:bg-black/10', { 'bg-black/20': pathname === '/' })}>
+                      <Link href="/" className={cn('flex items-center gap-3 p-2 rounded-md hover:bg-zinc-800', { 'bg-zinc-900': pathname === '/' })}>
                         <LayoutGrid className="h-5 w-5" /> Grilla de Eventos
                       </Link>
 
                       {isHomePage && onYearFilterChange && onShowFilterChange && showFilter && (
                         <>
-                            <Separator className='bg-primary-foreground/20 my-4' />
+                            <Separator className='bg-zinc-700 my-4' />
                             <div className='space-y-4'>
                                 <h3 className='font-bold flex items-center gap-2 text-lg'>
                                     <Filter className="h-5 w-5" />
@@ -69,7 +69,7 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                                             onClick={() => onShowFilterChange && onShowFilterChange('ppv')}
                                             className={cn(
                                                 'cursor-pointer p-1 rounded-md text-sm',
-                                                showFilter === 'ppv' ? 'font-bold text-amber-300' : 'hover:bg-black/10'
+                                                showFilter === 'ppv' ? 'font-bold text-amber-400' : 'hover:bg-zinc-800'
                                             )}
                                         >
                                             PPV
@@ -78,7 +78,7 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                                             onClick={() => onShowFilterChange && onShowFilterChange('raw')}
                                             className={cn(
                                                 'cursor-pointer p-1 rounded-md text-sm',
-                                                showFilter === 'raw' ? 'font-bold text-red-300' : 'hover:bg-black/10'
+                                                showFilter === 'raw' ? 'font-bold text-red-500' : 'hover:bg-zinc-800'
                                             )}
                                         >
                                             RAW
@@ -87,7 +87,7 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                                             onClick={() => onShowFilterChange && onShowFilterChange('smackdown')}
                                             className={cn(
                                                 'cursor-pointer p-1 rounded-md text-sm',
-                                                showFilter === 'smackdown' ? 'font-bold text-blue-300' : 'hover:bg-black/10'
+                                                showFilter === 'smackdown' ? 'font-bold text-blue-400' : 'hover:bg-zinc-800'
                                             )}
                                         >
                                             SmackDown
@@ -112,8 +112,8 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                       )}
 
                   </nav>
-                  <div className="p-6 border-t border-primary-foreground/20">
-                    <span className="text-xs text-primary-foreground/50">v2.7.613</span>
+                  <div className="p-6 border-t border-zinc-800">
+                    <span className="text-xs text-zinc-500">v2.7.613</span>
                   </div>
               </SheetContent>
           </Sheet>
@@ -121,7 +121,7 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
           <Link href="/">
               <h1 className="text-2xl font-bold font-headline cursor-pointer">
                   <span className="text-foreground">Attitude</span>
-                  <span className="text-red-500">Rewind</span>
+                  <span className="text-primary">Rewind</span>
               </h1>
           </Link>
 
