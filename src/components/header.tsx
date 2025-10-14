@@ -63,47 +63,6 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                                     Filtros
                                 </h3>
                                 <div className='space-y-2'>
-                                    <label className='text-sm font-medium'>Show</label>
-                                    <div className="space-y-1 pl-2">
-                                        <div
-                                            onClick={() => onShowFilterChange && onShowFilterChange('todos')}
-                                            className={cn(
-                                                'cursor-pointer p-1 rounded-md text-sm',
-                                                showFilter === 'todos' ? 'font-bold text-primary' : 'hover:bg-zinc-800'
-                                            )}
-                                        >
-                                            Todos
-                                        </div>
-                                        <div
-                                            onClick={() => onShowFilterChange && onShowFilterChange('ppv')}
-                                            className={cn(
-                                                'cursor-pointer p-1 rounded-md text-sm',
-                                                showFilter === 'ppv' ? 'font-bold text-amber-400' : 'hover:bg-zinc-800'
-                                            )}
-                                        >
-                                            PPV
-                                        </div>
-                                        <div
-                                            onClick={() => onShowFilterChange && onShowFilterChange('raw')}
-                                            className={cn(
-                                                'cursor-pointer p-1 rounded-md text-sm',
-                                                showFilter === 'raw' ? 'font-bold text-red-500' : 'hover:bg-zinc-800'
-                                            )}
-                                        >
-                                            RAW
-                                        </div>
-                                        <div
-                                            onClick={() => onShowFilterChange && onShowFilterChange('smackdown')}
-                                            className={cn(
-                                                'cursor-pointer p-1 rounded-md text-sm',
-                                                showFilter === 'smackdown' ? 'font-bold text-blue-400' : 'hover:bg-zinc-800'
-                                            )}
-                                        >
-                                            SmackDown
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='space-y-2'>
                                     <label className='text-sm font-medium'>Año</label>
                                     <Select value={yearFilter} onValueChange={(value) => onYearFilterChange(value as YearFilter)}>
                                         <SelectTrigger className='text-black'>
@@ -115,6 +74,47 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                                             <SelectItem value="2001">2001</SelectItem>
                                         </SelectContent>
                                     </Select>
+                                </div>
+                                <div className='space-y-2'>
+                                    <label className='text-sm font-medium'>Show</label>
+                                    <div className="space-y-1 pl-2">
+                                        <div
+                                            onClick={() => onShowFilterChange('todos')}
+                                            className={cn(
+                                                'cursor-pointer p-1 rounded-md text-sm',
+                                                showFilter === 'todos' ? 'font-bold text-primary' : 'hover:bg-zinc-800'
+                                            )}
+                                        >
+                                            Todos
+                                        </div>
+                                        <div
+                                            onClick={() => onShowFilterChange('ppv')}
+                                            className={cn(
+                                                'cursor-pointer p-1 rounded-md text-sm',
+                                                showFilter === 'ppv' ? 'font-bold text-amber-400' : 'hover:bg-zinc-800'
+                                            )}
+                                        >
+                                            PPV
+                                        </div>
+                                        <div
+                                            onClick={() => onShowFilterChange('raw')}
+                                            className={cn(
+                                                'cursor-pointer p-1 rounded-md text-sm',
+                                                showFilter === 'raw' ? 'font-bold text-red-500' : 'hover:bg-zinc-800'
+                                            )}
+                                        >
+                                            RAW
+                                        </div>
+                                        <div
+                                            onClick={() => onShowFilterChange('smackdown')}
+                                            className={cn(
+                                                'cursor-pointer p-1 rounded-md text-sm',
+                                                showFilter === 'smackdown' ? 'font-bold text-blue-400' : 'hover:bg-zinc-800'
+                                            )}
+                                        >
+                                            SmackDown
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </>
