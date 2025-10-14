@@ -137,7 +137,7 @@ export function EventDetails({ event, onBack, isEmbedded = false }: EventDetails
         }
     };
     
-    const showImage = event.type === 'ppv' || event.type === 'raw' || event.type === 'smackdown';
+    const showImage = event.type === 'ppv';
     const ppvEvent = event.type === 'ppv' ? (event as PPVEvent) : null;
 
 
@@ -150,22 +150,8 @@ export function EventDetails({ event, onBack, isEmbedded = false }: EventDetails
               </Button>
             )}
             <div className="space-y-6">
-                <div className={cn("flex flex-col md:flex-row gap-8 items-start")}>
-                    {showImage && (
-                        <div className="md:w-1/3 flex-shrink-0">
-                            <div className="rounded-lg overflow-hidden border-2 border-primary/50 shadow-lg shadow-primary/20">
-                                <Image 
-                                    src={getShowImage(event.type, event)}
-                                    alt={`Portada de ${event.type === 'ppv' ? (event as PPVEvent).name : getEventTypeDisplay(event.type)}`}
-                                    width={400}
-                                    height={600}
-                                    className="w-full h-auto object-cover"
-                                />
-                            </div>
-                        </div>
-                    )}
-                    
-                    <div className="flex-grow space-y-6">
+                <div className="flex flex-col md:flex-row gap-8 items-start">
+                    <div className="flex-grow space-y-6 w-full">
                         <div className="flex flex-wrap items-center gap-4 text-sm">
                             <Badge className={cn("text-sm gap-2", getShowBadgeStyle(event.type))}>
                                 {getShowIcon(event.type)}
@@ -285,7 +271,21 @@ export function EventDetails({ event, onBack, isEmbedded = false }: EventDetails
                             </SelectItem>
                         </SelectContent>
                     </Select>
-                 </div>
+                </div>
+                
+                {showImage && (
+                    <div className="pt-6">
+                        <div className="rounded-lg overflow-hidden border-2 border-primary/50 shadow-lg shadow-primary/20 max-w-md mx-auto">
+                            <Image 
+                                src={getShowImage(event.type, event)}
+                                alt={`Portada de ${event.type === 'ppv' ? (event as PPVEvent).name : getEventTypeDisplay(event.type)}`}
+                                width={400}
+                                height={600}
+                                className="w-full h-auto object-cover"
+                            />
+                        </div>
+                    </div>
+                )}
               </div>
         </div>
     );
