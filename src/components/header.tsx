@@ -130,7 +130,7 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
           <Link href="/">
               <h1 className="text-2xl font-bold font-headline cursor-pointer">
                   <span className="text-foreground">Attitude</span>
-                  <span className="text-primary">Rewind</span>
+                  <span className="text-red-500">Rewind</span>
               </h1>
           </Link>
 
