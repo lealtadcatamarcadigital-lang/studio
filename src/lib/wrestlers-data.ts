@@ -1,3 +1,4 @@
+
 export interface WrestlerData {
   imageUrl?: string;
 }
