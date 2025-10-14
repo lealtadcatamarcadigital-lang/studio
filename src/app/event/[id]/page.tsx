@@ -28,7 +28,7 @@ export default function EventPage() {
     
     return (
         <main className="min-h-screen bg-background">
-            <Header showFilter='todos' yearFilter='todos' onShowFilterChange={() => {}} onYearFilterChange={() => {}} />
+            <Header />
             <EventDetails event={event} onBack={() => router.back()} />
         </main>
     )

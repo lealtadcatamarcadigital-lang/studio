@@ -3,7 +3,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Menu, LayoutGrid, Filter } from 'lucide-react';
+import { Menu, LayoutGrid } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -15,20 +15,9 @@ import {
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import type { ShowTypeFilter, YearFilter } from '@/app/page';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
 
-interface HeaderProps {
-    showFilter?: ShowTypeFilter;
-    yearFilter?: YearFilter;
-    onShowFilterChange?: (value: ShowTypeFilter) => void;
-    onYearFilterChange?: (value: YearFilter) => void;
-}
-
-export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilterChange }: HeaderProps) {
+export function Header() {
   const pathname = usePathname();
-  const isHomePage = pathname === '/';
 
   return (
     <header className="sticky top-0 z-30 bg-card shadow-md">
@@ -53,73 +42,6 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                       <Link href="/" className={cn('flex items-center gap-3 p-2 rounded-md hover:bg-zinc-800', { 'bg-zinc-900': pathname === '/' })}>
                         <LayoutGrid className="h-5 w-5" /> Grilla de Eventos
                       </Link>
-
-                      {isHomePage && onYearFilterChange && onShowFilterChange && showFilter !== undefined && (
-                        <>
-                            <Separator className='bg-zinc-700 my-4' />
-                            <div className='space-y-4'>
-                                <h3 className='font-bold flex items-center gap-2 text-lg'>
-                                    <Filter className="h-5 w-5" />
-                                    Filtros
-                                </h3>
-                                <div className='space-y-2'>
-                                    <label className='text-sm font-medium'>Año</label>
-                                    <Select value={yearFilter} onValueChange={(value) => onYearFilterChange(value as YearFilter)}>
-                                        <SelectTrigger className='text-black'>
-                                            <SelectValue placeholder="Seleccionar año" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="todos">Todos</SelectItem>
-                                            <SelectItem value="2000">2000</SelectItem>
-                                            <SelectItem value="2001">2001</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className='space-y-2'>
-                                    <label className='text-sm font-medium'>Show</label>
-                                    <div className="space-y-1 pl-2">
-                                        <div
-                                            onClick={() => onShowFilterChange('todos')}
-                                            className={cn(
-                                                'cursor-pointer p-1 rounded-md text-sm',
-                                                showFilter === 'todos' ? 'font-bold text-primary' : 'hover:bg-zinc-800'
-                                            )}
-                                        >
-                                            Todos
-                                        </div>
-                                        <div
-                                            onClick={() => onShowFilterChange('ppv')}
-                                            className={cn(
-                                                'cursor-pointer p-1 rounded-md text-sm',
-                                                showFilter === 'ppv' ? 'font-bold text-amber-400' : 'hover:bg-zinc-800'
-                                            )}
-                                        >
-                                            PPV
-                                        </div>
-                                        <div
-                                            onClick={() => onShowFilterChange('raw')}
-                                            className={cn(
-                                                'cursor-pointer p-1 rounded-md text-sm',
-                                                showFilter === 'raw' ? 'font-bold text-red-500' : 'hover:bg-zinc-800'
-                                            )}
-                                        >
-                                            RAW
-                                        </div>
-                                        <div
-                                            onClick={() => onShowFilterChange('smackdown')}
-                                            className={cn(
-                                                'cursor-pointer p-1 rounded-md text-sm',
-                                                showFilter === 'smackdown' ? 'font-bold text-blue-400' : 'hover:bg-zinc-800'
-                                            )}
-                                        >
-                                            SmackDown
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </>
-                      )}
-
                   </nav>
                   <div className="p-6 border-t border-zinc-800">
                     <span className="text-xs text-zinc-500">v2.7.613</span>
