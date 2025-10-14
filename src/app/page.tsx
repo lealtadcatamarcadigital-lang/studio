@@ -6,7 +6,6 @@ import { Header } from '@/components/header';
 import { WWF_ALL_DATA } from '@/lib/events-data-all';
 import { flattenEvents, type DetailedEvent, type EventStatus, type EventStatusMap } from '@/lib/utils';
 import { NextShowCarousel } from "@/components/next-show-carousel";
-import { EventGrid } from "@/components/event-grid";
 import { EventDetails } from "@/components/event-details";
 
 export default function Home() {
@@ -31,7 +30,7 @@ export default function Home() {
         const firstUnwatchedIndex = allEvents.findIndex(event => eventStatuses[event.id] !== 'visto');
         if (firstUnwatchedIndex !== -1) {
             setSelectedEventId(allEvents[firstUnwatchedIndex].id);
-        } else {
+        } else if (allEvents.length > 0) {
             setSelectedEventId(allEvents[0].id);
         }
     }
@@ -85,9 +84,6 @@ export default function Home() {
             <EventDetails event={selectedEvent} onBack={() => {}} isEmbedded />
          </div>
       )}
-
-      <EventGrid events={allEvents} onEventClick={handleEventSelect} />
-
     </main>
   );
 }
