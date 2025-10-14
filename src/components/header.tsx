@@ -54,7 +54,7 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                         <LayoutGrid className="h-5 w-5" /> Grilla de Eventos
                       </Link>
 
-                      {isHomePage && onYearFilterChange && onShowFilterChange && showFilter && (
+                      {isHomePage && onYearFilterChange && onShowFilterChange && showFilter !== undefined && (
                         <>
                             <Separator className='bg-zinc-700 my-4' />
                             <div className='space-y-4'>
@@ -65,6 +65,15 @@ export function Header({ showFilter, yearFilter, onShowFilterChange, onYearFilte
                                 <div className='space-y-2'>
                                     <label className='text-sm font-medium'>Show</label>
                                     <div className="space-y-1 pl-2">
+                                        <div
+                                            onClick={() => onShowFilterChange && onShowFilterChange('todos')}
+                                            className={cn(
+                                                'cursor-pointer p-1 rounded-md text-sm',
+                                                showFilter === 'todos' ? 'font-bold text-primary' : 'hover:bg-zinc-800'
+                                            )}
+                                        >
+                                            Todos
+                                        </div>
                                         <div
                                             onClick={() => onShowFilterChange && onShowFilterChange('ppv')}
                                             className={cn(
