@@ -25,23 +25,48 @@ export default function Home() {
     } catch (error) {
       console.error("Could not parse data from localStorage:", error);
     }
-  }, []);
-  
-  useEffect(() => {
-    if (allEvents.length > 0) {
-      if (!selectedEventId) {
-          const firstUnwatchedIndex = allEvents.findIndex(event => eventStatuses[event.id] !== 'visto');
-          if (firstUnwatchedIndex !== -1) {
-              setSelectedEventId(allEvents[firstUnwatchedIndex].id);
-          } else if (allEvents.length > 0) {
-              setSelectedEventId(allEvents[0].id);
-          }
-      }
-      // Add a small delay to prevent flickering on fast loads
-      const timer = setTimeout(() => setIsLoading(false), 500);
-      return () => clearTimeout(timer);
+
+    // Set initial selected event and finish loading
+    const firstUnwatchedIndex = allEvents.findIndex(event => {
+        try {
+            const stored = localStorage.getItem('attitude-rewind-statuses');
+            if (stored) {
+                return JSON.parse(stored)[event.id] !== 'visto';
+            }
+        } catch (e) {
+            // ignore
+        }
+        return true;
+    });
+
+    if (firstUnwatchedIndex !== -1) {
+        setSelectedEventId(allEvents[firstUnwatchedIndex].id);
+    } else if (allEvents.length > 0) {
+        setSelectedEventId(allEvents[0].id);
     }
-  }, [allEvents, eventStatuses, selectedEventId]);
+    
+    // Add a small delay to prevent flickering on fast loads
+    const timer = setTimeout(() => setIsLoading(false), 500);
+    
+    return () => clearTimeout(timer);
+  }, [allEvents]);
+
+
+  useEffect(() => {
+    // This effect runs only when eventStatuses changes, to find the next unwatched event.
+    // It does not control the main loading state.
+    const firstUnwatchedIndex = allEvents.findIndex(event => eventStatuses[event.id] !== 'visto');
+    if (firstUnwatchedIndex !== -1) {
+        if (!selectedEventId || eventStatuses[selectedEventId] === 'visto') {
+            setSelectedEventId(allEvents[firstUnwatchedIndex].id);
+        }
+    } else if (allEvents.length > 0) {
+        if (!selectedEventId) {
+            setSelectedEventId(allEvents[0].id);
+        }
+    }
+  }, [eventStatuses, allEvents, selectedEventId]);
+
 
   const handleEventSelect = (eventId: string) => {
     setSelectedEventId(eventId);
