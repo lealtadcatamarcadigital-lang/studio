@@ -17,6 +17,7 @@ export default function Home() {
   const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
 
   useEffect(() => {
+    // This effect runs only ONCE on component mount to handle the initial loading state.
     let statuses: EventStatusMap = {};
     try {
       const storedStatuses = localStorage.getItem('attitude-rewind-statuses');
@@ -27,32 +28,36 @@ export default function Home() {
     } catch (error) {
       console.error("Could not parse data from localStorage:", error);
     }
-
-    const firstUnwatchedIndex = allEvents.findIndex(event => statuses[event.id] !== 'visto');
-    let initialEventId: string | null = null;
-    if (firstUnwatchedIndex !== -1) {
-        initialEventId = allEvents[firstUnwatchedIndex].id;
-    } else if (allEvents.length > 0) {
-        initialEventId = allEvents[0].id;
-    }
-    setSelectedEventId(initialEventId);
     
     // Add a small delay to prevent flickering on fast loads
     const timer = setTimeout(() => setIsLoading(false), 500);
     
     return () => clearTimeout(timer);
-  }, []); // Empty dependency array ensures this runs only ONCE on mount
+  }, []); // Empty dependency array ensures this runs only ONCE.
 
 
   useEffect(() => {
-    // This effect handles selecting the next unwatched event when statuses change.
+    // This effect handles selecting the appropriate event when statuses or events change.
     // It does not control the main loading state.
     if (isLoading) return; // Don't run this logic during initial load
 
-    const firstUnwatchedIndex = allEvents.findIndex(event => eventStatuses[event.id] !== 'visto');
+    let statuses: EventStatusMap = {};
+    try {
+      const storedStatuses = localStorage.getItem('attitude-rewind-statuses');
+      if (storedStatuses) {
+        statuses = JSON.parse(storedStatuses);
+      }
+    } catch (error) {
+        // Use existing state if localStorage fails
+        statuses = eventStatuses;
+        console.error("Could not parse data from localStorage:", error);
+    }
+
+    const firstUnwatchedIndex = allEvents.findIndex(event => statuses[event.id] !== 'visto');
+    
     if (firstUnwatchedIndex !== -1) {
-        // If the currently selected event is watched, find the next unwatched one.
-        if (!selectedEventId || eventStatuses[selectedEventId] === 'visto') {
+        // If the currently selected event is watched OR there is no selection, find the next unwatched one.
+        if (!selectedEventId || statuses[selectedEventId] === 'visto') {
             setSelectedEventId(allEvents[firstUnwatchedIndex].id);
         }
     } else if (allEvents.length > 0) {
@@ -61,7 +66,7 @@ export default function Home() {
             setSelectedEventId(allEvents[0].id);
         }
     }
-  }, [eventStatuses, allEvents, selectedEventId, isLoading]);
+  }, [eventStatuses, allEvents, isLoading]); // depends on eventStatuses to re-run when a status changes
 
 
   const handleEventSelect = (eventId: string) => {
