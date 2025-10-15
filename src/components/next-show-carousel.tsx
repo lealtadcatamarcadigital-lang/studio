@@ -98,8 +98,8 @@ export function NextShowCarousel({ events, onEventSelect, eventStatuses, onToggl
                     )
                 })}
                 </CarouselContent>
-                <CarouselPrevious className="hidden sm:flex" />
-                <CarouselNext className="hidden sm:flex" />
+                <CarouselPrevious className="sm:flex -left-4" />
+                <CarouselNext className="sm:flex -right-4" />
             </Carousel>
         </div>
     </div>
