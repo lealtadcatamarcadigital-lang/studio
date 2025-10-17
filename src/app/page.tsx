@@ -8,11 +8,14 @@ import { flattenEvents, type DetailedEvent, type EventStatus, type EventStatusMa
 import { NextShowCarousel } from "@/components/next-show-carousel";
 import { EventDetails } from "@/components/event-details";
 import { LoadingSpinner } from "@/components/loading-spinner";
+import { EventGrid } from "@/components/event-grid";
+import type { Match } from "@/lib/events-data";
 
 export default function Home() {
   const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
 
@@ -102,24 +105,61 @@ export default function Home() {
     return allEvents.find(event => event.id === selectedEventId) || null;
   }, [allEvents, selectedEventId]);
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredEvents = useMemo(() => {
+    if (!searchQuery) return allEvents;
+    const lowercasedQuery = searchQuery.toLowerCase();
+
+    return allEvents.filter(event => {
+        const name = event.type === 'ppv' ? event.name.toLowerCase() : `WWF ${event.type}`.toLowerCase();
+        const description = event.description?.toLowerCase() || '';
+        const location = event.location?.toLowerCase() || '';
+
+        const matchesText = (event.matches || []).map(match => {
+            return typeof match === 'string' ? match : match.match;
+        }).join(' ').toLowerCase();
+
+        return (
+            name.includes(lowercasedQuery) ||
+            description.includes(lowercasedQuery) ||
+            location.includes(lowercasedQuery) ||
+            matchesText.includes(lowercasedQuery)
+        );
+    });
+  }, [allEvents, searchQuery]);
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
   return (
     <main className="min-h-screen">
-      <Header />
-      <NextShowCarousel 
-        events={upcomingEvents} 
-        onEventSelect={handleEventSelect}
-        eventStatuses={eventStatuses}
-        onToggleStatus={toggleEventStatus}
+      <Header 
+        searchQuery={searchQuery}
+        onSearchChange={handleSearchChange}
+        showSearch={true}
       />
-      
-      {selectedEvent && (
-         <div id="event-details-section" className="bg-muted/30 py-8">
-            <EventDetails event={selectedEvent} onBack={() => {}} isEmbedded />
-         </div>
+
+      {searchQuery ? (
+         <EventGrid events={filteredEvents} onEventClick={handleEventSelect} />
+      ) : (
+        <>
+            <NextShowCarousel 
+                events={upcomingEvents} 
+                onEventSelect={handleEventSelect}
+                eventStatuses={eventStatuses}
+                onToggleStatus={toggleEventStatus}
+            />
+            
+            {selectedEvent && (
+                <div id="event-details-section" className="bg-muted/30 py-8">
+                    <EventDetails event={selectedEvent} onBack={() => {}} isEmbedded />
+                </div>
+            )}
+        </>
       )}
     </main>
   );

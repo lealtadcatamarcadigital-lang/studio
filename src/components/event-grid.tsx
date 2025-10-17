@@ -24,6 +24,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { getMonthNumber, getEventTypeDisplay, getShowImage, type DetailedEvent, type EventStatusMap, getShowBadgeStyle } from "@/lib/utils";
 import { Badge } from "./ui/badge";
+import { useRouter } from "next/navigation";
 
 
 interface EventGridProps {
@@ -37,6 +38,7 @@ const OPEN_COLLAPSIBLES_KEY = 'attitude-rewind-open-collapsibles';
 export function EventGrid({ events, onEventClick }: EventGridProps) {
   const [openCollapsibles, setOpenCollapsibles] = useState<Record<string, boolean>>({});
   const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
+  const router = useRouter();
 
   useEffect(() => {
     try {
@@ -55,7 +57,7 @@ export function EventGrid({ events, onEventClick }: EventGridProps) {
 
   const handleCardClick = (eventId: string) => {
     sessionStorage.setItem(SCROLL_POSITION_KEY, window.scrollY.toString());
-    onEventClick(eventId);
+    router.push(`/event/${eventId}`);
   };
 
   const toggleStatus = (eventId: string) => {
@@ -109,7 +111,7 @@ export function EventGrid({ events, onEventClick }: EventGridProps) {
                 open={openCollapsibles[month] ?? true}
                 onOpenChange={() => toggleCollapsible(month)}
             >
-                <div className="sticky top-[258px] md:top-[262px] z-10 bg-background/90 backdrop-blur-sm -mx-4 px-4 py-3 mb-4 border-b">
+                <div className="sticky top-16 z-10 bg-background/90 backdrop-blur-sm -mx-4 px-4 py-3 mb-4 border-b">
                     <CollapsibleTrigger asChild>
                         <div className="flex items-center gap-4 cursor-pointer group">
                             <h2 className="text-2xl font-bold">{month}</h2>
@@ -162,26 +164,29 @@ export function EventGrid({ events, onEventClick }: EventGridProps) {
                                     </div>
                                 ) : (
                                   <>
-                                    <div>
-                                      <div className="flex justify-between items-start">
-                                        <h3 className="font-bold text-lg mb-2 flex items-center gap-2 pr-4">
+                                    <div className="flex justify-between items-start">
+                                      <div>
+                                        <Badge className={cn("text-xs flex-shrink-0 mb-2", getShowBadgeStyle(event.type))}>
                                             {getShowIcon(event.type)}
-                                            {`WWF ${getEventTypeDisplay(event.type)}`}
-                                        </h3>
-                                        <Badge className="text-xs flex-shrink-0" variant={isWatched ? 'default' : 'secondary'} onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleStatus(event.id); }}>
-                                          <Eye className={cn("h-4 w-4 mr-1", isWatched ? 'text-green-400' : 'text-gray-400')} />
-                                          {isWatched ? 'Visto' : 'Marcar'}
+                                            <span>{getEventTypeDisplay(event.type)}</span>
                                         </Badge>
+                                        <h3 className="font-bold text-lg">
+                                          {`WWF ${getEventTypeDisplay(event.type)}`}
+                                        </h3>
                                       </div>
-                                      <div className="space-y-1 text-sm text-muted-foreground">
-                                          <div className="flex items-center gap-2">
-                                              <CalendarDays className="h-4 w-4"/>
-                                              <span>{new Date(event.year, getMonthNumber(event.month), parseInt(event.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                                          </div>
-                                          <div className="flex items-center gap-2">
-                                              <MapPin className="h-4 w-4"/>
-                                              <span>{event.location}</span>
-                                          </div>
+                                      <Badge className="text-xs" variant={isWatched ? 'default' : 'secondary'} onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleStatus(event.id); }}>
+                                        <Eye className={cn("h-4 w-4 mr-1", isWatched ? 'text-green-400' : 'text-gray-400')} />
+                                        {isWatched ? 'Visto' : 'Marcar'}
+                                      </Badge>
+                                    </div>
+                                    <div className="mt-4 text-sm text-muted-foreground space-y-1">
+                                      <div className="flex items-center gap-2">
+                                          <CalendarDays className="h-4 w-4"/>
+                                          <span>{new Date(event.year, getMonthNumber(event.month), parseInt(event.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                                      </div>
+                                      <div className="flex items-center gap-2">
+                                          <MapPin className="h-4 w-4"/>
+                                          <span>{event.location}</span>
                                       </div>
                                     </div>
                                   </>
@@ -204,5 +209,3 @@ export function EventGrid({ events, onEventClick }: EventGridProps) {
     </div>
   );
 }
-
-    
