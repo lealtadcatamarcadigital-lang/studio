@@ -191,7 +191,7 @@ export const wrestlersData: Record<string, WrestlerData> = {
         imageUrl: "https://i.pinimg.com/736x/40/c3/97/40c397216e82c036ace369e522d1726a.jpg"
     },
     "Al Snow": {
-        imageUrl: "https://i.imgur.com/N52Z9zS.jpeg"
+        imageUrl: "https://i.pinimg.com/736x/5f/54/8f/5f548f0c24f37cf37e848a620bc38f08.jpg"
     },
     "Essa Rios": {
         imageUrl: "https://i.imgur.com/M62V3fD.jpeg"
