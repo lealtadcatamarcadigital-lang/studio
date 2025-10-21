@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -42,15 +41,15 @@ export function NextShowCarousel({ events, onEventSelect, eventStatuses, onToggl
   };
 
   return (
-    <div className="bg-card/90 backdrop-blur-sm border-y h-[272px] sticky top-16 z-20">
+    <div className="bg-card/90 backdrop-blur-sm border-y sticky top-16 z-20 py-4">
         <div className="container mx-auto px-4 h-full flex flex-col justify-center">
-            <h2 className="text-2xl font-bold">Próximos Shows</h2>
+            <h2 className="text-2xl font-bold mb-4">Próximos Shows</h2>
             <Carousel
                 opts={{
                 align: 'start',
                 loop: false,
                 }}
-                className="w-full mt-4"
+                className="w-full"
             >
                 <CarouselContent className="-ml-1">
                 {events.slice(0, 10).map((event, index) => {
@@ -98,8 +97,8 @@ export function NextShowCarousel({ events, onEventSelect, eventStatuses, onToggl
                     )
                 })}
                 </CarouselContent>
-                <CarouselPrevious className="-left-4" />
-                <CarouselNext className="-right-4" />
+                <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10" />
+                <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10" />
             </Carousel>
         </div>
     </div>
