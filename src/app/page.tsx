@@ -20,11 +20,9 @@ export default function Home() {
   const allEvents = useMemo(() => flattenEvents(WWF_ALL_DATA), []);
 
   useEffect(() => {
-    // Check session storage to see if initial load has already happened
     if (sessionStorage.getItem('initialLoadDone')) {
       setIsLoading(false);
     } else {
-      // If not, show loading screen and then set the flag
       const timer = setTimeout(() => {
         setIsLoading(false);
         sessionStorage.setItem('initialLoadDone', 'true');
@@ -34,8 +32,6 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    // This effect runs to get statuses from localStorage.
-    // It should run after the initial loading is handled.
     if (isLoading) return;
     
     let statuses: EventStatusMap = {};
@@ -52,24 +48,20 @@ export default function Home() {
 
 
   useEffect(() => {
-    // This effect handles selecting the appropriate event when statuses or events change.
-    if (isLoading) return; // Don't run this logic during initial load
+    if (isLoading) return;
 
     const firstUnwatchedIndex = allEvents.findIndex(event => eventStatuses[event.id] !== 'visto');
     
     if (firstUnwatchedIndex !== -1) {
-        // If the currently selected event is watched OR there is no selection, find the next unwatched one.
         if (!selectedEventId || eventStatuses[selectedEventId] === 'visto') {
             setSelectedEventId(allEvents[firstUnwatchedIndex].id);
         }
     } else if (allEvents.length > 0) {
-        // If all events are watched, and there's no selection, select the first one.
         if (!selectedEventId) {
             setSelectedEventId(allEvents[0].id);
         }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eventStatuses, allEvents, isLoading]);
+  }, [eventStatuses, allEvents, isLoading, selectedEventId]);
 
 
   const handleEventSelect = (eventId: string) => {
@@ -92,11 +84,20 @@ export default function Home() {
   };
 
   const upcomingEvents = useMemo(() => {
-    if (!allEvents.length || Object.keys(eventStatuses).length === 0) return [];
+    if (!allEvents.length) return [];
+  
+    const statusesExist = Object.keys(eventStatuses).length > 0;
+  
+    if (!statusesExist) {
+      // If statuses are not loaded yet, show the first 10 events
+      return allEvents.slice(0, 10);
+    }
+  
     const firstUnwatchedIndex = allEvents.findIndex(event => eventStatuses[event.id] !== 'visto');
-    
-    const startIndex = firstUnwatchedIndex === -1 ? 0 : firstUnwatchedIndex;
-    
+    const startIndex = firstUnwatchedIndex === -1 ? (allEvents.length > 0 ? 0 : -1) : firstUnwatchedIndex;
+  
+    if (startIndex === -1) return [];
+  
     return allEvents.slice(startIndex, startIndex + 10);
   }, [allEvents, eventStatuses]);
 
@@ -143,17 +144,17 @@ export default function Home() {
         showSearch={true}
       />
 
+      <NextShowCarousel 
+          events={upcomingEvents} 
+          onEventSelect={handleEventSelect}
+          eventStatuses={eventStatuses}
+          onToggleStatus={toggleEventStatus}
+      />
+
       {searchQuery ? (
          <EventGrid events={filteredEvents} onEventClick={handleEventSelect} />
       ) : (
         <>
-            <NextShowCarousel 
-                events={upcomingEvents} 
-                onEventSelect={handleEventSelect}
-                eventStatuses={eventStatuses}
-                onToggleStatus={toggleEventStatus}
-            />
-            
             {selectedEvent && (
                 <div id="event-details-section" className="bg-muted/30 py-8">
                     <EventDetails event={selectedEvent} onBack={() => {}} isEmbedded />
