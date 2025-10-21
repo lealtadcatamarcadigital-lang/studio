@@ -150,13 +150,13 @@ export default function Home() {
           eventStatuses={eventStatuses}
           onToggleStatus={toggleEventStatus}
       />
-
+      
       {searchQuery ? (
          <EventGrid events={filteredEvents} onEventClick={handleEventSelect} />
       ) : (
         <>
             {selectedEvent && (
-                <div id="event-details-section" className="bg-muted/30 py-4">
+                <div id="event-details-section" className="bg-muted/30">
                     <EventDetails event={selectedEvent} onBack={() => {}} isEmbedded />
                 </div>
             )}
