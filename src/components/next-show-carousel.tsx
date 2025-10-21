@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -31,7 +30,10 @@ export function NextShowCarousel({ events, onEventSelect, eventStatuses, onToggl
   const handleEventClick = (event: React.MouseEvent, eventId: string) => {
     event.preventDefault();
     onEventSelect(eventId);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const element = document.getElementById('event-details-section');
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   const handleToggleStatus = (e: React.MouseEvent, eventId: string) => {
@@ -67,9 +69,9 @@ export function NextShowCarousel({ events, onEventSelect, eventStatuses, onToggl
                                                 <Image
                                                     src={getShowImage(event.type, event)}
                                                     alt={event.type === 'ppv' ? (event as PPVEvent).name : getEventTypeDisplay(event.type)}
-                                                    layout="fill"
-                                                    objectFit="cover"
-                                                    className="transition-transform group-hover:scale-105"
+                                                    fill
+                                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                    className="object-cover transition-transform group-hover:scale-105"
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                                                 <Badge className="absolute top-2 left-2">{index === 0 ? "Próximo a ver" : `#${index + 1}`}</Badge>
