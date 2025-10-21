@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -43,7 +44,7 @@ export function NextShowCarousel({ events, onEventSelect, eventStatuses, onToggl
   return (
     <div className="bg-card/90 backdrop-blur-sm border-y sticky top-16 z-20 py-4">
         <div className="container mx-auto px-4 h-full flex flex-col justify-center">
-            <h2 className="text-2xl font-bold mb-4">Próximos Shows</h2>
+            <h2 className="text-2xl font-bold mb-4"></h2>
             <Carousel
                 opts={{
                 align: 'start',
@@ -97,8 +98,8 @@ export function NextShowCarousel({ events, onEventSelect, eventStatuses, onToggl
                     )
                 })}
                 </CarouselContent>
-                <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10" />
-                <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10" />
+                <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/50 text-white border-white/50 hover:bg-black/70 hover:text-white" />
+                <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/50 text-white border-white/50 hover:bg-black/70 hover:text-white" />
             </Carousel>
         </div>
     </div>
