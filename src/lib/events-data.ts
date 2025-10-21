@@ -15,7 +15,9 @@ export interface PPVEvent extends Event {
 
 export interface MonthData {
   month: string;
-  mont  raw: Event[];
+  monthId: string;
+  year: number;
+  raw: Event[];
   smackdown: Event[];
   ppvs: PPVEvent[];
 }
