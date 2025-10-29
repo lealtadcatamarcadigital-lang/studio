@@ -86,14 +86,16 @@ export function NextShowCarousel({ events, onEventSelect, eventStatuses, onToggl
                                 <h3 className="font-bold text-lg truncate">
                                     {event.type === 'ppv' ? (event as PPVEvent).name : `WWF ${getEventTypeDisplay(event.type)}`}
                                 </h3>
-                                <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+                                <div className="flex items-center gap-2 text-sm text-white/80 mt-1">
                                     <CalendarDays className="h-4 w-4" />
                                     <span>{new Date(event.year, getMonthNumber(event.month), parseInt(event.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                                 </div>
-                                <div className="flex items-center gap-2 text-xs text-white/80 mt-2">
-                                  <Tv className="h-4 w-4" />
-                                  <span>Disponible en Netflix</span>
-                                </div>
+                                {(event.type === 'raw' || event.type === 'smackdown') && (
+                                  <div className="flex items-center gap-2 text-xs text-white/80 mt-2">
+                                    <Tv className="h-4 w-4" />
+                                    <span>Disponible en Netflix</span>
+                                  </div>
+                                )}
                             </div>
                           </div>
                         </CardContent>
