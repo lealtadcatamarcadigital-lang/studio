@@ -156,7 +156,7 @@ export default function Home() {
       ) : (
         <>
             {selectedEvent && (
-                <div id="event-details-section" className="bg-muted/30">
+                <div id="event-details-section" className="bg-muted/30 pt-4">
                     <EventDetails event={selectedEvent} onBack={() => {}} isEmbedded />
                 </div>
             )}
