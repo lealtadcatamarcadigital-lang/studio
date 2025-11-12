@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -60,7 +61,7 @@ export function NextShowCarousel({ events, onEventSelect, eventStatuses, onToggl
               const isWatched = status === 'visto';
 
               return (
-                <CarouselItem key={index} className="pl-1 basis-1/2 md:basis-1/3 lg:basis-1/4">
+                <CarouselItem key={index} className="pl-1 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
                   <div className="p-1">
                     <a href={`/event/${event.id}`} onClick={(e) => handleEventClick(e, event.id)}>
                       <Card className="overflow-hidden group hover:border-primary">
@@ -82,7 +83,7 @@ export function NextShowCarousel({ events, onEventSelect, eventStatuses, onToggl
                             >
                                 <Eye className={cn("h-4 w-4", isWatched ? 'text-green-400' : 'text-gray-400')} />
                             </Badge>
-                            <div className="absolute bottom-0 left-0 p-4 text-white">
+                            <div className="absolute bottom-0 p-4 text-white w-full">
                                 <h3 className="font-bold text-lg truncate">
                                     {event.type === 'ppv' ? (event as PPVEvent).name : `WWF ${getEventTypeDisplay(event.type)}`}
                                 </h3>
@@ -91,9 +92,11 @@ export function NextShowCarousel({ events, onEventSelect, eventStatuses, onToggl
                                     <span>{new Date(event.year, getMonthNumber(event.month), parseInt(event.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                                 </div>
                                 {(event.type === 'raw' || event.type === 'smackdown') && (
-                                  <div className="flex items-center gap-2 text-xs text-white/80 mt-2">
-                                    <Tv className="h-4 w-4" />
-                                    <span>Disponible en Netflix</span>
+                                  <div className="absolute bottom-0 left-0 p-4">
+                                      <div className="flex items-center gap-2 text-xs text-white/80 mt-2 bg-black/50 rounded-full px-2 py-1">
+                                          <Tv className="h-4 w-4" />
+                                          <span>Disponible en Netflix</span>
+                                      </div>
                                   </div>
                                 )}
                             </div>
