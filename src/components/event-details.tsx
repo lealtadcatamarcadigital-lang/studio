@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, CalendarDays, ChevronDown, CheckCircle, Circle, Eye, EyeOff, Info, ListChecks, MapPin, Ticket, Trophy, Youtube } from 'lucide-react';
@@ -114,9 +114,9 @@ interface EventDetailsProps {
 }
 
 export function EventDetails({ event, onBack, isEmbedded = false }: EventDetailsProps) {
-    const [eventStatuses, setEventStatuses] = useState<EventStatusMap>({});
+    const [eventStatuses, setEventStatuses] = React.useState<EventStatusMap>({});
 
-    useEffect(() => {
+    React.useEffect(() => {
         try {
           const storedStatuses = localStorage.getItem('attitude-rewind-statuses');
           if (storedStatuses) {
@@ -170,11 +170,21 @@ export function EventDetails({ event, onBack, isEmbedded = false }: EventDetails
                         {event.videoUrl && (
                           <div className="my-4">
                               <div className="aspect-video w-full rounded-lg overflow-hidden border">
-                                  <video
-                                      src={event.videoUrl}
-                                      controls
-                                      className="w-full h-full bg-black"
-                                  />
+                                  {event.videoUrl.includes('ok.ru') ? (
+                                      <iframe
+                                          src={event.videoUrl}
+                                          frameBorder="0"
+                                          allow="autoplay"
+                                          allowFullScreen
+                                          className="w-full h-full bg-black"
+                                      ></iframe>
+                                  ) : (
+                                      <video
+                                          src={event.videoUrl}
+                                          controls
+                                          className="w-full h-full bg-black"
+                                      />
+                                  )}
                               </div>
                           </div>
                         )}
