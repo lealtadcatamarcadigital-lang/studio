@@ -167,6 +167,18 @@ export function EventDetails({ event, onBack, isEmbedded = false }: EventDetails
                             </div>
                         </div>
 
+                        {event.videoUrl && (
+                          <div className="my-4">
+                              <div className="aspect-video w-full rounded-lg overflow-hidden border">
+                                  <video
+                                      src={event.videoUrl}
+                                      controls
+                                      className="w-full h-full bg-black"
+                                  />
+                              </div>
+                          </div>
+                        )}
+
                         <div>
                             <h3 className="font-headline font-bold text-2xl flex items-center gap-2 mb-3">
                                 <ListChecks className="h-6 w-6 text-primary" />

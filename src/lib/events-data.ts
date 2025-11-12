@@ -5,6 +5,7 @@ export interface Event {
   location: string;
   description?: string;
   matches?: Match[];
+  videoUrl?: string;
 }
 
 export interface PPVEvent extends Event {
