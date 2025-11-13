@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -91,14 +90,6 @@ export function NextShowCarousel({ events, onEventSelect, eventStatuses, onToggl
                                     <CalendarDays className="h-4 w-4" />
                                     <span>{new Date(event.year, getMonthNumber(event.month), parseInt(event.date)).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                                 </div>
-                                {(event.type === 'raw' || event.type === 'smackdown') && (
-                                  <div className="absolute bottom-0 left-0 p-4">
-                                      <div className="flex items-center gap-2 text-xs text-white/80 mt-2 bg-black/50 rounded-full px-2 py-1">
-                                          <Tv className="h-4 w-4" />
-                                          <span>Disponible en Netflix</span>
-                                      </div>
-                                  </div>
-                                )}
                             </div>
                           </div>
                         </CardContent>
